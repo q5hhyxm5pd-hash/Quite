@@ -155,6 +155,15 @@ html[data-theme="brutal"] .btn.solid{background:#FF6B9D;color:#000}
 html[data-theme="brutal"] .btn.solid:hover{background:#FF6B9D;color:#000}
 html[data-theme="brutal"] nav.tabs button{font-weight:700;color:#000}
 html[data-theme="brutal"] nav.tabs button.active{background:#000;color:#FFE14D;border-bottom-color:#000}
+/* pressed buttons: bright font on the dark active fill */
+html[data-theme="brutal"] .seg button.on,
+html[data-theme="brutal"] .seg button.on[data-who="t"],
+html[data-theme="brutal"] .seg button.on[data-who="l"]{color:#FFE14D}
+html[data-theme="brutal"] .fx-line .methseg button.on,
+html[data-theme="brutal"] .fx-line .methseg button.on[data-meth="d"],
+html[data-theme="brutal"] .fx-line .methseg button.on[data-meth="c"],
+html[data-theme="brutal"] .fx-line .methseg button.on[data-meth="v"]{color:#FFE14D}
+html[data-theme="brutal"] .fpill.on{background:#000;color:#FFE14D;border-color:#000}
 html[data-theme="brutal"] .tag{border:1.5px solid #000;border-radius:0;background:#fff}
 html[data-theme="brutal"] input,html[data-theme="brutal"] select,html[data-theme="brutal"] textarea{border-width:2px}
 html[data-theme="brutal"] .modal{border:3px solid #000;box-shadow:8px 8px 0 #000}
@@ -594,6 +603,29 @@ table.annual td.cur-col{box-shadow:inset 3px 0 0 var(--clay),inset -3px 0 0 var(
   .modal-overlay{align-items:flex-end;padding:0}
   .modal{max-width:none;border-radius:var(--r1) 22px 0 0;max-height:94vh}
 }
+
+/* ===== MICRO-INTERAÇÕES (todas as skins) ===== */
+/* troca de tema com cross-fade suave */
+body{transition:background-color .4s ease,color .4s ease}
+.card,.hero,.fx-group,.split .who,.inc-item,.tbl-scroll{transition:background-color .4s ease,border-color .4s ease,box-shadow .25s ease}
+/* feedback de toque/clique nos botões */
+.btn:active{transform:translateY(1px) scale(.985)}
+.cat-btn:active,.fpill:active,.seg button:active,.fx-line .methseg button:active,.theme-card:active,.month-nav button.arrow:active{transform:scale(.94)}
+.mark{transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.brand:hover .mark{transform:rotate(-8deg) scale(1.06)}
+/* destaque quando uma opção é selecionada */
+.seg button.on{animation:pop .26s cubic-bezier(.2,.8,.2,1)}
+.cat-btn.sel{animation:pop .3s cubic-bezier(.2,.8,.2,1)}
+.theme-card.on{animation:pop .3s cubic-bezier(.2,.8,.2,1)}
+.theme-card:hover{transform:translateY(-2px)}
+.fpill.on{animation:pop .24s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{0%{transform:scale(.9)}55%{transform:scale(1.04)}100%{transform:scale(1)}}
+/* hover mais vivo nas linhas de gasto fixo e abertura de grupo */
+.fx-gh:active{transform:scale(.997)}
+.hero{transition:background-color .4s ease,box-shadow .3s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
+.hero:hover{transform:translateY(-2px)}
+/* respeita quem prefere menos movimento */
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
 </style>
 </head>
 <body>
@@ -874,6 +906,11 @@ table.annual td.cur-col{box-shadow:inset 3px 0 0 var(--clay),inset -3px 0 0 var(
     <h1 class="view-title">Renda do mês</h1>
     <p class="view-sub">Crie as fontes de renda da casa do seu jeito: salário de cada pessoa, ganhos com qualquer atividade. Fontes mensais têm um valor por mês; fontes avulsas recebem lançamentos conforme o dinheiro entra.</p>
 
+    <div class="card inc-card fu" style="margin-bottom:16px;display:flex;align-items:baseline;gap:12px">
+      <span style="font-weight:600;color:var(--muted);font-size:13.5px">Renda combinada do mês</span>
+      <span class="serif num" id="inc-total" style="font-size:30px;font-weight:300;margin-left:auto">R$ 0</span>
+    </div>
+
     <div id="inc-sources"></div>
 
     <div class="card inc-card fu" style="margin-top:16px">
@@ -887,11 +924,6 @@ table.annual td.cur-col{box-shadow:inset 3px 0 0 var(--clay),inset -3px 0 0 var(
         </div>
         <button class="btn solid" id="src-add" style="height:46px;padding:13px 22px">Adicionar fonte</button>
       </div>
-    </div>
-
-    <div class="card inc-card fu" style="margin-top:16px;display:flex;align-items:baseline;gap:12px">
-      <span style="font-weight:600;color:var(--muted);font-size:13.5px">Renda combinada do mês</span>
-      <span class="serif num" id="inc-total" style="font-size:30px;font-weight:300;margin-left:auto">R$ 0</span>
     </div>
   </section>
 
@@ -1330,7 +1362,7 @@ function renderFixas(){
   document.getElementById('fx-card').textContent=money0(fixedCredit(m));
 
   const wrap=document.getElementById('fx-groups');
-  wrap.innerHTML=fixedGroupList().map((g,gi)=>{const isCustom=!GROUPS.includes(g);
+  wrap.innerHTML=`<div style="padding:0 4px 18px"><button class="btn fx-addgroup" style="width:100%;justify-content:center">+ nova categoria</button></div>`+fixedGroupList().map((g,gi)=>{const isCustom=!GROUPS.includes(g);
     const lines=state.fixed.map((f,idx)=>({f,idx})).filter(o=>o.f.group===g);
     return `<div class="fx-group">
       <div class="fx-gh ${openGroups.has(gi)?'open':''}" data-g="${gi}">
@@ -1356,7 +1388,7 @@ function renderFixas(){
         <div style="padding:8px 20px"><button class="btn fx-addline" data-g="${g.replace(/"/g,'&quot;')}">+ conta</button></div>
       </div>
     </div>`;
-  }).join('')+`<div style="padding:18px 4px 2px"><button class="btn fx-addgroup" style="width:100%;justify-content:center">+ nova categoria</button></div>`;
+  }).join('');
   wrap.querySelectorAll('.fx-gh').forEach(h=>h.onclick=()=>{const g=+h.dataset.g;if(openGroups.has(g))openGroups.delete(g);else openGroups.add(g);h.classList.toggle('open');h.nextElementSibling.classList.toggle('open')});
   wrap.querySelectorAll('.fx-val').forEach(inp=>{
     inp.onchange=()=>{state.fixed[+inp.dataset.idx].months[m]=parseNum(inp.value);save();renderFixas();renderResumo()};

@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Nunito:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Archivo:wght@500;700;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js"></script>
 <style>
 :root{
   color-scheme:light;
@@ -413,6 +414,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--clay);ba
 input.amt{font-variant-numeric:tabular-nums;font-weight:400;font-size:16px}
 textarea{resize:vertical;min-height:44px}
 .seg{display:inline-flex;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r2);padding:3px}
+#src-who,#m-who{flex-wrap:wrap}
 .seg button{border:none;background:transparent;font-family:inherit;font-weight:700;font-size:13px;
   padding:8px 16px;border-radius:var(--r1);cursor:pointer;color:var(--muted);transition:.16s}
 .seg button.on{background:var(--seg-on);color:var(--ink);box-shadow:0 1px 3px rgba(26,26,24,.12)}
@@ -420,8 +422,14 @@ textarea{resize:vertical;min-height:44px}
 .seg button.on[data-who="l"]{color:var(--cactus-deep)}
 
 /* category buttons */
-.cat-block{margin-bottom:14px}
-.cat-block .cg-title{font-size:12.5px;letter-spacing:.02em;font-weight:600;color:var(--faint);margin:14px 0 8px}
+.cat-block{margin-bottom:12px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r3);padding:12px 14px 14px;box-shadow:var(--shadow);transition:box-shadow .2s,border-color .2s}
+.cat-block .cg-title{font-size:12.5px;letter-spacing:.02em;font-weight:600;color:var(--faint);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.cat-grip{cursor:grab;touch-action:none;color:var(--faint);font-size:14px;line-height:1;letter-spacing:-3px;padding:2px 3px;border-radius:var(--r0);user-select:none;-webkit-user-select:none;display:inline-flex;transition:.16s}
+.cat-grip:hover{color:var(--clay)}
+.cat-grip:active{cursor:grabbing}
+.cat-block.sortable-ghost{opacity:.35}
+.cat-block.sortable-chosen{border-color:var(--clay);box-shadow:var(--shadow-lift)}
+.cat-block.sortable-drag{box-shadow:var(--shadow-lift);opacity:.97}
 .cats{display:flex;flex-wrap:wrap;gap:8px}
 .cat-btn{
   font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
@@ -548,9 +556,12 @@ table.annual td.cur-col{box-shadow:inset 3px 0 0 var(--clay),inset -3px 0 0 var(
 .modal-head .mdot span{width:15px;height:15px;border-radius:50%;display:block}
 .modal-head .mt{font-family:var(--f-body);font-weight:600;font-size:19px;letter-spacing:-.01em;line-height:1.1}
 .modal-head .mt small{display:block;font-size:12px;letter-spacing:.02em;color:var(--muted);font-weight:500;margin-top:2px}
-.modal-head .mx{margin-left:auto;border:none;background:var(--paper-2);width:34px;height:34px;border-radius:50%;
-  cursor:pointer;color:var(--ink-soft);font-size:20px;transition:.16s;flex:none}
-.modal-head .mx:hover{background:var(--neg-bg);color:var(--neg)}
+.modal-head .mx{margin-left:auto;border:1px solid var(--line-strong);background:var(--paper-2);width:34px;height:34px;border-radius:var(--r1);
+  cursor:pointer;color:var(--ink-soft);font-size:20px;line-height:1;display:grid;place-items:center;transition:.16s;flex:none}
+.modal-head .mx:hover{background:var(--neg-bg);color:var(--neg);border-color:var(--neg)}
+html[data-theme="bauhaus"] .modal-head .mx{border-radius:50%}
+html[data-theme="brutal"] .modal-head .mx{border:2px solid #000;box-shadow:2px 2px 0 #000}
+html[data-theme="brutal"] .modal-head .mx:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 #000;background:#FF6B9D;color:#000;border-color:#000}
 .modal-body{padding:14px 24px 24px;display:flex;flex-direction:column;gap:14px}
 .mrow{display:flex;gap:12px}
 .mrow>.field{flex:1}
@@ -591,6 +602,8 @@ table.annual td.cur-col{box-shadow:inset 3px 0 0 var(--clay),inset -3px 0 0 var(
   .mb-item svg{width:22px;height:22px;stroke-width:1.8}
   .mb-item:active{color:var(--clay)}
   main{padding-bottom:104px}
+  /* esconde a barra inferior quando há um modal aberto (evita sobreposição de botões) */
+  body:has(.modal-overlay.show) .mobile-bar{display:none}
 }
 @media(max-width:860px){
   .stats{grid-template-columns:1fr 1fr}
@@ -601,8 +614,9 @@ table.annual td.cur-col{box-shadow:inset 3px 0 0 var(--clay),inset -3px 0 0 var(
   nav.tabs{padding:0 18px}
   .view-title{font-size:28px}
   .modal-overlay{align-items:flex-end;padding:0}
-  .modal{max-width:none;border-radius:var(--r1) 22px 0 0;max-height:94vh}
+  .modal{max-width:none;border-radius:22px 22px 0 0;max-height:94vh}
 }
+html[data-theme="brutal"] .modal{border-radius:0}
 
 /* ===== MICRO-INTERAÇÕES (todas as skins) ===== */
 /* troca de tema com cross-fade suave */
@@ -716,7 +730,7 @@ body{transition:background-color .4s ease,color .4s ease}
   <section class="view" id="v-gastos">
     <div class="eyebrow">Lançamentos</div>
     <h1 class="view-title">Gastos do mês</h1>
-    <p class="cat-hint">Toque numa categoria para lançar um gasto. Não achou a sua? Toque em <strong>+ nova</strong> no fim de qualquer grupo e crie a categoria do seu jeito.</p>
+    <p class="cat-hint">Toque numa categoria para lançar um gasto. Não achou a sua? Toque em <strong>+ nova</strong> no fim de qualquer grupo e crie a categoria do seu jeito. Arraste pelo <strong>⠿</strong> para reordenar os grupos como preferir.</p>
 
     <div class="card entry fu">
       <div id="cat-buttons"></div>
@@ -1273,11 +1287,12 @@ function renderResumo(){
 }
 
 /* ===================== RENDER: GASTOS ===================== */
+let catSortable=null;
 function renderCatButtons(){
   const wrap=document.getElementById('cat-buttons');
   wrap.innerHTML=(state.cats||CAT_DEFS).map((d,di)=>`
     <div class="cat-block">
-      <div class="cg-title">${d.g}</div>
+      <div class="cg-title"><span class="cat-grip" title="Arraste para reordenar" aria-label="Arraste para reordenar">⠿</span>${d.g}</div>
       <div class="cats">${d.subs.map(s=>`<button class="cat-btn" data-cat="${s}">${s}</button>`).join('')}
         <button class="cat-btn cat-add" data-g="${di}" title="Criar categoria em ${d.g}">+ nova</button></div>
     </div>`).join('');
@@ -1289,6 +1304,18 @@ function renderCatButtons(){
       state.cats[+b.dataset.g].subs.push(v);save();renderCatButtons();toast('Categoria criada ✓');
     });
   });
+  if(window.Sortable&&state.cats){
+    if(catSortable)catSortable.destroy();
+    catSortable=Sortable.create(wrap,{
+      handle:'.cat-grip',animation:170,
+      onEnd:e=>{
+        if(e.oldIndex===e.newIndex)return;
+        const moved=state.cats.splice(e.oldIndex,1)[0];
+        state.cats.splice(e.newIndex,0,moved);
+        save();renderCatButtons();
+      }
+    });
+  }
 }
 let modalCat=null, editingId=null;
 function openModal(cat,tx){

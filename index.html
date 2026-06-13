@@ -640,11 +640,57 @@ body{transition:background-color .4s ease,color .4s ease}
 .hero:hover{transform:translateY(-2px)}
 /* respeita quem prefere menos movimento */
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+/* ===== barra de topo: idioma / moeda ===== */
+.utilbar{max-width:1180px;margin:0 auto;padding:7px 28px 0;display:flex;justify-content:flex-end;gap:8px}
+.useg{display:inline-flex;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r1);padding:2px}
+.useg button{border:none;background:transparent;font-family:var(--f-mono);font-weight:600;font-size:11px;letter-spacing:.04em;padding:4px 11px;border-radius:var(--r0);cursor:pointer;color:var(--muted);transition:.15s;white-space:nowrap}
+.useg button.on{background:var(--seg-on);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.useg button:active{transform:scale(.93)}
+
+/* ===== templates de tema menores (mantém a estética) ===== */
+#st-themes .theme-card{padding:8px}
+#st-themes .theme-card .tn{font-size:11px;margin-bottom:6px}
+#st-themes .theme-card .sw i{width:13px;height:13px}
+
+/* ===== calendário de gastos ===== */
+.cal-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px}
+.cal-total{font-family:var(--f-disp);font-weight:var(--w-num);font-size:24px;color:var(--clay)}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+.cal-wd{text-align:center;font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-cell{aspect-ratio:1;border:1px solid var(--line);border-radius:var(--r2);background:var(--paper);display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:6px 7px;cursor:pointer;font-family:inherit;text-align:left;transition:transform .15s,border-color .15s,box-shadow .15s;overflow:hidden;min-height:0}
+.cal-cell.empty{border:none;background:transparent;cursor:default}
+.cal-cell:not(.empty):hover{border-color:var(--clay);transform:translateY(-1px)}
+.cal-cell.sel{border-color:var(--clay);box-shadow:0 0 0 2px var(--clay-soft)}
+.cal-cell.today{outline:2px solid var(--clay);outline-offset:-2px}
+.cal-cell.today .cal-dnum{color:var(--clay);font-weight:800}
+.cal-dnum{font-size:12.5px;font-weight:600;color:var(--ink-soft)}
+.cal-damt{margin-top:auto;font-size:10.5px;font-weight:700;color:var(--ink);line-height:1.15;align-self:stretch;word-break:break-word}
+
+/* ===== anti-overflow horizontal no mobile ===== */
+body{overflow-x:clip}
+img,canvas,table{max-width:100%}
+#iv-who.iv-seg{flex-wrap:wrap}
+
+@media(max-width:640px){
+  .utilbar{padding:6px 16px 0}
+  nav.tabs button{padding:12px 9px 13px;letter-spacing:.05em;font-size:12px}
+  .cal-grid,.cal-weekdays{gap:4px}
+  .cal-cell{padding:4px 4px;border-radius:var(--r1)}
+  .cal-dnum{font-size:11px}
+  .cal-damt{font-size:8.5px}
+  .cal-wd{font-size:9.5px}
+}
 </style>
 </head>
 <body>
 
 <header>
+  <div class="utilbar">
+    <div class="useg" id="langSeg" title="Idioma / Language"><button data-lang="pt" class="on">PT</button><button data-lang="en">EN</button></div>
+    <div class="useg" id="curSeg" title="Moeda / Currency"><button data-cur="BRL" class="on">R$</button><button data-cur="USD">$</button></div>
+  </div>
   <div class="head-inner">
     <div class="brand">
       <div class="brand-txt">
@@ -659,67 +705,68 @@ body{transition:background-color .4s ease,color .4s ease}
     </div>
 
     <div class="tools">
-      <button class="btn" id="reportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>Relatório</button>
-      <button class="btn" id="settingsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Ajustes</button>
-      <button class="btn" id="clearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>Limpar</button>
-      <button class="btn" id="importBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Importar</button>
-      <button class="btn" id="exportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0l-4 4m4-4l4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Exportar</button>
+      <button class="btn" id="reportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg><span data-en="Report">Relatório</span></button>
+      <button class="btn" id="settingsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span data-en="Settings">Ajustes</span></button>
+      <button class="btn" id="clearBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg><span data-en="Clear">Limpar</span></button>
+      <button class="btn" id="importBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg><span data-en="Import">Importar</span></button>
+      <button class="btn" id="exportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0l-4 4m4-4l4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg><span data-en="Export">Exportar</span></button>
       <input type="file" id="fileIn" accept="application/json" hidden>
     </div>
   </div>
   <nav class="tabs" id="tabs">
-    <button class="active" data-v="resumo">Resumo</button>
-    <button data-v="gastos">Gastos</button>
-    <button data-v="fixas">Despesas Fixas</button>
-    <button data-v="renda">Renda</button>
-    <button data-v="invest">Investimentos</button>
-    <button data-v="anual">Visão Anual</button>
+    <button class="active" data-v="resumo" data-en="Summary">Resumo</button>
+    <button data-v="gastos" data-en="Expenses">Gastos</button>
+    <button data-v="calendario" data-en="Calendar">Calendário</button>
+    <button data-v="fixas" data-en="Fixed costs">Despesas Fixas</button>
+    <button data-v="renda" data-en="Income">Renda</button>
+    <button data-v="invest" data-en="Investments">Investimentos</button>
+    <button data-v="anual" data-en="Year view">Visão Anual</button>
   </nav>
 </header>
 
 <nav class="mobile-bar" id="mobile-bar">
-  <button class="mb-item" id="mb-report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>Relatório</button>
-  <button class="mb-item" id="mb-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Ajustes</button>
-  <button class="mb-item" id="mb-data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>Dados</button>
+  <button class="mb-item" id="mb-report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg><span data-en="Report">Relatório</span></button>
+  <button class="mb-item" id="mb-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span data-en="Settings">Ajustes</span></button>
+  <button class="mb-item" id="mb-data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><span data-en="Data">Dados</span></button>
 </nav>
 
 <main>
   <!-- ===== RESUMO ===== -->
   <section class="view active" id="v-resumo">
     <div class="eyebrow" id="r-eyebrow">Junho · 2026</div>
-    <h1 class="view-title">Resumo do mês</h1>
-    <p class="view-sub">Uma visão calma de tudo que entra e sai do lar. Ajuste os números nas outras abas e este painel acompanha em tempo real.</p>
+    <h1 class="view-title" data-en="Monthly summary">Resumo do mês</h1>
+    <p class="view-sub" data-en="A calm view of everything coming in and going out of the home. Adjust the numbers in the other tabs and this panel follows in real time.">Uma visão calma de tudo que entra e sai da casa. Ajuste os números nas outras abas e este painel acompanha em tempo real.</p>
 
     <div class="hero fu" style="animation-delay:.02s">
-      <div class="hero-label">Saldo líquido do mês</div>
+      <div class="hero-label" data-en="Net balance this month">Saldo líquido do mês</div>
       <div class="hero-big num" id="h-saldo">R$ 0</div>
       <div class="hero-meta">
-        <div><span>Renda combinada</span><strong class="num" id="h-renda">R$ 0</strong></div>
-        <div><span>Total de gastos</span><strong class="num" id="h-gastos">R$ 0</strong></div>
-        <div><span>Taxa de poupança</span><div class="chip-rate"><span class="num" id="h-taxa">0%</span></div></div>
+        <div><span data-en="Combined income">Renda combinada</span><strong class="num" id="h-renda">R$ 0</strong></div>
+        <div><span data-en="Total spending">Total de gastos</span><strong class="num" id="h-gastos">R$ 0</strong></div>
+        <div><span data-en="Savings rate">Taxa de poupança</span><div class="chip-rate"><span class="num" id="h-taxa">0%</span></div></div>
       </div>
     </div>
 
     <div class="grid stats" style="margin-top:18px">
-      <div class="card stat fu" style="animation-delay:.06s"><div class="lab"><span class="dot" style="background:var(--cactus)"></span>Despesas fixas</div><div class="val num" id="s-fixas">R$ 0</div><div class="sub" id="s-fixas-sub">do orçamento do lar</div></div>
-      <div class="card stat fu" style="animation-delay:.1s"><div class="lab"><span class="dot" style="background:var(--clay)"></span>Gastos variáveis</div><div class="val num" id="s-var">R$ 0</div><div class="sub" id="s-var-sub">cartão e débito</div></div>
-      <div class="card stat fu" style="animation-delay:.14s"><div class="lab"><span class="dot" style="background:var(--gold)"></span>Fatura no crédito</div><div class="val num" id="s-cred">R$ 0</div><div class="sub" id="s-cred-sub">a pagar</div></div>
-      <div class="card stat fu" style="animation-delay:.18s"><div class="lab"><span class="dot" style="background:var(--ink-soft)"></span>Parcelas pendentes</div><div class="val num" id="s-parc">R$ 0</div><div class="sub" id="s-parc-sub">compromissos futuros</div></div>
+      <div class="card stat fu" style="animation-delay:.06s"><div class="lab"><span class="dot" style="background:var(--cactus)"></span><span data-en="Fixed costs">Despesas fixas</span></div><div class="val num" id="s-fixas">R$ 0</div><div class="sub" id="s-fixas-sub" data-en="of the home budget">do orçamento da casa</div></div>
+      <div class="card stat fu" style="animation-delay:.1s"><div class="lab"><span class="dot" style="background:var(--clay)"></span><span data-en="Variable spending">Gastos variáveis</span></div><div class="val num" id="s-var">R$ 0</div><div class="sub" id="s-var-sub" data-en="card and debit">cartão e débito</div></div>
+      <div class="card stat fu" style="animation-delay:.14s"><div class="lab"><span class="dot" style="background:var(--gold)"></span><span data-en="Credit-card bill">Fatura no crédito</span></div><div class="val num" id="s-cred">R$ 0</div><div class="sub" id="s-cred-sub" data-en="to pay">a pagar</div></div>
+      <div class="card stat fu" style="animation-delay:.18s"><div class="lab"><span class="dot" style="background:var(--ink-soft)"></span><span data-en="Pending installments">Parcelas pendentes</span></div><div class="val num" id="s-parc">R$ 0</div><div class="sub" id="s-parc-sub" data-en="future commitments">compromissos futuros</div></div>
     </div>
 
     <div class="section-row">
       <div class="card panel fu" style="animation-delay:.1s">
-        <h3>Gastos por categoria</h3>
-        <div class="ph-sub">Onde o dinheiro foi neste mês</div>
+        <h3 data-en="Spending by category">Gastos por categoria</h3>
+        <div class="ph-sub" data-en="Where the money went this month">Onde o dinheiro foi neste mês</div>
         <div class="donut-wrap">
           <canvas id="donut"></canvas>
-          <div class="donut-center"><span>Variável</span><strong class="num" id="donut-total">R$ 0</strong></div>
+          <div class="donut-center"><span data-en="Variable">Variável</span><strong class="num" id="donut-total">R$ 0</strong></div>
         </div>
         <ul class="legend" id="cat-legend"></ul>
       </div>
       <div class="card panel fu" style="animation-delay:.14s">
-        <h3>Entra & sai</h3>
-        <div class="ph-sub">Renda contra despesas do mês</div>
+        <h3 data-en="In & out">Entra & sai</h3>
+        <div class="ph-sub" data-en="Income vs. expenses for the month">Renda contra despesas do mês</div>
         <div class="chart-wrap"><canvas id="flowBar"></canvas></div>
         <div class="split" id="split-grid"></div>
       </div>
@@ -728,19 +775,35 @@ body{transition:background-color .4s ease,color .4s ease}
 
   <!-- ===== GASTOS ===== -->
   <section class="view" id="v-gastos">
-    <div class="eyebrow">Lançamentos</div>
-    <h1 class="view-title">Gastos do mês</h1>
-    <p class="cat-hint">Toque numa categoria para lançar um gasto. Não achou a sua? Toque em <strong>+ nova</strong> no fim de qualquer grupo e crie a categoria do seu jeito. Arraste pelo <strong>⠿</strong> para reordenar os grupos como preferir.</p>
+    <div class="eyebrow" data-en="Entries">Lançamentos</div>
+    <h1 class="view-title" data-en="Spending this month">Gastos do mês</h1>
+    <p class="cat-hint" data-en="Tap a category to log an expense. Don't see yours? Tap <strong>+ new</strong> at the end of any group and create your own. Drag by the <strong>⠿</strong> handle to reorder groups however you like.">Toque numa categoria para lançar um gasto. Não achou a sua? Toque em <strong>+ nova</strong> no fim de qualquer grupo e crie a categoria do seu jeito. Arraste pelo <strong>⠿</strong> para reordenar os grupos como preferir.</p>
 
     <div class="card entry fu">
       <div id="cat-buttons"></div>
     </div>
 
     <div class="tx-head">
-      <h3>Lançamentos do mês</h3>
+      <h3 data-en="Entries this month">Lançamentos do mês</h3>
       <div class="filter-pills" id="tx-filter"></div>
     </div>
     <div id="tx-list"></div>
+  </section>
+
+  <!-- ===== CALENDÁRIO ===== -->
+  <section class="view" id="v-calendario">
+    <div class="eyebrow" data-en="Day by day">Dia a dia</div>
+    <h1 class="view-title" data-en="Spending calendar">Calendário de gastos</h1>
+    <p class="view-sub" data-en="Each day shows how much you spent — a stronger color means a bigger day. Tap a day to see its entries.">Cada dia mostra quanto você gastou — quanto mais forte a cor, maior o gasto do dia. Toque num dia para ver os lançamentos.</p>
+    <div class="card panel">
+      <div class="cal-top">
+        <div class="ph-sub" data-en="Total this month">Total no mês</div>
+        <div class="cal-total num" id="cal-monthtotal">R$ 0</div>
+      </div>
+      <div class="cal-weekdays" id="cal-weekdays"></div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+    <div id="cal-day"></div>
   </section>
 
   <!-- ===== ENTRY MODAL ===== -->
@@ -753,24 +816,24 @@ body{transition:background-color .4s ease,color .4s ease}
       </div>
       <div class="modal-body">
         <div class="mrow">
-          <div class="field" style="flex:1.3"><label>Valor (R$)</label><input id="m-val" class="bigamt num" inputmode="decimal" placeholder="0,00"></div>
-          <div class="field"><label>Data</label><input id="m-date" type="date"></div>
+          <div class="field" style="flex:1.3"><label><span data-en="Amount">Valor</span> (<span class="cursym">R$</span>)</label><input id="m-val" class="bigamt num" inputmode="decimal" placeholder="0,00"></div>
+          <div class="field"><label data-en="Date">Data</label><input id="m-date" type="date"></div>
         </div>
         <div class="mrow">
-          <div class="field"><label>Quem gastou</label>
+          <div class="field"><label data-en="Who spent">Quem gastou</label>
             <div class="seg" id="m-who"></div>
           </div>
-          <div class="field"><label>Forma</label>
-            <div class="seg" id="m-type"><button data-type="Débito" class="on">Débito</button><button data-type="Crédito">Crédito</button></div>
+          <div class="field"><label data-en="Method">Forma</label>
+            <div class="seg" id="m-type"><button data-type="Débito" class="on" data-en="Debit">Débito</button><button data-type="Crédito" data-en="Credit">Crédito</button></div>
           </div>
         </div>
         <div class="mrow">
-          <div class="field" style="flex:2"><label>Descrição</label><input id="m-desc" placeholder="Ex.: Almoço com a Cecília"></div>
-          <div class="field" style="flex:1"><label>Parcelas</label><input id="m-parc" class="num" inputmode="numeric" value="1"></div>
+          <div class="field" style="flex:2"><label data-en="Description">Descrição</label><input id="m-desc" placeholder="Ex.: Almoço com a Cecília" data-en-ph="e.g. Lunch with Cecília"></div>
+          <div class="field" style="flex:1"><label data-en="Installments">Parcelas</label><input id="m-parc" class="num" inputmode="numeric" value="1"></div>
         </div>
-        <div class="field"><label>Notas (opcional)</label><textarea id="m-note" placeholder="Contexto extra: parcela 2/6, reembolsável, presente…"></textarea></div>
+        <div class="field"><label data-en="Notes (optional)">Notas (opcional)</label><textarea id="m-note" placeholder="Contexto extra: parcela 2/6, reembolsável, presente…" data-en-ph="Extra context: installment 2/6, refundable, gift…"></textarea></div>
         <div class="modal-actions">
-          <button class="btn" id="m-cancel">Cancelar</button>
+          <button class="btn" id="m-cancel" data-en="Cancel">Cancelar</button>
           <button class="btn solid" id="m-add">Adicionar gasto</button>
         </div>
       </div>
@@ -787,8 +850,8 @@ body{transition:background-color .4s ease,color .4s ease}
       <div class="modal-body">
         <p id="cf-msg" style="color:var(--ink-soft);font-size:14px;line-height:1.55;margin:-2px 0 2px"></p>
         <div class="modal-actions">
-          <button class="btn" id="cf-no">Cancelar</button>
-          <button class="btn solid" id="cf-yes">Confirmar</button>
+          <button class="btn" id="cf-no" data-en="Cancel">Cancelar</button>
+          <button class="btn solid" id="cf-yes" data-en="Confirm">Confirmar</button>
         </div>
       </div>
     </div>
@@ -796,20 +859,20 @@ body{transition:background-color .4s ease,color .4s ease}
 
   <!-- ===== FIXAS ===== -->
   <section class="view" id="v-fixas">
-    <div class="eyebrow">O essencial do lar</div>
-    <h1 class="view-title">Despesas fixas</h1>
-    <p class="view-sub">As contas que se repetem. Edite o valor para o mês selecionado e, ao lado, informe o <strong>dia de vencimento</strong>. Assim a seção "A vencer" te avisa o que está chegando.</p>
+    <div class="eyebrow" data-en="The home essentials">O essencial da casa</div>
+    <h1 class="view-title" data-en="Fixed costs">Despesas fixas</h1>
+    <p class="view-sub" data-en="The bills that repeat. Edit the value for the selected month and, beside it, set the <strong>due day</strong>. That way the &quot;Upcoming&quot; section warns you what's coming.">As contas que se repetem. Edite o valor para o mês selecionado e, ao lado, informe o <strong>dia de vencimento</strong>. Assim a seção "A vencer" te avisa o que está chegando.</p>
     <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:18px">
-      <div class="card stat" style="flex:1;min-width:200px"><div class="lab"><span class="dot" style="background:var(--cactus)"></span>Total fixo no mês</div><div class="val num" id="fx-total">R$ 0</div></div>
-      <div class="card stat" style="flex:1;min-width:200px"><div class="lab"><span class="dot" style="background:var(--gold)"></span>Orçamento do mês</div><div class="val num" id="fx-budget" contenteditable style="outline:none">R$ 0</div></div>
-      <div class="card stat" style="flex:1;min-width:200px"><div class="lab"><span class="dot" id="fx-bd-dot" style="background:var(--clay)"></span>Sobra / Estouro</div><div class="val num" id="fx-diff">R$ 0</div></div>
-      <div class="card stat" style="flex:1;min-width:200px"><div class="lab"><span class="dot" style="background:#9C8650"></span>No cartão (fixas)</div><div class="val num" id="fx-card">R$ 0</div><div class="sub">vai na fatura</div></div>
+      <div class="card stat" style="flex:1;min-width:200px"><div class="lab"><span class="dot" style="background:var(--cactus)"></span><span data-en="Fixed total this month">Total fixo no mês</span></div><div class="val num" id="fx-total">R$ 0</div></div>
+      <div class="card stat" style="flex:1;min-width:200px"><div class="lab"><span class="dot" style="background:var(--gold)"></span><span data-en="Budget for the month">Orçamento do mês</span></div><div class="val num" id="fx-budget" contenteditable style="outline:none">R$ 0</div></div>
+      <div class="card stat" style="flex:1;min-width:200px"><div class="lab"><span class="dot" id="fx-bd-dot" style="background:var(--clay)"></span><span data-en="Left / Over">Sobra / Estouro</span></div><div class="val num" id="fx-diff">R$ 0</div></div>
+      <div class="card stat" style="flex:1;min-width:200px"><div class="lab"><span class="dot" style="background:#9C8650"></span><span data-en="On the card (fixed)">No cartão (fixas)</span></div><div class="val num" id="fx-card">R$ 0</div><div class="sub" data-en="goes on the bill">vai na fatura</div></div>
     </div>
 
     <div class="card panel" id="upcoming-card" style="margin-bottom:18px">
       <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
-        <div><h3 style="margin:0">A vencer</h3><div class="ph-sub" style="margin:2px 0 0">Contas deste mês com dia de vencimento</div></div>
-        <button class="btn" id="email-bills" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5l9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>Enviar por e-mail</button>
+        <div><h3 style="margin:0" data-en="Upcoming">A vencer</h3><div class="ph-sub" style="margin:2px 0 0" data-en="This month's bills with a due day">Contas deste mês com dia de vencimento</div></div>
+        <button class="btn" id="email-bills" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5l9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg><span data-en="Send by e-mail">Enviar por e-mail</span></button>
       </div>
       <div id="upcoming-list" style="margin-top:14px"></div>
     </div>
@@ -820,11 +883,11 @@ body{transition:background-color .4s ease,color .4s ease}
   <!-- ===== DATA SHEET ===== -->
   <div class="modal-overlay" id="data-sheet">
     <div class="modal" style="max-width:420px" role="dialog" aria-modal="true">
-      <div class="modal-head"><div class="mt">Dados<small>backup e arquivo</small></div><button class="mx" id="ds-close" aria-label="Fechar">×</button></div>
+      <div class="modal-head"><div class="mt"><span data-en="Data">Dados</span><small data-en="backup &amp; file">backup e arquivo</small></div><button class="mx" id="ds-close" aria-label="Fechar">×</button></div>
       <div class="modal-body">
-        <button class="btn" id="ds-export" style="justify-content:center;width:100%">Exportar backup (.json)</button>
-        <button class="btn" id="ds-import" style="justify-content:center;width:100%">Importar backup</button>
-        <button class="btn" id="ds-clear" style="justify-content:center;width:100%">Limpar tudo</button>
+        <button class="btn" id="ds-export" style="justify-content:center;width:100%" data-en="Export backup (.json)">Exportar backup (.json)</button>
+        <button class="btn" id="ds-import" style="justify-content:center;width:100%" data-en="Import backup">Importar backup</button>
+        <button class="btn" id="ds-clear" style="justify-content:center;width:100%" data-en="Clear everything">Limpar tudo</button>
       </div>
     </div>
   </div>
@@ -832,11 +895,11 @@ body{transition:background-color .4s ease,color .4s ease}
   <!-- ===== REPORT MODAL ===== -->
   <div class="modal-overlay" id="report-modal">
     <div class="modal" style="max-width:420px" role="dialog" aria-modal="true">
-      <div class="modal-head"><div class="mt">Gerar relatório<small id="rp-sub"></small></div><button class="mx" id="rp-close" aria-label="Fechar">×</button></div>
+      <div class="modal-head"><div class="mt"><span data-en="Generate report">Gerar relatório</span><small id="rp-sub"></small></div><button class="mx" id="rp-close" aria-label="Fechar">×</button></div>
       <div class="modal-body">
-        <p style="font-size:13.5px;line-height:1.55;margin:0">O relatório junta tudo do mês selecionado: renda por pessoa e por fonte, despesas fixas, gastos por categoria, fatura do cartão e saldo. Gere em PDF pela impressão ou baixe uma planilha Excel com os dados, pra guardar no seu computador.</p>
+        <p style="font-size:13.5px;line-height:1.55;margin:0" data-en="The report gathers everything from the selected month: income by person and by source, fixed costs, spending by category, the card bill and balance. Generate a PDF via print or download an Excel sheet to keep on your computer.">O relatório junta tudo do mês selecionado: renda por pessoa e por fonte, despesas fixas, gastos por categoria, fatura do cartão e saldo. Gere em PDF pela impressão ou baixe uma planilha Excel com os dados, pra guardar no seu computador.</p>
         <div class="modal-actions">
-          <button class="btn" id="rp-print" style="flex:1;justify-content:center">Imprimir / PDF</button>
+          <button class="btn" id="rp-print" style="flex:1;justify-content:center" data-en="Print / PDF">Imprimir / PDF</button>
           <button class="btn solid" id="rp-xlsx" style="flex:1;justify-content:center">Excel (.xlsx)</button>
         </div>
       </div>
@@ -846,13 +909,13 @@ body{transition:background-color .4s ease,color .4s ease}
   <!-- ===== IMPORT CHOICE MODAL ===== -->
   <div class="modal-overlay" id="import-modal">
     <div class="modal" style="max-width:440px" role="dialog" aria-modal="true">
-      <div class="modal-head"><div class="mt">Importar dados<small>já existe coisa aqui</small></div><button class="mx" id="im-close" aria-label="Fechar">×</button></div>
+      <div class="modal-head"><div class="mt"><span data-en="Import data">Importar dados</span><small data-en="there's already stuff here">já existe coisa aqui</small></div><button class="mx" id="im-close" aria-label="Fechar">×</button></div>
       <div class="modal-body">
-        <p style="font-size:13.5px;line-height:1.55;margin:0"><strong>Mesclar</strong> junta o arquivo com o que já está aqui: pessoas são unidas pelo nome, lançamentos e rendas são somados, e as despesas fixas do arquivo só preenchem meses que estiverem vazios. É o caminho do "Quite da casa", juntando o de cada pessoa.</p>
-        <p style="font-size:13.5px;line-height:1.55;margin:0"><strong>Substituir</strong> apaga tudo daqui e fica só o arquivo.</p>
+        <p style="font-size:13.5px;line-height:1.55;margin:0" data-en="<strong>Merge</strong> joins the file with what's already here: people are matched by name, entries and income are added together, and the file's fixed costs only fill months that are empty. It's the path to a shared household budget, combining each person's."><strong>Mesclar</strong> junta o arquivo com o que já está aqui: pessoas são unidas pelo nome, lançamentos e rendas são somados, e as despesas fixas do arquivo só preenchem meses que estiverem vazios. É o caminho do "Quite da casa", juntando o de cada pessoa.</p>
+        <p style="font-size:13.5px;line-height:1.55;margin:0" data-en="<strong>Replace</strong> erases everything here and keeps only the file."><strong>Substituir</strong> apaga tudo daqui e fica só o arquivo.</p>
         <div class="modal-actions">
-          <button class="btn" id="im-replace">Substituir tudo</button>
-          <button class="btn solid" id="im-merge" style="flex:1.4;justify-content:center">Mesclar</button>
+          <button class="btn" id="im-replace" data-en="Replace all">Substituir tudo</button>
+          <button class="btn solid" id="im-merge" style="flex:1.4;justify-content:center" data-en="Merge">Mesclar</button>
         </div>
       </div>
     </div>
@@ -864,7 +927,7 @@ body{transition:background-color .4s ease,color .4s ease}
       <div class="modal-head"><div class="mt" id="pm-title">Nova categoria</div><button class="mx" id="pm-close" aria-label="Fechar">×</button></div>
       <div class="modal-body">
         <div class="field"><label id="pm-label">Nome</label><input id="pm-input"></div>
-        <div class="modal-actions"><button class="btn" id="pm-cancel">Cancelar</button><button class="btn solid" id="pm-ok" style="flex:1.4;justify-content:center">Salvar</button></div>
+        <div class="modal-actions"><button class="btn" id="pm-cancel" data-en="Cancel">Cancelar</button><button class="btn solid" id="pm-ok" style="flex:1.4;justify-content:center" data-en="Save">Salvar</button></div>
       </div>
     </div>
   </div>
@@ -872,23 +935,29 @@ body{transition:background-color .4s ease,color .4s ease}
   <!-- ===== AJUSTES MODAL ===== -->
   <div class="modal-overlay" id="settings-modal">
     <div class="modal" style="max-width:520px" role="dialog" aria-modal="true">
-      <div class="modal-head"><div class="mt">Ajustes<small id="st-sub">pessoas e categorias da casa</small></div><button class="mx" id="st-close" aria-label="Fechar">×</button></div>
+      <div class="modal-head"><div class="mt"><span data-en="Settings">Ajustes</span><small id="st-sub" data-en="people &amp; categories of the home">pessoas e categorias da casa</small></div><button class="mx" id="st-close" aria-label="Fechar">×</button></div>
       <div class="modal-body">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px">Tema</div>
-          <div id="st-themes" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px"></div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end">
+          <div style="flex:1;min-width:120px"><div class="eyebrow" style="margin-bottom:8px" data-en="Language">Idioma</div>
+            <div class="seg" id="langSeg2" style="width:100%"><button data-lang="pt" class="on">Português</button><button data-lang="en">English</button></div></div>
+          <div style="flex:1;min-width:120px"><div class="eyebrow" style="margin-bottom:8px" data-en="Currency">Moeda</div>
+            <div class="seg" id="curSeg2" style="width:100%"><button data-cur="BRL" class="on">R$ BRL</button><button data-cur="USD">$ USD</button></div></div>
         </div>
-        <div id="st-welcome" style="display:none;padding:10px 12px;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r2);font-size:13.5px;line-height:1.5">Bem-vinda ao Quite. Comece adicionando as pessoas da casa: cada lançamento, renda e investimento pode ser atribuído a alguém.</div>
         <div>
-          <div class="eyebrow" style="margin-bottom:8px">Pessoas da casa</div>
+          <div class="eyebrow" style="margin-bottom:8px" data-en="Theme">Tema</div>
+          <div id="st-themes" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:7px"></div>
+        </div>
+        <div id="st-welcome" style="display:none;padding:10px 12px;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r2);font-size:13.5px;line-height:1.5" data-en="Welcome to Quite. Start by adding the people of the home: every entry, income and investment can be assigned to someone — and the names then show up in the Income tab.">Bem-vinda ao Quite. Comece adicionando as pessoas da casa: cada lançamento, renda e investimento pode ser atribuído a alguém — e os nomes passam a aparecer na aba Renda.</div>
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px" data-en="People of the home">Pessoas da casa</div>
           <div id="st-people"></div>
           <div style="display:flex;gap:8px;margin-top:8px">
-            <input id="st-pname" placeholder="Nome (ex.: Ana)" style="flex:1">
-            <button class="btn solid" id="st-padd">Adicionar</button>
+            <input id="st-pname" placeholder="Nome (ex.: Ana)" data-en-ph="Name (e.g. Ana)" style="flex:1">
+            <button class="btn solid" id="st-padd" data-en="Add">Adicionar</button>
           </div>
         </div>
         <div>
-          <div class="eyebrow" style="margin-bottom:8px">Categorias criadas por você</div>
+          <div class="eyebrow" style="margin-bottom:8px" data-en="Categories you created">Categorias criadas por você</div>
           <div id="st-cats" class="ph-sub" style="font-size:13px"></div>
         </div>
       </div>
@@ -900,15 +969,15 @@ body{transition:background-color .4s ease,color .4s ease}
     <div class="modal" style="max-width:470px" role="dialog" aria-modal="true">
       <div class="modal-head">
         <div class="mdot" style="background:var(--cactus-soft)"><span style="background:var(--cactus-deep)"></span></div>
-        <div class="mt">Lembrete de contas<small id="bills-sub">a vencer</small></div>
+        <div class="mt"><span data-en="Bill reminder">Lembrete de contas</span><small id="bills-sub" data-en="upcoming">a vencer</small></div>
         <button class="mx" id="bills-close" aria-label="Fechar">×</button>
       </div>
       <div class="modal-body">
-        <p class="ph-sub" style="margin:-4px 0 0">Copie o texto ou abra direto no seu e-mail e mande pra você e pra quem divide as contas da casa.</p>
+        <p class="ph-sub" style="margin:-4px 0 0" data-en="Copy the text or open it straight in your e-mail and send it to yourself and whoever shares the home's bills.">Copie o texto ou abra direto no seu e-mail e mande pra você e pra quem divide as contas da casa.</p>
         <textarea id="bills-text" readonly style="min-height:170px;font-size:13px;line-height:1.5;font-family:inherit"></textarea>
         <div class="modal-actions">
-          <button class="btn" id="bills-copy">Copiar texto</button>
-          <a class="btn solid" id="bills-mail" href="#" target="_blank" rel="noopener" style="flex:1.6;justify-content:center;text-decoration:none">Abrir no e-mail</a>
+          <button class="btn" id="bills-copy" data-en="Copy text">Copiar texto</button>
+          <a class="btn solid" id="bills-mail" href="#" target="_blank" rel="noopener" style="flex:1.6;justify-content:center;text-decoration:none" data-en="Open in e-mail">Abrir no e-mail</a>
         </div>
       </div>
     </div>
@@ -916,80 +985,82 @@ body{transition:background-color .4s ease,color .4s ease}
 
   <!-- ===== RENDA ===== -->
   <section class="view" id="v-renda">
-    <div class="eyebrow">O que entra</div>
-    <h1 class="view-title">Renda do mês</h1>
-    <p class="view-sub">Crie as fontes de renda da casa do seu jeito: salário de cada pessoa, ganhos com qualquer atividade. Fontes mensais têm um valor por mês; fontes avulsas recebem lançamentos conforme o dinheiro entra.</p>
+    <div class="eyebrow" data-en="What comes in">O que entra</div>
+    <h1 class="view-title" data-en="Income this month">Renda do mês</h1>
+    <p class="view-sub" data-en="Create the home's income sources your way: each person's salary, earnings from any activity. Monthly sources have a value per month; one-off sources get entries as the money comes in.">Crie as fontes de renda da casa do seu jeito: salário de cada pessoa, ganhos com qualquer atividade. Fontes mensais têm um valor por mês; fontes avulsas recebem lançamentos conforme o dinheiro entra.</p>
+
+    <div id="inc-peoplehint"></div>
 
     <div class="card inc-card fu" style="margin-bottom:16px;display:flex;align-items:baseline;gap:12px">
-      <span style="font-weight:600;color:var(--muted);font-size:13.5px">Renda combinada do mês</span>
+      <span style="font-weight:600;color:var(--muted);font-size:13.5px" data-en="Combined income this month">Renda combinada do mês</span>
       <span class="serif num" id="inc-total" style="font-size:30px;font-weight:300;margin-left:auto">R$ 0</span>
     </div>
 
     <div id="inc-sources"></div>
 
     <div class="card inc-card fu" style="margin-top:16px">
-      <h3 class="serif" style="font-size:18px;margin-bottom:4px">Nova fonte de renda</h3>
-      <div class="ph-sub" style="color:var(--muted);font-size:12.5px">Ex.: "Salário", "Ganhos com Tattoo", "Freelas", "Aluguel recebido"</div>
+      <h3 class="serif" style="font-size:18px;margin-bottom:4px" data-en="New income source">Nova fonte de renda</h3>
+      <div class="ph-sub" style="color:var(--muted);font-size:12.5px" data-en="e.g. &quot;Salary&quot;, &quot;Side earnings&quot;, &quot;Freelance&quot;, &quot;Rent received&quot;">Ex.: "Salário", "Ganhos extras", "Freelas", "Aluguel recebido"</div>
       <div class="tattoo-form" style="margin-top:14px">
-        <div class="field" style="flex:1.4;min-width:160px"><label>Nome da fonte</label><input id="src-label" placeholder="Ex.: Ganhos com Tattoo"></div>
-        <div class="field" style="min-width:150px"><label>De quem</label><div class="seg" id="src-who"></div></div>
-        <div class="field" style="min-width:180px"><label>Tipo</label>
-          <div class="seg" id="src-kind"><button data-kind="m" class="on">Mensal</button><button data-kind="a">Avulsa</button></div>
+        <div class="field" style="flex:1.4;min-width:160px"><label data-en="Source name">Nome da fonte</label><input id="src-label" placeholder="Ex.: Ganhos extras" data-en-ph="e.g. Side earnings"></div>
+        <div class="field" style="min-width:150px"><label data-en="Whose">De quem</label><div class="seg" id="src-who"></div></div>
+        <div class="field" style="min-width:180px"><label data-en="Type">Tipo</label>
+          <div class="seg" id="src-kind"><button data-kind="m" class="on" data-en="Monthly">Mensal</button><button data-kind="a" data-en="One-off">Avulsa</button></div>
         </div>
-        <button class="btn solid" id="src-add" style="height:46px;padding:13px 22px">Adicionar fonte</button>
+        <button class="btn solid" id="src-add" style="height:46px;padding:13px 22px" data-en="Add source">Adicionar fonte</button>
       </div>
     </div>
   </section>
 
   <!-- ===== INVESTIMENTOS ===== -->
   <section class="view" id="v-invest">
-    <div class="eyebrow">Patrimônio</div>
-    <h1 class="view-title">Investimentos</h1>
-    <p class="view-sub">Cada aplicação de vocês: CDB, Tesouro e o que mais vier. Atualize o saldo quando quiser e acompanhe quanto já rendeu. Vale para o ano todo, não muda com o mês lá em cima.</p>
+    <div class="eyebrow" data-en="Net worth">Patrimônio</div>
+    <h1 class="view-title" data-en="Investments">Investimentos</h1>
+    <p class="view-sub" data-en="Every holding of yours: CDB, Treasury and whatever else. Update the balance whenever you like and track how much it has earned. It covers the whole year, it doesn't change with the month up top.">Cada aplicação de vocês: CDB, Tesouro e o que mais vier. Atualize o saldo quando quiser e acompanhe quanto já rendeu. Vale para o ano todo, não muda com o mês lá em cima.</p>
 
     <div class="grid stats" style="margin-bottom:18px">
-      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--cactus-deep)"></span>Patrimônio total</div><div class="val num" id="iv-total">R$ 0</div><div class="sub" id="iv-count">0 aplicações</div></div>
-      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--clay)"></span>Total aplicado</div><div class="val num" id="iv-aplicado">R$ 0</div><div class="sub">valor investido</div></div>
-      <div class="card stat"><div class="lab"><span class="dot" id="iv-rend-dot" style="background:var(--gold)"></span>Rendimento</div><div class="val num" id="iv-rend">R$ 0</div><div class="sub" id="iv-rend-pct">0%</div></div>
+      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--cactus-deep)"></span><span data-en="Total net worth">Patrimônio total</span></div><div class="val num" id="iv-total">R$ 0</div><div class="sub" id="iv-count">0 aplicações</div></div>
+      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--clay)"></span><span data-en="Total invested">Total aplicado</span></div><div class="val num" id="iv-aplicado">R$ 0</div><div class="sub" data-en="amount invested">valor investido</div></div>
+      <div class="card stat"><div class="lab"><span class="dot" id="iv-rend-dot" style="background:var(--gold)"></span><span data-en="Return">Rendimento</span></div><div class="val num" id="iv-rend">R$ 0</div><div class="sub" id="iv-rend-pct">0%</div></div>
     </div>
 
     <div class="card entry fu" style="padding:24px 26px">
-      <h3 class="serif" style="font-size:20px;margin-bottom:4px">Nova aplicação</h3>
-      <div class="ph-sub" style="color:var(--muted);font-size:12.5px;margin-bottom:14px">Preencha o que tiver. Só tipo e valor já bastam</div>
+      <h3 class="serif" style="font-size:20px;margin-bottom:4px" data-en="New holding">Nova aplicação</h3>
+      <div class="ph-sub" style="color:var(--muted);font-size:12.5px;margin-bottom:14px" data-en="Fill in what you have. Type and value alone are enough">Preencha o que tiver. Só tipo e valor já bastam</div>
       <div class="tattoo-form">
-        <div class="field" style="min-width:150px"><label>Tipo</label>
+        <div class="field" style="min-width:150px"><label data-en="Type">Tipo</label>
           <div class="cselect" id="iv-tipo-wrap">
             <button type="button" class="cselect-btn" id="iv-tipo-btn"><span class="cs-dot"></span><span class="cs-val">CDB / CDI</span><span class="cs-caret">▾</span></button>
             <div class="cselect-menu" id="iv-tipo-menu"></div>
           </div>
           <input type="hidden" id="iv-tipo" value="CDB / CDI">
         </div>
-        <div class="field" style="flex:1.4;min-width:150px"><label>Nome / Instituição</label><input id="iv-nome" placeholder="Ex.: CDB Banco Inter"></div>
-        <div class="field" style="flex:1 1 100%;min-width:260px"><label>Quem</label>
+        <div class="field" style="flex:1.4;min-width:150px"><label data-en="Name / Institution">Nome / Instituição</label><input id="iv-nome" placeholder="Ex.: CDB Banco Inter" data-en-ph="e.g. CDB Inter Bank"></div>
+        <div class="field" style="flex:1 1 100%;min-width:260px"><label data-en="Whose">Quem</label>
           <div class="seg iv-seg" id="iv-who"></div>
         </div>
-        <div class="field" style="min-width:130px"><label>Valor aplicado (R$)</label><input id="iv-aplic" class="amt num" inputmode="decimal" placeholder="0,00"></div>
-        <div class="field" style="min-width:130px"><label>Saldo atual (R$)</label><input id="iv-saldo" class="amt num" inputmode="decimal" placeholder="= aplicado"></div>
-        <div class="field" style="min-width:130px"><label>Rentabilidade</label><input id="iv-taxa" placeholder="Ex.: 110% CDI"></div>
-        <div class="field" style="min-width:140px"><label>Vencimento</label><input id="iv-venc" type="date"></div>
-        <div class="field" style="flex:1.2;min-width:130px"><label>Notas (opcional)</label><input id="iv-note" placeholder="liquidez, observações…"></div>
-        <button class="btn solid" id="iv-add" style="height:46px;padding:13px 22px">+ Adicionar</button>
+        <div class="field" style="min-width:130px"><label><span data-en="Invested">Valor aplicado</span> (<span class="cursym">R$</span>)</label><input id="iv-aplic" class="amt num" inputmode="decimal" placeholder="0,00"></div>
+        <div class="field" style="min-width:130px"><label><span data-en="Current balance">Saldo atual</span> (<span class="cursym">R$</span>)</label><input id="iv-saldo" class="amt num" inputmode="decimal" placeholder="= aplicado" data-en-ph="= invested"></div>
+        <div class="field" style="min-width:130px"><label data-en="Yield">Rentabilidade</label><input id="iv-taxa" placeholder="Ex.: 110% CDI" data-en-ph="e.g. 110% CDI"></div>
+        <div class="field" style="min-width:140px"><label data-en="Maturity">Vencimento</label><input id="iv-venc" type="date"></div>
+        <div class="field" style="flex:1.2;min-width:130px"><label data-en="Notes (optional)">Notas (opcional)</label><input id="iv-note" placeholder="liquidez, observações…" data-en-ph="liquidity, notes…"></div>
+        <button class="btn solid" id="iv-add" style="height:46px;padding:13px 22px" data-en="+ Add">+ Adicionar</button>
       </div>
     </div>
 
     <div class="section-row" style="margin-top:18px">
       <div class="card panel">
-        <h3>Alocação</h3>
-        <div class="ph-sub">Distribuição do patrimônio por tipo</div>
+        <h3 data-en="Allocation">Alocação</h3>
+        <div class="ph-sub" data-en="Net worth split by type">Distribuição do patrimônio por tipo</div>
         <div class="donut-wrap">
           <canvas id="iv-donut"></canvas>
-          <div class="donut-center"><span>Total</span><strong class="num" id="iv-donut-total">R$ 0</strong></div>
+          <div class="donut-center"><span data-en="Total">Total</span><strong class="num" id="iv-donut-total">R$ 0</strong></div>
         </div>
         <ul class="legend" id="iv-legend"></ul>
       </div>
       <div class="card panel">
-        <h3>Suas aplicações</h3>
-        <div class="ph-sub">Toque no saldo para atualizar</div>
+        <h3 data-en="Your holdings">Suas aplicações</h3>
+        <div class="ph-sub" data-en="Tap the balance to update">Toque no saldo para atualizar</div>
         <div id="iv-list"></div>
       </div>
     </div>
@@ -997,33 +1068,56 @@ body{transition:background-color .4s ease,color .4s ease}
 
   <!-- ===== ANUAL ===== -->
   <section class="view" id="v-anual">
-    <div class="eyebrow">2026 · panorama</div>
-    <h1 class="view-title">Visão anual</h1>
-    <p class="view-sub">Os doze meses lado a lado. A coluna destacada é o mês que você está vendo agora.</p>
+    <div class="eyebrow" data-en="2026 · overview">2026 · panorama</div>
+    <h1 class="view-title" data-en="Year view">Visão anual</h1>
+    <p class="view-sub" data-en="The twelve months side by side. The highlighted column is the month you're viewing now.">Os doze meses lado a lado. A coluna destacada é o mês que você está vendo agora.</p>
     <div class="grid stats" style="margin-bottom:18px">
-      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--cactus)"></span>Renda no ano</div><div class="val num" id="a-renda">R$ 0</div></div>
-      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--clay)"></span>Gastos no ano</div><div class="val num" id="a-gastos">R$ 0</div></div>
-      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--pos)"></span>Saldo no ano</div><div class="val num" id="a-saldo">R$ 0</div></div>
-      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--gold)"></span>Poupança média</div><div class="val num" id="a-taxa">0%</div></div>
+      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--cactus)"></span><span data-en="Income this year">Renda no ano</span></div><div class="val num" id="a-renda">R$ 0</div></div>
+      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--clay)"></span><span data-en="Spending this year">Gastos no ano</span></div><div class="val num" id="a-gastos">R$ 0</div></div>
+      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--pos)"></span><span data-en="Balance this year">Saldo no ano</span></div><div class="val num" id="a-saldo">R$ 0</div></div>
+      <div class="card stat"><div class="lab"><span class="dot" style="background:var(--gold)"></span><span data-en="Average savings">Poupança média</span></div><div class="val num" id="a-taxa">0%</div></div>
     </div>
     <div class="tbl-scroll">
       <table class="annual" id="annual-tbl"></table>
     </div>
     <div class="ann-charts">
-      <div class="card panel"><h3>Tendência mensal</h3><div class="ph-sub">Renda, gastos e saldo ao longo do ano</div><div class="chart-wrap"><canvas id="trendChart"></canvas></div></div>
-      <div class="card panel"><h3>Despesas fixas por grupo</h3><div class="ph-sub">Composição anual do essencial</div><div class="chart-wrap"><canvas id="groupChart"></canvas></div></div>
+      <div class="card panel"><h3 data-en="Monthly trend">Tendência mensal</h3><div class="ph-sub" data-en="Income, spending and balance across the year">Renda, gastos e saldo ao longo do ano</div><div class="chart-wrap"><canvas id="trendChart"></canvas></div></div>
+      <div class="card panel"><h3 data-en="Fixed costs by group">Despesas fixas por grupo</h3><div class="ph-sub" data-en="Yearly makeup of the essentials">Composição anual do essencial</div><div class="chart-wrap"><canvas id="groupChart"></canvas></div></div>
     </div>
   </section>
 
-  <div class="foot">Feito com cuidado para a sua casa · os dados ficam no seu navegador. Exporte o JSON para guardar ou começar um novo mês</div>
+  <div class="foot" data-en="Made with care for your home · your data stays in your browser. Export the JSON to keep it or start a new month">Feito com cuidado para a sua casa · os dados ficam no seu navegador. Exporte o JSON para guardar ou começar um novo mês</div>
 </main>
 
 <div id="toast"></div>
+
+<!-- ===== START (primeiro acesso): idioma + moeda ===== -->
+<div class="modal-overlay" id="start-modal">
+  <div class="modal" style="max-width:420px" role="dialog" aria-modal="true">
+    <div class="modal-head"><div class="mt"><span data-en="Welcome to Quite">Bem-vinda ao Quite</span><small data-en="pick to get started">escolha para começar</small></div></div>
+    <div class="modal-body">
+      <div><div class="eyebrow" style="margin-bottom:8px" data-en="Language">Idioma</div>
+        <div class="seg" id="startLang" style="width:100%"><button data-lang="pt" class="on">Português</button><button data-lang="en">English</button></div></div>
+      <div><div class="eyebrow" style="margin-bottom:8px" data-en="Currency">Moeda</div>
+        <div class="seg" id="startCur" style="width:100%"><button data-cur="BRL" class="on">R$ BRL</button><button data-cur="USD">$ USD</button></div></div>
+      <button class="btn solid" id="start-go" style="justify-content:center;width:100%" data-en="Continue">Continuar</button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ===================== DADOS ===================== */
 const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const MABBR=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const MONTHS_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MABBR_EN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const WEEKD={pt:['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],en:['Sun','Mon','Tue','Wed','Thu','Fri','Sat']};
+/* idioma e moeda escolhidos pela pessoa */
+function lang(){return (state&&state.meta&&state.meta.lang)||'pt'}
+function MO(){return lang()==='en'?MONTHS_EN:MONTHS}
+function MOA(){return lang()==='en'?MABBR_EN:MABBR}
+/* tradução de strings geradas em JS: tr(pt, en) — cai pro PT se faltar */
+function tr(pt,en){return (lang()==='en'&&en!==undefined)?en:pt}
 const GROUPS=['Moradia','Contas','Seguros','Transporte','Assinaturas','Dívidas','Educação'];
 function fixedGroupList(){
   const out=GROUPS.slice();
@@ -1100,6 +1194,25 @@ const THEMES={
 const THEME_LIST=[{id:'quite',nome:'Original'},{id:'vivo',nome:'Vivo'},{id:'sereno',nome:'Sereno'},{id:'neon',nome:'Neon'},{id:'suico',nome:'Suíço'},{id:'brutal',nome:'Brutal'},{id:'editorial',nome:'Editorial'},{id:'terminal',nome:'Terminal'},{id:'bauhaus',nome:'Bauhaus'}];
 const T=()=>THEMES[(state&&state.meta&&state.meta.theme)||'quite']||THEMES.quite;
 function applyTheme(){document.documentElement.setAttribute('data-theme',(state.meta&&state.meta.theme)||'quite')}
+/* ---- idioma (PT/EN): traduz a interface, mantém os dados que você digitou ---- */
+function applyI18n(){
+  const en=lang()==='en';
+  document.documentElement.setAttribute('lang',en?'en':'pt-BR');
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    if(el._pt===undefined)el._pt=el.innerHTML;
+    el.innerHTML=en?el.dataset.en:el._pt;
+  });
+  document.querySelectorAll('[data-en-ph]').forEach(el=>{
+    if(el._ptph===undefined)el._ptph=el.getAttribute('placeholder')||'';
+    el.setAttribute('placeholder',en?el.dataset.enPh:el._ptph);
+  });
+  document.querySelectorAll('#langSeg button,#langSeg2 button,#startLang button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang()));
+}
+/* ---- moeda (símbolo só; sem conversão) ---- */
+function applyCurrency(){
+  document.querySelectorAll('.cursym').forEach(s=>s.textContent=curSym());
+  document.querySelectorAll('#curSeg button,#curSeg2 button,#startCur button').forEach(b=>b.classList.toggle('on',b.dataset.cur===curCode()));
+}
 function groupColor(g){const i=fixedGroupList().indexOf(g);return T().groups[(i>=0?i:0)%T().groups.length]}
 
 /* macro categorias (botões) + ícone + cor + subcategorias */
@@ -1136,7 +1249,7 @@ const SEED_FIXED=[
 
 function blankState(){
   return {
-    meta:{year:2026,v:9},
+    meta:{year:2026,v:9,lang:'pt',currency:'BRL'},
     people:[],
     incomes:[],
     cats:CAT_DEFS.map(d=>({g:d.g,ic:d.ic,c:d.c,subs:d.subs.slice()})),
@@ -1152,15 +1265,18 @@ function uid(){return Math.random().toString(36).slice(2,9)}
 
 /* ===================== ESTADO ===================== */
 let state, curMonth=new Date().getMonth(); // 0-11
+let firstRun=false;
 let txFilter='all', formWho='t', formType='Débito', ivWho='c';
 let openGroups=new Set([0,1]);
 
 function load(){
   try{const s=localStorage.getItem('mandacaru_gobbo');if(s){state=JSON.parse(s);migrate();return}}catch(e){}
-  state=defaultState();
+  state=defaultState();firstRun=true;
 }
 function migrate(){
   state.meta=state.meta||{};
+  state.meta.lang=state.meta.lang||'pt';
+  state.meta.currency=state.meta.currency||'BRL';
   state.investments=state.investments||[];
   (state.fixed||[]).forEach(f=>{if(f.due===undefined)f.due='';if(f.method===undefined)f.method='d'});
   if((state.meta.v||0)<9){state.tattoo=state.tattoo||[];state.income=state.income||{};}
@@ -1187,7 +1303,7 @@ function migrate(){
     if(!state.incomes){
       state.incomes=[];
       {const sal=state.income&&Object.values(state.income).find(v=>Array.isArray(v));if(sal)state.incomes.push({id:uid(),label:'Salário',person:'t',kind:'m',months:sal.slice()});}
-      if(state.tattoo!==undefined){state.incomes.push({id:uid(),label:'Ganhos com Tattoo',kind:'a',entries:(state.tattoo||[]).map(e=>({id:e.id,who:e.who,desc:e.cliente||e.desc||'',date:e.date,valor:e.valor,note:e.note||(e.sessoes>1?e.sessoes+' sessões':''),month:e.month}))});}
+      if(state.tattoo!==undefined){state.incomes.push({id:uid(),label:'Ganhos extras',kind:'a',entries:(state.tattoo||[]).map(e=>({id:e.id,who:e.who,desc:e.cliente||e.desc||'',date:e.date,valor:e.valor,note:e.note||(e.sessoes>1?e.sessoes+' sessões':''),month:e.month}))});}
       delete state.income; delete state.tattoo;
     }
     if(!state.cats)state.cats=CAT_DEFS.map(d=>({g:d.g,ic:d.ic,c:d.c,subs:d.subs.slice()}));
@@ -1200,10 +1316,15 @@ function migrate(){
 function save(){try{localStorage.setItem('mandacaru_gobbo',JSON.stringify(state))}catch(e){}}
 
 /* ===================== UTIL ===================== */
-const BRL=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2,maximumFractionDigits:2});
-const BRL0=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:0,maximumFractionDigits:0});
-const money=v=>BRL.format(v||0);
-const money0=v=>BRL.format(v||0); // valores exatos com centavos (consistência)
+/* moeda: símbolo + formatação (sem conversão de câmbio) */
+const CUR_FMT={
+  BRL:{f:new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2,maximumFractionDigits:2}),sym:'R$'},
+  USD:{f:new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2}),sym:'$'}
+};
+function curCode(){return (state&&state.meta&&state.meta.currency)||'BRL'}
+function curSym(){return (CUR_FMT[curCode()]||CUR_FMT.BRL).sym}
+const money=v=>(CUR_FMT[curCode()]||CUR_FMT.BRL).f.format(v||0);
+const money0=v=>money(v); // valores exatos com centavos (consistência)
 const pct=v=>(isFinite(v)?(v*100):0).toFixed(1).replace('.',',')+'%';
 const parseNum=s=>{if(typeof s==='number')return s;s=(s||'').toString().replace(/[^\d,.-]/g,'').replace(/\.(?=\d{3})/g,'').replace(',','.');const n=parseFloat(s);return isNaN(n)?0:n};
 const pad=n=>String(n).padStart(2,'0');
@@ -1219,7 +1340,7 @@ function fixedTotal(m){return state.fixed.reduce((s,f)=>s+(f.months[m]||0),0)}
 function fixedByGroup(m){const o={};fixedGroupList().forEach(g=>o[g]=0);state.fixed.forEach(f=>{o[f.group]=(o[f.group]||0)+(f.months[m]||0)});return o}
 
 function personColor(id){const i=(state.people||[]).findIndex(p=>p.id===id);return i<0?T().ticksB:T().people[i%T().people.length]}
-function personName(id){if(id==='c')return 'Conjunto';const p=(state.people||[]).find(x=>x.id===id);return p?p.name:'(removida)'}
+function personName(id){if(id==='c')return tr('Conjunto','Joint');const p=(state.people||[]).find(x=>x.id===id);return p?p.name:tr('(removida)','(removed)')}
 function personInitial(id){return (personName(id)[0]||'?').toUpperCase()}
 function incomeMonth(m){let t=0;(state.incomes||[]).forEach(s=>{if(s.kind==='m')t+=(s.months[m]||0);else (s.entries||[]).forEach(e=>{if(e.month===m)t+=(e.valor||0)})});return t}
 function incomePerson(m,who){let t=0;(state.incomes||[]).forEach(s=>{if(s.kind==='m'){if(s.person===who)t+=(s.months[m]||0)}else (s.entries||[]).forEach(e=>{if(e.month===m&&e.who===who)t+=(e.valor||0)})});return t}
@@ -1235,9 +1356,9 @@ function totalSpend(m){return fixedTotal(m)+varTotal(m)}
 
 /* ===================== RENDER: HEADER/MONTH ===================== */
 function renderMonth(){
-  document.getElementById('mLabel').textContent=MONTHS[curMonth];
+  document.getElementById('mLabel').textContent=MO()[curMonth];
   document.getElementById('yLabel').textContent=state.meta.year;
-  document.getElementById('r-eyebrow').textContent=MONTHS[curMonth]+' · '+state.meta.year;
+  document.getElementById('r-eyebrow').textContent=MO()[curMonth]+' · '+state.meta.year;
 }
 
 /* ===================== RENDER: RESUMO ===================== */
@@ -1253,9 +1374,9 @@ function renderResumo(){
   document.getElementById('h-taxa').textContent=pct(taxa);
   document.getElementById('s-fixas').textContent=money0(fix);
   const bud=state.budget[m]||0;
-  document.getElementById('s-fixas-sub').textContent=bud?(fix<=bud?'dentro do orçamento':'acima do orçamento'):'sem orçamento definido';
+  document.getElementById('s-fixas-sub').textContent=bud?(fix<=bud?tr('dentro do orçamento','within budget'):tr('acima do orçamento','over budget')):tr('sem orçamento definido','no budget set');
   document.getElementById('s-var').textContent=money0(vr);
-  document.getElementById('s-var-sub').textContent=txMonth(m).length+' lançamento(s)';
+  document.getElementById('s-var-sub').textContent=txMonth(m).length+tr(' lançamento(s)',' entry(ies)');
   document.getElementById('s-cred').textContent=money0(cardTotal(m));
   document.getElementById('s-parc').textContent=money0(pendingInstallments(m));
 
@@ -1265,25 +1386,25 @@ function renderResumo(){
   const entries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
   document.getElementById('donut-total').textContent=money0(vr);
   const legend=document.getElementById('cat-legend');
-  if(!entries.length){legend.innerHTML='<li style="color:var(--muted);justify-content:center;border:none">Nenhum gasto variável neste mês ainda</li>'}
+  if(!entries.length){legend.innerHTML=`<li style="color:var(--muted);justify-content:center;border:none">${tr('Nenhum gasto variável neste mês ainda','No variable spending this month yet')}</li>`}
   else{legend.innerHTML=entries.map(([g,v])=>`<li><span class="sw" style="background:${catGroupColor(g)}"></span><span class="nm">${g}</span><span class="pc">${vr?Math.round(v/vr*100):0}%</span><span class="am">${money0(v)}</span></li>`).join('')}
 
   // donut
   const dctx=document.getElementById('donut');
-  const dData=entries.length?entries:[['Sem dados',1]];
+  const dData=entries.length?entries:[[tr('Sem dados','No data'),1]];
   if(donutChart)donutChart.destroy();
   donutChart=new Chart(dctx,{type:'doughnut',data:{labels:dData.map(e=>e[0]),datasets:[{data:dData.map(e=>e[1]),backgroundColor:entries.length?dData.map(e=>catGroupColor(e[0])):[T().grid],borderColor:T().donutB,borderWidth:3,hoverOffset:6}]},options:{cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': '+money(c.raw)}}},animation:{animateScale:true,duration:700}}});
 
   // flow bar
   const fctx=document.getElementById('flowBar');
   if(flowChart)flowChart.destroy();
-  flowChart=new Chart(fctx,{type:'bar',data:{labels:['Renda','Fixas','Variável','Saldo'],datasets:[{data:[renda,fix,vr,Math.max(saldo,0)],backgroundColor:[T().flow[0],T().flow[1],T().flow[2],saldo<0?T().flowNeg:T().flow[3]],borderRadius:2,maxBarThickness:54}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+money(c.raw)}}},scales:{y:{grid:{color:T().grid},border:{display:false},ticks:{callback:v=>'R$'+(v/1000)+'k',color:T().ticks,font:{family:T().font,size:11}}},x:{grid:{display:false},border:{display:false},ticks:{color:T().ticksB,font:{family:T().font,weight:'600',size:12}}}},animation:{duration:700}}});
+  flowChart=new Chart(fctx,{type:'bar',data:{labels:[tr('Renda','Income'),tr('Fixas','Fixed'),tr('Variável','Variable'),tr('Saldo','Balance')],datasets:[{data:[renda,fix,vr,Math.max(saldo,0)],backgroundColor:[T().flow[0],T().flow[1],T().flow[2],saldo<0?T().flowNeg:T().flow[3]],borderRadius:2,maxBarThickness:54}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+money(c.raw)}}},scales:{y:{grid:{color:T().grid},border:{display:false},ticks:{callback:v=>curSym()+(v/1000)+'k',color:T().ticks,font:{family:T().font,size:11}}},x:{grid:{display:false},border:{display:false},ticks:{color:T().ticksB,font:{family:T().font,weight:'600',size:12}}}},animation:{duration:700}}});
 
   // pessoas
   document.getElementById('split-grid').innerHTML=(state.people||[]).map(p=>`
     <div class="who"><div class="nm"><span class="av" style="background:${personColor(p.id)}">${personInitial(p.id)}</span>${p.name}</div>
     <div class="big num">${money0(varTotal(m,p.id))}</div>
-    <div class="ln"><span>gastos no mês</span><span class="num">crédito ${money0(creditMonth(m,p.id))}</span></div></div>`).join('')||'<div class="ph-sub">Adicione as pessoas da casa em Ajustes.</div>';
+    <div class="ln"><span>${tr('gastos no mês','spent this month')}</span><span class="num">${tr('crédito','credit')} ${money0(creditMonth(m,p.id))}</span></div></div>`).join('')||`<div class="ph-sub">${tr('Adicione as pessoas da casa em Ajustes.','Add the people of the home in Settings.')}</div>`;
 }
 
 /* ===================== RENDER: GASTOS ===================== */
@@ -1292,16 +1413,16 @@ function renderCatButtons(){
   const wrap=document.getElementById('cat-buttons');
   wrap.innerHTML=(state.cats||CAT_DEFS).map((d,di)=>`
     <div class="cat-block">
-      <div class="cg-title"><span class="cat-grip" title="Arraste para reordenar" aria-label="Arraste para reordenar">⠿</span>${d.g}</div>
+      <div class="cg-title"><span class="cat-grip" title="${tr('Arraste para reordenar','Drag to reorder')}" aria-label="${tr('Arraste para reordenar','Drag to reorder')}">⠿</span>${d.g}</div>
       <div class="cats">${d.subs.map(s=>`<button class="cat-btn" data-cat="${s}">${s}</button>`).join('')}
-        <button class="cat-btn cat-add" data-g="${di}" title="Criar categoria em ${d.g}">+ nova</button></div>
+        <button class="cat-btn cat-add" data-g="${di}" title="${tr('Criar categoria em','Create category in')} ${d.g}">${tr('+ nova','+ new')}</button></div>
     </div>`).join('');
   wrap.querySelectorAll('.cat-btn:not(.cat-add)').forEach(b=>b.onclick=()=>openModal(b.dataset.cat));
   wrap.querySelectorAll('.cat-add').forEach(b=>b.onclick=()=>{
-    askPromptModal('Nova categoria em '+state.cats[+b.dataset.g].g,'Nome da categoria',v=>{
+    askPromptModal(tr('Nova categoria em ','New category in ')+state.cats[+b.dataset.g].g,tr('Nome da categoria','Category name'),v=>{
       v=(v||'').trim();if(!v)return;
-      if(state.cats.some(d=>d.subs.includes(v))){toast('Essa categoria já existe');return}
-      state.cats[+b.dataset.g].subs.push(v);save();renderCatButtons();toast('Categoria criada ✓');
+      if(state.cats.some(d=>d.subs.includes(v))){toast(tr('Essa categoria já existe','That category already exists'));return}
+      state.cats[+b.dataset.g].subs.push(v);save();renderCatButtons();toast(tr('Categoria criada ✓','Category created ✓'));
     });
   });
   if(window.Sortable&&state.cats){
@@ -1323,7 +1444,7 @@ function openModal(cat,tx){
   const c=catColor(cat);
   document.getElementById('m-dot').style.background=c+'22';
   document.getElementById('m-dot').firstElementChild.style.background=c;
-  document.getElementById('m-cat').innerHTML=cat+'<small>'+(tx?'Editar gasto':'Novo gasto')+' · '+MONTHS[curMonth]+'</small>';
+  document.getElementById('m-cat').innerHTML=cat+'<small>'+(tx?tr('Editar gasto','Edit expense'):tr('Novo gasto','New expense'))+' · '+MO()[curMonth]+'</small>';
   document.getElementById('m-val').value=tx?String(tx.val).replace('.',','):'';
   document.getElementById('m-date').value=(tx&&tx.date)?tx.date:defaultDate();
   document.getElementById('m-desc').value=tx?(tx.desc||cat):cat;
@@ -1333,7 +1454,7 @@ function openModal(cat,tx){
   if(!(state.people||[]).find(p=>p.id===formWho))formWho=(state.people[0]||{id:''}).id;
   renderWhoSeg('m-who',formWho,false);
   document.querySelectorAll('#m-type button').forEach(b=>b.classList.toggle('on',b.dataset.type===formType));
-  document.getElementById('m-add').textContent=tx?'Salvar alterações':'Adicionar gasto';
+  document.getElementById('m-add').textContent=tx?tr('Salvar alterações','Save changes'):tr('Adicionar gasto','Add expense');
   document.getElementById('modal').classList.add('show');
   setTimeout(()=>document.getElementById('m-val').focus(),80);
 }
@@ -1343,36 +1464,36 @@ function catColor(cat){const i=(state.cats||CAT_DEFS).findIndex(x=>x.subs.includ
 function catGroupColor(g){const i=(state.cats||CAT_DEFS).findIndex(x=>x.g===g);return i<0?T().ticksB:T().cats[i%T().cats.length]}
 function renderWhoSeg(elId,current,withConjunto){
   const el=document.getElementById(elId);if(!el)return;
-  const opts=(withConjunto?[{id:'c',name:'Conjunto'}]:[]).concat(state.people||[]);
+  const opts=(withConjunto?[{id:'c',name:tr('Conjunto','Joint')}]:[]).concat(state.people||[]);
   el.innerHTML=opts.map(p=>`<button data-who="${p.id}" class="${p.id===current?'on':''}">${p.name}</button>`).join('');
 }
 function renderFilterPills(){
   const el=document.getElementById('tx-filter');
   const ps=state.people||[];
-  el.innerHTML=`<button class="fpill ${txFilter==='all'?'on':''}" data-f="all">Todos</button>`+
+  el.innerHTML=`<button class="fpill ${txFilter==='all'?'on':''}" data-f="all">${tr('Todos','All')}</button>`+
     ps.map(p=>`<button class="fpill ${txFilter===p.id?'on':''}" data-f="${p.id}">${p.name}</button>`).join('');
 }
 function renderTx(){
   renderFilterPills();
   const list=document.getElementById('tx-list');
   let items=txMonth(curMonth).filter(t=>txFilter==='all'||t.who===txFilter).slice().reverse();
-  if(!items.length){list.innerHTML=`<div class="empty"><div style="margin-top:8px">Nenhum lançamento ${txFilter!=='all'?'para este filtro':'neste mês'} ainda.<br>Toque numa categoria acima para lançar.</div></div>`;return}
+  if(!items.length){list.innerHTML=`<div class="empty"><div style="margin-top:8px">${tr('Nenhum lançamento','No entries')} ${txFilter!=='all'?tr('para este filtro','for this filter'):tr('neste mês','this month')} ${tr('ainda.','yet.')}<br>${tr('Toque numa categoria acima para lançar.','Tap a category above to log one.')}</div></div>`;return}
   list.innerHTML=items.map((t,i)=>`
-    <div class="tx" data-id="${t.id}" style="animation-delay:${i*.03}s;cursor:pointer" title="Toque para editar">
+    <div class="tx" data-id="${t.id}" style="animation-delay:${i*.03}s;cursor:pointer" title="${tr('Toque para editar','Tap to edit')}">
       <div class="ic" style="border-color:${catColor(t.cat)}33"><span style="width:13px;height:13px;border-radius:50%;background:${catColor(t.cat)};display:block"></span></div>
       <div class="info">
         <div class="t1">${t.desc||t.cat}
           <span class="tag" style="background:${personColor(t.who)}1A;color:${personColor(t.who)}">${personName(t.who)}</span>
-          <span class="tag ${t.type==='Crédito'?'cr':'db'}">${t.type}</span>
+          <span class="tag ${t.type==='Crédito'?'cr':'db'}">${tr(t.type,t.type==='Crédito'?'Credit':'Debit')}</span>
           ${t.parc>1?`<span class="tag" style="background:var(--paper-2);color:var(--muted)">${t.parc}x</span>`:''}
         </div>
         <div class="t2">${t.date?fmtDate(t.date)+' · ':''}${t.cat}${t.note?' · '+t.note:''}</div>
       </div>
       <div class="amt">${money(t.val)}</div>
-      <button class="del" data-id="${t.id}" title="Excluir">×</button>
+      <button class="del" data-id="${t.id}" title="${tr('Excluir','Delete')}">×</button>
     </div>`).join('');
   list.querySelectorAll('.tx').forEach(row=>row.onclick=()=>{const t=state.tx.find(x=>x.id===row.dataset.id);if(t)openModal(t.cat,t)});
-  list.querySelectorAll('.del').forEach(b=>b.onclick=e=>{e.stopPropagation();state.tx=state.tx.filter(x=>x.id!==b.dataset.id);save();renderTx();renderResumo();toast('Lançamento removido')});
+  list.querySelectorAll('.del').forEach(b=>b.onclick=e=>{e.stopPropagation();state.tx=state.tx.filter(x=>x.id!==b.dataset.id);save();renderTx();renderResumo();renderCalendario();toast(tr('Lançamento removido','Entry removed'))});
 }
 
 /* ===================== RENDER: FIXAS ===================== */
@@ -1389,30 +1510,30 @@ function renderFixas(){
   document.getElementById('fx-card').textContent=money0(fixedCredit(m));
 
   const wrap=document.getElementById('fx-groups');
-  wrap.innerHTML=`<div style="padding:0 4px 18px"><button class="btn fx-addgroup" style="width:100%;justify-content:center">+ nova categoria</button></div>`+fixedGroupList().map((g,gi)=>{const isCustom=!GROUPS.includes(g);
+  wrap.innerHTML=`<div style="padding:0 4px 18px"><button class="btn fx-addgroup" style="width:100%;justify-content:center">${tr('+ nova categoria','+ new category')}</button></div>`+fixedGroupList().map((g,gi)=>{const isCustom=!GROUPS.includes(g);
     const lines=state.fixed.map((f,idx)=>({f,idx})).filter(o=>o.f.group===g);
     return `<div class="fx-group">
       <div class="fx-gh ${openGroups.has(gi)?'open':''}" data-g="${gi}">
         <div class="gt"><span class="gdot" style="background:${groupColor(g)}"></span>${g}</div>
         <div class="gsum num">${money0(groups[g])}</div>
-        ${isCustom?`<button class="del fx-gdel" data-g="${g.replace(/"/g,'&quot;')}" title="Excluir categoria">×</button>`:''}
+        ${isCustom?`<button class="del fx-gdel" data-g="${g.replace(/"/g,'&quot;')}" title="${tr('Excluir categoria','Delete category')}">×</button>`:''}
         <span class="chev">▸</span>
       </div>
       <div class="fx-body ${openGroups.has(gi)?'open':''}">
         ${lines.map(({f,idx})=>{const mm=(f.mByMonth&&f.mByMonth[m])||'d';return `<div class="fx-line">
           <input class="nm fx-name" data-idx="${idx}" value="${(f.name||'').replace(/"/g,'&quot;')}" style="border:none;background:transparent;padding:0;font-weight:600;min-width:0">
-          <input class="note-in fx-note" data-idx="${idx}" placeholder="nota…" value="${(f.note||'').replace(/"/g,'&quot;')}">
+          <input class="note-in fx-note" data-idx="${idx}" placeholder="${tr('nota…','note…')}" value="${(f.note||'').replace(/"/g,'&quot;')}">
           <div class="methseg fx-meth" data-idx="${idx}">
-            <button data-meth="d" class="${f.method!=='c'&&f.method!=='v'?'on':''}">Débito</button>
-            <button data-meth="c" class="${f.method==='c'?'on':''}">Crédito</button>
-            <button data-meth="v" class="${f.method==='v'?'on':''}">Varia</button>
+            <button data-meth="d" class="${f.method!=='c'&&f.method!=='v'?'on':''}">${tr('Débito','Debit')}</button>
+            <button data-meth="c" class="${f.method==='c'?'on':''}">${tr('Crédito','Credit')}</button>
+            <button data-meth="v" class="${f.method==='v'?'on':''}">${tr('Varia','Varies')}</button>
           </div>
-          ${f.method==='v'?`<span class="methm-lab">no mês</span><div class="methseg fx-methm" data-idx="${idx}"><button data-meth="d" class="${mm==='d'?'on':''}">Déb</button><button data-meth="c" class="${mm==='c'?'on':''}">Créd</button></div>`:''}
-          <input class="due-in fx-due" data-idx="${idx}" inputmode="numeric" maxlength="2" placeholder="dia" value="${f.due||''}" title="Dia de vencimento">
-          <input class="val-in fx-val" data-idx="${idx}" value="${(f.months[m]||0).toString().replace('.',',')}"> <span class="cur">R$</span>
-          <button class="del fx-del" data-idx="${idx}" title="Excluir conta">×</button>
+          ${f.method==='v'?`<span class="methm-lab">${tr('no mês','this month')}</span><div class="methseg fx-methm" data-idx="${idx}"><button data-meth="d" class="${mm==='d'?'on':''}">${tr('Déb','Deb')}</button><button data-meth="c" class="${mm==='c'?'on':''}">${tr('Créd','Cred')}</button></div>`:''}
+          <input class="due-in fx-due" data-idx="${idx}" inputmode="numeric" maxlength="2" placeholder="${tr('dia','day')}" value="${f.due||''}" title="${tr('Dia de vencimento','Due day')}">
+          <input class="val-in fx-val" data-idx="${idx}" value="${(f.months[m]||0).toString().replace('.',',')}"> <span class="cur">${curSym()}</span>
+          <button class="del fx-del" data-idx="${idx}" title="${tr('Excluir conta','Delete bill')}">×</button>
         </div>`}).join('')}
-        <div style="padding:8px 20px"><button class="btn fx-addline" data-g="${g.replace(/"/g,'&quot;')}">+ conta</button></div>
+        <div style="padding:8px 20px"><button class="btn fx-addline" data-g="${g.replace(/"/g,'&quot;')}">${tr('+ conta','+ bill')}</button></div>
       </div>
     </div>`;
   }).join('');
@@ -1425,27 +1546,27 @@ function renderFixas(){
   wrap.querySelectorAll('.fx-del').forEach(b=>b.onclick=()=>{
     const f=state.fixed[+b.dataset.idx];
     const has=f.months.some(v=>v>0);
-    const go=()=>{state.fixed.splice(+b.dataset.idx,1);save();renderFixas();renderResumo();renderAnual();toast('Conta removida')};
-    has?askConfirm('Excluir conta','"'+f.name+'" tem valores no ano. Excluir mesmo assim?',go):go();
+    const go=()=>{state.fixed.splice(+b.dataset.idx,1);save();renderFixas();renderResumo();renderAnual();toast(tr('Conta removida','Bill removed'))};
+    has?askConfirm(tr('Excluir conta','Delete bill'),'"'+f.name+'" '+tr('tem valores no ano. Excluir mesmo assim?','has values in the year. Delete anyway?'),go):go();
   });
   const ag=wrap.querySelector('.fx-addgroup');
-  if(ag)ag.onclick=()=>askPromptModal('Nova categoria de despesa fixa','Nome da categoria',v=>{
+  if(ag)ag.onclick=()=>askPromptModal(tr('Nova categoria de despesa fixa','New fixed-cost category'),tr('Nome da categoria','Category name'),v=>{
     v=(v||'').trim();if(!v)return;
-    if(fixedGroupList().some(g=>g.toLowerCase()===v.toLowerCase())){toast('Essa categoria já existe');return}
-    state.fixedGroups.push(v);openGroups.add(fixedGroupList().indexOf(v));save();renderFixas();toast('Categoria criada ✓');
+    if(fixedGroupList().some(g=>g.toLowerCase()===v.toLowerCase())){toast(tr('Essa categoria já existe','That category already exists'));return}
+    state.fixedGroups.push(v);openGroups.add(fixedGroupList().indexOf(v));save();renderFixas();toast(tr('Categoria criada ✓','Category created ✓'));
   });
   wrap.querySelectorAll('.fx-gdel').forEach(b=>b.onclick=e=>{
     e.stopPropagation();
     const g=b.dataset.g;
     const lines=state.fixed.filter(f=>f.group===g);
-    const go=()=>{state.fixed=state.fixed.filter(f=>f.group!==g);state.fixedGroups=(state.fixedGroups||[]).filter(x=>x!==g);save();renderFixas();renderResumo();renderAnual();toast('Categoria removida')};
-    lines.length?askConfirm('Excluir categoria','"'+g+'" tem '+lines.length+' conta(s). Excluir a categoria e tudo dentro dela?',go):go();
+    const go=()=>{state.fixed=state.fixed.filter(f=>f.group!==g);state.fixedGroups=(state.fixedGroups||[]).filter(x=>x!==g);save();renderFixas();renderResumo();renderAnual();toast(tr('Categoria removida','Category removed'))};
+    lines.length?askConfirm(tr('Excluir categoria','Delete category'),'"'+g+'" '+tr('tem','has')+' '+lines.length+' '+tr('conta(s). Excluir a categoria e tudo dentro dela?','bill(s). Delete the category and everything in it?'),go):go();
   });
   wrap.querySelectorAll('.fx-addline').forEach(b=>b.onclick=()=>{
-    askPromptModal('Nova conta em '+b.dataset.g,'Nome da conta',v=>{
+    askPromptModal(tr('Nova conta em ','New bill in ')+b.dataset.g,tr('Nome da conta','Bill name'),v=>{
       v=(v||'').trim();if(!v)return;
       state.fixed.push({group:b.dataset.g,name:v,months:Array(12).fill(0),note:'',due:'',method:'d'});
-      save();renderFixas();toast('Conta criada ✓');
+      save();renderFixas();toast(tr('Conta criada ✓','Bill created ✓'));
     });
   });
   wrap.querySelectorAll('.fx-due').forEach(inp=>{inp.onchange=()=>{let d=inp.value.replace(/\D/g,'').slice(0,2);if(+d>31)d='31';state.fixed[+inp.dataset.idx].due=d;save();renderFixas()}});
@@ -1467,29 +1588,29 @@ function upcomingBills(){
 function renderUpcoming(){
   const list=document.getElementById('upcoming-list');
   const bills=upcomingBills();
-  if(!bills.length){list.innerHTML=`<div style="color:var(--muted);font-size:13.5px;padding:6px 0">Nenhuma conta com dia de vencimento ainda. Informe o <strong>dia</strong> ao lado do valor de cada conta acima e elas aparecem aqui.</div>`;return}
-  const tag=b=>b.days<0?['up-over','venceu há '+(-b.days)+(b.days===-1?' dia':' dias')]
-    :b.days===0?['up-today','vence hoje']
-    :b.days<=5?['up-soon','faltam '+b.days+(b.days===1?' dia':' dias')]
-    :['up-ok','faltam '+b.days+' dias'];
+  if(!bills.length){list.innerHTML=`<div style="color:var(--muted);font-size:13.5px;padding:6px 0">${tr('Nenhuma conta com dia de vencimento ainda. Informe o <strong>dia</strong> ao lado do valor de cada conta acima e elas aparecem aqui.','No bills with a due day yet. Set the <strong>day</strong> next to each bill\'s value above and they show up here.')}</div>`;return}
+  const tag=b=>b.days<0?['up-over',tr('venceu há '+(-b.days)+(b.days===-1?' dia':' dias'),'overdue by '+(-b.days)+(b.days===-1?' day':' days'))]
+    :b.days===0?['up-today',tr('vence hoje','due today')]
+    :b.days<=5?['up-soon',tr('faltam '+b.days+(b.days===1?' dia':' dias'),b.days+(b.days===1?' day':' days')+' left')]
+    :['up-ok',tr('faltam '+b.days+' dias',b.days+' days left')];
   const total=bills.reduce((s,b)=>s+b.val,0);
   list.innerHTML=bills.map(b=>{const[c,t]=tag(b);return `
     <div class="up">
-      <div class="uday"><b>${String(b.day).padStart(2,'0')}</b><small>${MABBR[curMonth]}</small></div>
+      <div class="uday"><b>${String(b.day).padStart(2,'0')}</b><small>${MOA()[curMonth]}</small></div>
       <div class="uinfo"><div class="un">${b.name}</div><div class="ud ${c}">${t}</div></div>
       <div class="uamt">${money(b.val)}</div>
     </div>`;}).join('')
-    +`<div class="up" style="border-top:2px solid var(--line);font-weight:500"><div class="uinfo"><div class="un">Total a vencer</div></div><div class="uamt">${money(total)}</div></div>`;
+    +`<div class="up" style="border-top:2px solid var(--line);font-weight:500"><div class="uinfo"><div class="un">${tr('Total a vencer','Total upcoming')}</div></div><div class="uamt">${money(total)}</div></div>`;
 }
 function billsText(){
   const bills=upcomingBills();
-  const subject=`Contas a vencer · ${MONTHS[curMonth]} ${state.meta.year}`;
+  const subject=`${tr('Contas a vencer','Upcoming bills')} · ${MO()[curMonth]} ${state.meta.year}`;
   let lines=[subject,''];
-  if(!bills.length){lines.push('Nenhuma conta com dia de vencimento neste mês.');}
+  if(!bills.length){lines.push(tr('Nenhuma conta com dia de vencimento neste mês.','No bills with a due day this month.'));}
   else{
-    bills.forEach(b=>{const when=b.days<0?'(venceu)':b.days===0?'(hoje)':`(faltam ${b.days} dias)`;
-      lines.push(`• ${b.name} · ${money(b.val)} · vence ${String(b.day).padStart(2,'0')}/${String(curMonth+1).padStart(2,'0')} ${when}`);});
-    lines.push('',`Total a vencer: ${money(bills.reduce((s,b)=>s+b.val,0))}`);
+    bills.forEach(b=>{const when=b.days<0?tr('(venceu)','(overdue)'):b.days===0?tr('(hoje)','(today)'):tr(`(faltam ${b.days} dias)`,`(${b.days} days left)`);
+      lines.push(`• ${b.name} · ${money(b.val)} · ${tr('vence','due')} ${String(b.day).padStart(2,'0')}/${String(curMonth+1).padStart(2,'0')} ${when}`);});
+    lines.push('',`${tr('Total a vencer','Total upcoming')}: ${money(bills.reduce((s,b)=>s+b.val,0))}`);
   }
   lines.push('','Quite · Finanças de Casa');
   return {subject,body:lines.join('\n')};
@@ -1506,24 +1627,32 @@ function closeBills(){document.getElementById('bills-modal').classList.remove('s
 let srcWho='', srcKind='m';
 function renderRenda(){
   const m=curMonth;
+  const ph=document.getElementById('inc-peoplehint');
+  if(ph){
+    ph.innerHTML=(state.people||[]).length?'':`<div class="card inc-card fu" style="border-left:3px solid var(--clay);margin-bottom:16px">
+      <div style="font-weight:700;margin-bottom:4px">${tr('Primeiro, adicione as pessoas da casa','First, add the people of the home')}</div>
+      <div class="ph-sub" style="font-size:13px;line-height:1.5">${tr('Vá em <strong>Ajustes → Pessoas da casa</strong> e cadastre quem mora aí. Os nomes passam a aparecer aqui na Renda (e também em Gastos e Investimentos) para você atribuir cada valor a alguém.','Go to <strong>Settings → People of the home</strong> and add who lives there. The names then show up here in Income (and in Expenses and Investments) so you can assign each amount to someone.')}</div>
+      <button class="btn solid" id="inc-openpeople" style="margin-top:12px">${tr('Abrir Ajustes','Open Settings')}</button></div>`;
+    const ob=document.getElementById('inc-openpeople');if(ob)ob.onclick=()=>openSettings(true);
+  }
   if(!(state.people||[]).find(p=>p.id===srcWho))srcWho=(state.people[0]||{id:''}).id;
   renderWhoSeg('src-who',srcWho,false);
   const wrap=document.getElementById('inc-sources');
   if(!(state.incomes||[]).length){
-    wrap.innerHTML='<div class="card inc-card fu"><div class="ph-sub">Nenhuma fonte de renda ainda. Crie a primeira aqui embaixo.</div></div>';
+    wrap.innerHTML=`<div class="card inc-card fu"><div class="ph-sub">${tr('Nenhuma fonte de renda ainda. Crie a primeira aqui embaixo.','No income source yet. Create your first one below.')}</div></div>`;
   }else{
     wrap.innerHTML=state.incomes.map(src=>{
       const pc=src.person?personColor(src.person):'#8A8A82';
       const head=`<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
         <h3 class="serif" style="font-size:18px;margin:0">${src.label}</h3>
         ${src.person?`<span class="tag" style="background:${pc}1A;color:${pc}">${personName(src.person)}</span>`:''}
-        <span class="tag" style="background:var(--paper-2);color:var(--muted)">${src.kind==='m'?'mensal':'avulsa'}</span>
-        <button class="del src-del" data-id="${src.id}" title="Excluir fonte" style="margin-left:auto">×</button>
+        <span class="tag" style="background:var(--paper-2);color:var(--muted)">${src.kind==='m'?tr('mensal','monthly'):tr('avulsa','one-off')}</span>
+        <button class="del src-del" data-id="${src.id}" title="${tr('Excluir fonte','Delete source')}" style="margin-left:auto">×</button>
       </div>`;
       if(src.kind==='m'){
         return `<div class="card inc-card fu" style="margin-top:16px">${head}
           <div class="inc-item" style="margin-top:12px">
-            <div class="il">Valor em ${MONTHS[m]}</div>
+            <div class="il">${tr('Valor em','Value in')} ${MO()[m]}</div>
             <input class="amt num src-m" data-id="${src.id}" value="${(src.months[m]||0).toString().replace('.',',')}">
           </div></div>`;
       }
@@ -1531,11 +1660,11 @@ function renderRenda(){
       const subs=(state.people||[]).map(p=>{const v=items.filter(e=>e.who===p.id).reduce((x,e)=>x+(e.valor||0),0);return v>0?`<span class="tag" style="background:${personColor(p.id)}1A;color:${personColor(p.id)}">${p.name} ${money(v)}</span>`:''}).join('');
       return `<div class="card inc-card fu" style="margin-top:16px">${head}
         <div class="tattoo-form" style="margin-top:12px">
-          <div class="field" style="min-width:140px"><label>Quem</label><div class="seg src-ewho" data-id="${src.id}"></div></div>
-          <div class="field" style="flex:1.3"><label>Descrição</label><input class="src-desc" data-id="${src.id}" placeholder="Ex.: Projeto fechado"></div>
-          <div class="field" style="min-width:135px"><label>Data</label><input class="src-date" data-id="${src.id}" type="date" value="${defaultDate()}"></div>
-          <div class="field" style="min-width:130px"><label>Valor (R$)</label><input class="amt num src-val" data-id="${src.id}" inputmode="decimal" placeholder="0,00"></div>
-          <button class="btn solid src-eadd" data-id="${src.id}" style="height:46px;padding:13px 18px">Lançar</button>
+          <div class="field" style="min-width:140px"><label>${tr('Quem','Whose')}</label><div class="seg src-ewho" data-id="${src.id}"></div></div>
+          <div class="field" style="flex:1.3"><label>${tr('Descrição','Description')}</label><input class="src-desc" data-id="${src.id}" placeholder="${tr('Ex.: Projeto fechado','e.g. Project closed')}"></div>
+          <div class="field" style="min-width:135px"><label>${tr('Data','Date')}</label><input class="src-date" data-id="${src.id}" type="date" value="${defaultDate()}"></div>
+          <div class="field" style="min-width:130px"><label>${tr('Valor','Amount')} (${curSym()})</label><input class="amt num src-val" data-id="${src.id}" inputmode="decimal" placeholder="0,00"></div>
+          <button class="btn solid src-eadd" data-id="${src.id}" style="height:46px;padding:13px 18px">${tr('Lançar','Log')}</button>
         </div>
         ${subs?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${subs}</div>`:''}
         <div style="margin-top:6px">${items.length?items.map(e=>`
@@ -1545,8 +1674,8 @@ function renderRenda(){
               <span class="tag" style="background:${personColor(e.who)}1A;color:${personColor(e.who)}">${personName(e.who)}</span></div>
               <div class="t2">${e.date?fmtDate(e.date):''}${e.note?' · '+e.note:''}</div></div>
             <div class="amt">${money(e.valor)}</div>
-            <button class="del src-edel" data-src="${src.id}" data-id="${e.id}" title="Excluir">×</button>
-          </div>`).join(''):'<div class="ph-sub" style="padding:14px 2px">Nenhum lançamento neste mês.</div>'}</div>
+            <button class="del src-edel" data-src="${src.id}" data-id="${e.id}" title="${tr('Excluir','Delete')}">×</button>
+          </div>`).join(''):`<div class="ph-sub" style="padding:14px 2px">${tr('Nenhum lançamento neste mês.','No entries this month.')}</div>`}</div>
       </div>`;
     }).join('');
   }
@@ -1561,30 +1690,30 @@ function renderRenda(){
   wrap.querySelectorAll('.src-eadd').forEach(btn=>btn.onclick=()=>{
     const src=state.incomes.find(x=>x.id===btn.dataset.id);
     const val=parseNum(wrap.querySelector(`.src-val[data-id="${src.id}"]`).value);
-    if(!val){toast('Digite o valor');return}
+    if(!val){toast(tr('Digite o valor','Enter the amount'));return}
     const date=wrap.querySelector(`.src-date[data-id="${src.id}"]`).value||defaultDate();
     src.entries=src.entries||[];
     src.entries.push({id:uid(),who:src._ewho||(state.people[0]||{id:''}).id,desc:wrap.querySelector(`.src-desc[data-id="${src.id}"]`).value.trim(),date,month:monthOfIso(date),valor:val,note:''});
-    save();renderRenda();renderResumo();renderAnual();toast('Lançado ✓');
+    save();renderRenda();renderResumo();renderAnual();toast(tr('Lançado ✓','Logged ✓'));
   });
-  wrap.querySelectorAll('.src-edel').forEach(b=>b.onclick=()=>{const src=state.incomes.find(x=>x.id===b.dataset.src);src.entries=src.entries.filter(e=>e.id!==b.dataset.id);save();renderRenda();renderResumo();renderAnual();toast('Removido')});
+  wrap.querySelectorAll('.src-edel').forEach(b=>b.onclick=()=>{const src=state.incomes.find(x=>x.id===b.dataset.src);src.entries=src.entries.filter(e=>e.id!==b.dataset.id);save();renderRenda();renderResumo();renderAnual();toast(tr('Removido','Removed'))});
   wrap.querySelectorAll('.src-del').forEach(b=>b.onclick=()=>{
     const src=state.incomes.find(x=>x.id===b.dataset.id);
-    askConfirm('Excluir fonte de renda','Excluir "'+src.label+'" e todos os seus valores? Essa ação não tem volta.',()=>{
-      state.incomes=state.incomes.filter(x=>x.id!==b.dataset.id);save();renderRenda();renderResumo();renderAnual();toast('Fonte removida');
+    askConfirm(tr('Excluir fonte de renda','Delete income source'),tr('Excluir "','Delete "')+src.label+tr('" e todos os seus valores? Essa ação não tem volta.','" and all its values? This cannot be undone.'),()=>{
+      state.incomes=state.incomes.filter(x=>x.id!==b.dataset.id);save();renderRenda();renderResumo();renderAnual();toast(tr('Fonte removida','Source removed'));
     });
   });
   document.getElementById('inc-total').textContent=money(incomeMonth(m));
 }
 function addIncomeSource(){
   const label=document.getElementById('src-label').value.trim();
-  if(!label){toast('Dê um nome pra fonte');return}
-  if(!(state.people||[]).length){toast('Adicione as pessoas da casa primeiro (Ajustes)');return}
+  if(!label){toast(tr('Dê um nome pra fonte','Give the source a name'));return}
+  if(!(state.people||[]).length){toast(tr('Adicione as pessoas da casa primeiro (Ajustes)','Add the people of the home first (Settings)'));return}
   state.incomes.push(srcKind==='m'
     ?{id:uid(),label,person:srcWho,kind:'m',months:Array(12).fill(0)}
     :{id:uid(),label,person:srcWho,kind:'a',entries:[]});
   document.getElementById('src-label').value='';
-  save();renderRenda();toast('Fonte criada ✓');
+  save();renderRenda();toast(tr('Fonte criada ✓','Source created ✓'));
 }
 /* ===================== RENDER: INVESTIMENTOS ===================== */
 let ivDonut;
@@ -1597,7 +1726,7 @@ function renderInvest(){
   const aplic=items.reduce((s,i)=>s+(i.aplicado||0),0);
   const rend=saldo-aplic;
   document.getElementById('iv-total').textContent=money(saldo);
-  document.getElementById('iv-count').textContent=items.length+(items.length===1?' aplicação':' aplicações');
+  document.getElementById('iv-count').textContent=items.length+(items.length===1?tr(' aplicação',' holding'):tr(' aplicações',' holdings'));
   document.getElementById('iv-aplicado').textContent=money(aplic);
   document.getElementById('iv-rend').textContent=(rend>=0?'+ ':'− ')+money(Math.abs(rend));
   document.getElementById('iv-rend').style.color=rend>=0?'var(--pos)':'var(--neg)';
@@ -1610,16 +1739,16 @@ function renderInvest(){
   items.forEach(i=>{byTipo[i.tipo]=(byTipo[i.tipo]||0)+(i.saldo||0)});
   const entries=Object.entries(byTipo).filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]);
   const legend=document.getElementById('iv-legend');
-  if(!entries.length){legend.innerHTML='<li style="color:var(--muted);justify-content:center;border:none">Sem aplicações ainda</li>';}
+  if(!entries.length){legend.innerHTML=`<li style="color:var(--muted);justify-content:center;border:none">${tr('Sem aplicações ainda','No holdings yet')}</li>`;}
   else{legend.innerHTML=entries.map(([t,v])=>`<li><span class="sw" style="background:${tipoColor(t)}"></span><span class="nm">${t}</span><span class="pc">${saldo?Math.round(v/saldo*100):0}%</span><span class="am">${money(v)}</span></li>`).join('');}
   const dctx=document.getElementById('iv-donut');
-  const dData=entries.length?entries:[['Sem dados',1]];
+  const dData=entries.length?entries:[[tr('Sem dados','No data'),1]];
   if(ivDonut)ivDonut.destroy();
   ivDonut=new Chart(dctx,{type:'doughnut',data:{labels:dData.map(e=>e[0]),datasets:[{data:dData.map(e=>e[1]),backgroundColor:entries.length?dData.map(e=>tipoColor(e[0])):[T().grid],borderColor:T().donutB,borderWidth:3,hoverOffset:6}]},options:{cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.label+': '+money(c.raw)}}},animation:{animateScale:true,duration:700}}});
 
   // lista
   const list=document.getElementById('iv-list');
-  if(!items.length){list.innerHTML=`<div class="empty" style="padding:34px 20px"><div style="color:var(--muted)">Nenhuma aplicação cadastrada.<br>Adicione a primeira no formulário acima.</div></div>`;}
+  if(!items.length){list.innerHTML=`<div class="empty" style="padding:34px 20px"><div style="color:var(--muted)">${tr('Nenhuma aplicação cadastrada.<br>Adicione a primeira no formulário acima.','No holdings yet.<br>Add your first one in the form above.')}</div></div>`;}
   else{
 
     list.innerHTML=items.map(i=>{const r=(i.saldo||0)-(i.aplicado||0);return `
@@ -1630,30 +1759,30 @@ function renderInvest(){
             <span class="tag" style="background:${tipoColor(i.tipo)}22;color:${tipoColor(i.tipo)}">${i.tipo}</span>
             ${i.who&&i.who!=='c'?`<span class="tag" style="background:${personColor(i.who)}1A;color:${personColor(i.who)}">${personName(i.who)}</span>`:''}
           </div>
-          <div class="t2">${i.taxa?i.taxa+' · ':''}${i.venc?'vence '+fmtDate(i.venc)+' · ':''}aplicado ${money(i.aplicado||0)}${r?` · <span style="color:${r>=0?'var(--pos)':'var(--neg)'};font-weight:700">${r>=0?'+':'−'}${money(Math.abs(r))}</span>`:''}${i.note?' · '+i.note:''}</div>
+          <div class="t2">${i.taxa?i.taxa+' · ':''}${i.venc?tr('vence ','due ')+fmtDate(i.venc)+' · ':''}${tr('aplicado','invested')} ${money(i.aplicado||0)}${r?` · <span style="color:${r>=0?'var(--pos)':'var(--neg)'};font-weight:700">${r>=0?'+':'−'}${money(Math.abs(r))}</span>`:''}${i.note?' · '+i.note:''}</div>
         </div>
         <div style="text-align:right">
-          <div style="font-size:11px;color:var(--faint);font-weight:600;margin-bottom:2px">saldo</div>
+          <div style="font-size:11px;color:var(--faint);font-weight:600;margin-bottom:2px">${tr('saldo','balance')}</div>
           <input class="val-in iv-saldo-in" data-id="${i.id}" value="${(i.saldo||0).toString().replace('.',',')}" style="width:120px">
         </div>
-        <button class="del" data-id="${i.id}" title="Excluir">×</button>
+        <button class="del" data-id="${i.id}" title="${tr('Excluir','Delete')}">×</button>
       </div>`}).join('');
     list.querySelectorAll('.iv-saldo-in').forEach(inp=>inp.onchange=()=>{const it=state.investments.find(x=>x.id===inp.dataset.id);if(it){it.saldo=parseNum(inp.value);save();renderInvest()}});
-    list.querySelectorAll('.del').forEach(b=>b.onclick=()=>{state.investments=state.investments.filter(x=>x.id!==b.dataset.id);save();renderInvest();toast('Aplicação removida')});
+    list.querySelectorAll('.del').forEach(b=>b.onclick=()=>{state.investments=state.investments.filter(x=>x.id!==b.dataset.id);save();renderInvest();toast(tr('Aplicação removida','Holding removed'))});
   }
 }
 function addInvest(){
   const aplicado=parseNum(document.getElementById('iv-aplic').value);
   const saldoRaw=document.getElementById('iv-saldo').value;
   const saldo=saldoRaw?parseNum(saldoRaw):aplicado;
-  if(!aplicado&&!saldo){toast('Informe o valor aplicado');document.getElementById('iv-aplic').focus();return}
+  if(!aplicado&&!saldo){toast(tr('Informe o valor aplicado','Enter the invested amount'));document.getElementById('iv-aplic').focus();return}
   state.investments.push({id:uid(),tipo:document.getElementById('iv-tipo').value,
     nome:document.getElementById('iv-nome').value.trim(),who:ivWho,
     aplicado,saldo,taxa:document.getElementById('iv-taxa').value.trim(),
     venc:document.getElementById('iv-venc').value,note:document.getElementById('iv-note').value.trim()});
   save();
   ['iv-nome','iv-aplic','iv-saldo','iv-taxa','iv-venc','iv-note'].forEach(id=>document.getElementById(id).value='');
-  renderInvest();toast('Aplicação adicionada ✓');
+  renderInvest();toast(tr('Aplicação adicionada ✓','Holding added ✓'));
 }
 
 /* ===================== RENDER: ANUAL ===================== */
@@ -1669,35 +1798,35 @@ function renderAnual(){
   document.getElementById('a-taxa').textContent=pct(sum(rendaArr)>0?sum(saldoArr)/sum(rendaArr):0);
 
   const mkRow=(label,arr,fmt,cls)=>`<tr><td>${label}</td>${arr.map((v,i)=>`<td class="${i===curMonth?'cur-col ':''}${cls?cls(v):''}">${fmt(v)}</td>`).join('')}<td style="font-weight:500">${fmt(sum(arr))}</td></tr>`;
-  let html=`<thead><tr><th>Mês</th>${MABBR.map((a,i)=>`<th class="${i===curMonth?'cur-col':''}">${a}</th>`).join('')}<th>Ano</th></tr></thead><tbody>`;
-  html+=mkRow('Renda',rendaArr,money0);
-  html+=mkRow('Despesas fixas',state.fixed[0]?Array.from({length:12},(_,m)=>fixedTotal(m)):[],money0);
-  html+=mkRow('Gastos variáveis',Array.from({length:12},(_,m)=>varTotal(m)),money0);
-  html+=`<tr class="tot">${mkRow('Total gastos',gastoArr,money0).replace('<tr>','').replace('</tr>','')}</tr>`;
-  html+=mkRow('Saldo',saldoArr,money0,v=>v<0?'neg':'pos');
-  html+=mkRow('Taxa poupança',taxaArr,pct,v=>v<0?'neg':'pos');
+  let html=`<thead><tr><th>${tr('Mês','Month')}</th>${MOA().map((a,i)=>`<th class="${i===curMonth?'cur-col':''}">${a}</th>`).join('')}<th>${tr('Ano','Year')}</th></tr></thead><tbody>`;
+  html+=mkRow(tr('Renda','Income'),rendaArr,money0);
+  html+=mkRow(tr('Despesas fixas','Fixed costs'),state.fixed[0]?Array.from({length:12},(_,m)=>fixedTotal(m)):[],money0);
+  html+=mkRow(tr('Gastos variáveis','Variable spending'),Array.from({length:12},(_,m)=>varTotal(m)),money0);
+  html+=`<tr class="tot">${mkRow(tr('Total gastos','Total spending'),gastoArr,money0).replace('<tr>','').replace('</tr>','')}</tr>`;
+  html+=mkRow(tr('Saldo','Balance'),saldoArr,money0,v=>v<0?'neg':'pos');
+  html+=mkRow(tr('Taxa poupança','Savings rate'),taxaArr,pct,v=>v<0?'neg':'pos');
   html+='</tbody>';
   document.getElementById('annual-tbl').innerHTML=html;
 
   const tctx=document.getElementById('trendChart');
   if(trendChart)trendChart.destroy();
-  trendChart=new Chart(tctx,{type:'line',data:{labels:MABBR,datasets:[
-    {label:'Renda',data:rendaArr,borderColor:T().trR,backgroundColor:T().trR,tension:.35,borderWidth:2.5,pointRadius:0,pointHoverRadius:5},
-    {label:'Gastos',data:gastoArr,borderColor:T().trG,backgroundColor:T().trG,tension:.35,borderWidth:2.5,pointRadius:0,pointHoverRadius:5},
-    {label:'Saldo',data:saldoArr,borderColor:T().trS,backgroundColor:T().trSF,fill:true,tension:.35,borderWidth:2,pointRadius:0,pointHoverRadius:5}
-  ]},options:{plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{family:T().font,weight:'600',size:12},color:T().legend}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+money0(c.raw)}}},scales:{y:{grid:{color:T().grid},border:{display:false},ticks:{callback:v=>'R$'+(v/1000)+'k',color:T().ticks,font:{size:11}}},x:{grid:{display:false},border:{display:false},ticks:{color:T().ticksB,font:{weight:'600',size:11}}}},animation:{duration:700}}});
+  trendChart=new Chart(tctx,{type:'line',data:{labels:MOA(),datasets:[
+    {label:tr('Renda','Income'),data:rendaArr,borderColor:T().trR,backgroundColor:T().trR,tension:.35,borderWidth:2.5,pointRadius:0,pointHoverRadius:5},
+    {label:tr('Gastos','Spending'),data:gastoArr,borderColor:T().trG,backgroundColor:T().trG,tension:.35,borderWidth:2.5,pointRadius:0,pointHoverRadius:5},
+    {label:tr('Saldo','Balance'),data:saldoArr,borderColor:T().trS,backgroundColor:T().trSF,fill:true,tension:.35,borderWidth:2,pointRadius:0,pointHoverRadius:5}
+  ]},options:{plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,font:{family:T().font,weight:'600',size:12},color:T().legend}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+money0(c.raw)}}},scales:{y:{grid:{color:T().grid},border:{display:false},ticks:{callback:v=>curSym()+(v/1000)+'k',color:T().ticks,font:{size:11}}},x:{grid:{display:false},border:{display:false},ticks:{color:T().ticksB,font:{weight:'600',size:11}}}},animation:{duration:700}}});
 
   const gctx=document.getElementById('groupChart');
   const gtot=GROUPS.map(g=>state.fixed.filter(f=>f.group===g).reduce((s,f)=>s+f.months.reduce((a,b)=>a+b,0),0));
   if(groupChart)groupChart.destroy();
-  groupChart=new Chart(gctx,{type:'bar',data:{labels:GROUPS.map(g=>g.length>14?g.slice(0,12)+'…':g),datasets:[{data:gtot,backgroundColor:GROUPS.map(g=>groupColor(g)),borderRadius:6,maxBarThickness:30}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>GROUPS[c[0].dataIndex],label:c=>' '+money0(c.raw)+'/ano'}}},scales:{x:{grid:{color:T().grid},border:{display:false},ticks:{callback:v=>'R$'+(v/1000)+'k',color:T().ticks,font:{size:11}}},y:{grid:{display:false},border:{display:false},ticks:{color:T().legend,font:{weight:'600',size:11}}}},animation:{duration:700}}});
+  groupChart=new Chart(gctx,{type:'bar',data:{labels:GROUPS.map(g=>g.length>14?g.slice(0,12)+'…':g),datasets:[{data:gtot,backgroundColor:GROUPS.map(g=>groupColor(g)),borderRadius:6,maxBarThickness:30}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{title:c=>GROUPS[c[0].dataIndex],label:c=>' '+money0(c.raw)+tr('/ano','/yr')}}},scales:{x:{grid:{color:T().grid},border:{display:false},ticks:{callback:v=>curSym()+(v/1000)+'k',color:T().ticks,font:{size:11}}},y:{grid:{display:false},border:{display:false},ticks:{color:T().legend,font:{weight:'600',size:11}}}},animation:{duration:700}}});
 }
 
 /* ===================== AÇÕES ===================== */
 function addTx(){
   if(!modalCat)return;
   const val=parseNum(document.getElementById('m-val').value);
-  if(!val){toast('Digite um valor');document.getElementById('m-val').focus();return}
+  if(!val){toast(tr('Digite um valor','Enter an amount'));document.getElementById('m-val').focus();return}
   const date=document.getElementById('m-date').value||defaultDate();
   const data={who:formWho,type:formType,cat:modalCat,
     desc:document.getElementById('m-desc').value.trim()||modalCat,
@@ -1706,19 +1835,19 @@ function addTx(){
   if(editingId){
     const t=state.tx.find(x=>x.id===editingId);
     if(t)Object.assign(t,data);
-    toast('Gasto atualizado ✓');
+    toast(tr('Gasto atualizado ✓','Expense updated ✓'));
   }else{
     state.tx.push({id:uid(),...data});
-    toast('Gasto adicionado ✓');
+    toast(tr('Gasto adicionado ✓','Expense added ✓'));
   }
   save();closeModal();
-  renderTx();renderResumo();renderAnual();
+  renderTx();renderResumo();renderAnual();renderCalendario();
 }
 function doExport(){
   const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download=`quite-${state.meta.year}.json`;a.click();
-  toast('Backup exportado ✓');
+  toast(tr('Backup exportado ✓','Backup exported ✓'));
 }
 let _pendingImport=null;
 function doImport(file){
@@ -1727,15 +1856,15 @@ function doImport(file){
     if(!d.fixed||(!d.income&&!d.incomes&&!d.people))throw 0;
     const hasData=(state.tx||[]).length||(state.incomes||[]).length||(state.people||[]).length||(state.fixed||[]).some(f=>f.months.some(v=>v>0));
     if(hasData){_pendingImport=d;document.getElementById('import-modal').classList.add('show');}
-    else{state=d;migrate();save();renderAll();toast('Dados importados ✓');}
-  }catch(err){toast('Arquivo inválido')}};
+    else{state=d;migrate();save();renderAll();toast(tr('Dados importados ✓','Data imported ✓'));}
+  }catch(err){toast(tr('Arquivo inválido','Invalid file'))}};
   rd.readAsText(file);
 }
 function importReplace(){
   if(!_pendingImport)return;
   state=_pendingImport;_pendingImport=null;
   document.getElementById('import-modal').classList.remove('show');
-  migrate();save();renderAll();toast('Dados substituídos ✓');
+  migrate();save();renderAll();toast(tr('Dados substituídos ✓','Data replaced ✓'));
 }
 function importMerge(){
   if(!_pendingImport)return;
@@ -1776,17 +1905,59 @@ function importMerge(){
   });
   // orçamento: preenche meses vazios
   (inc.budget||[]).forEach((v,i)=>{if(v&&!state.budget[i])state.budget[i]=v});
-  migrate();save();renderAll();toast('Dados mesclados ✓');
+  migrate();save();renderAll();toast(tr('Dados mesclados ✓','Data merged ✓'));
 }
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400)}
 
 /* ===================== RENDER ALL + NAV ===================== */
+/* ===================== RENDER: CALENDÁRIO ===================== */
+let calSelDay=null;
+function hexToRgb(h){h=(h||'#888').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16)||0;return[(n>>16)&255,(n>>8)&255,n&255]}
+/* valor compacto pra caber na célula do calendário */
+function moneyCell(v){const s=curSym(),dec=lang()==='en'?'.':',';if(v>=1000)return s+(v/1000).toFixed(v>=10000?0:1).replace('.',dec)+'k';return s+Math.round(v)}
+function renderCalendario(){
+  const grid=document.getElementById('cal-grid');if(!grid)return;
+  const y=state.meta.year,m=curMonth;
+  const wd=WEEKD[lang()]||WEEKD.pt;
+  document.getElementById('cal-weekdays').innerHTML=wd.map(d=>`<div class="cal-wd">${d}</div>`).join('');
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const firstDow=new Date(y,m,1).getDay();
+  const totals={};
+  txMonth(m).forEach(tx=>{const d=parseInt((tx.date||'').split('-')[2]);if(d)totals[d]=(totals[d]||0)+(tx.val||0)});
+  const maxv=Math.max(0,...Object.values(totals));
+  const [r,g,b]=hexToRgb(T().flow[2]||'#B04A20');
+  const todayIso=isoToday();
+  let cells='';
+  for(let i=0;i<firstDow;i++)cells+='<div class="cal-cell empty"></div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const v=totals[d]||0;
+    const bg=v>0?`background:rgba(${r},${g},${b},${(0.10+0.55*(maxv>0?v/maxv:0)).toFixed(3)})`:'';
+    const iso=y+'-'+pad(m+1)+'-'+pad(d);
+    cells+=`<button class="cal-cell${calSelDay===d?' sel':''}${iso===todayIso?' today':''}" data-day="${d}" style="${bg}">
+      <span class="cal-dnum">${d}</span>${v>0?`<span class="cal-damt num">${moneyCell(v)}</span>`:''}</button>`;
+  }
+  grid.innerHTML=cells;
+  grid.querySelectorAll('.cal-cell[data-day]').forEach(c=>c.onclick=()=>{calSelDay=(calSelDay===+c.dataset.day?null:+c.dataset.day);renderCalendario()});
+  document.getElementById('cal-monthtotal').textContent=money(Object.values(totals).reduce((s,v)=>s+v,0));
+  const det=document.getElementById('cal-day');
+  if(calSelDay&&calSelDay<=daysInMonth){
+    const items=txMonth(m).filter(tx=>parseInt((tx.date||'').split('-')[2])===calSelDay).slice().reverse();
+    const dayTot=items.reduce((s,tx)=>s+(tx.val||0),0);
+    det.innerHTML=`<div class="card panel" style="margin-top:16px">
+      <div class="tx-head" style="margin-top:0"><h3>${calSelDay} ${MO()[m]}</h3><span class="num" style="font-weight:600;color:var(--clay)">${money(dayTot)}</span></div>
+      ${items.length?items.map(tx=>`<div class="tx"><div class="ic">${catIcon(tx.cat)}</div>
+        <div class="info"><div class="t1">${(tx.desc||tx.cat)}</div><div class="t2">${tx.cat} · ${personName(tx.who)}${tx.note?' · '+tx.note:''}</div></div>
+        <div class="amt">${money(tx.val)}</div></div>`).join(''):`<div class="empty">${tr('Nada lançado neste dia.','Nothing recorded on this day.')}</div>`}
+    </div>`;
+  } else det.innerHTML='';
+}
 function renderAll(){
-  applyTheme();renderMonth();renderResumo();renderCatButtons();renderTx();renderFixas();renderRenda();renderInvest();renderAnual()}
+  applyTheme();applyI18n();applyCurrency();renderMonth();renderResumo();renderCatButtons();renderTx();renderFixas();renderRenda();renderInvest();renderAnual();renderCalendario()}
 function switchView(v){
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='v-'+v));
-  if(v==='anual')renderAnual();if(v==='resumo')renderResumo();if(v==='invest')renderInvest();
+  if(v==='anual')renderAnual();if(v==='resumo')renderResumo();if(v==='invest')renderInvest();if(v==='calendario')renderCalendario();
+  const act=document.querySelector('nav.tabs button.active');if(act)act.scrollIntoView({inline:'center',block:'nearest'});
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1795,8 +1966,16 @@ load();
 renderAll();
 
 document.getElementById('tabs').addEventListener('click',e=>{if(e.target.dataset.v)switchView(e.target.dataset.v)});
-document.getElementById('prevM').onclick=()=>{curMonth=(curMonth+11)%12;renderAll()};
-document.getElementById('nextM').onclick=()=>{curMonth=(curMonth+1)%12;renderAll()};
+document.getElementById('prevM').onclick=()=>{curMonth=(curMonth+11)%12;calSelDay=null;renderAll()};
+document.getElementById('nextM').onclick=()=>{curMonth=(curMonth+1)%12;calSelDay=null;renderAll()};
+/* ===== idioma (PT/EN) & moeda (BRL/USD) ===== */
+function setLang(l){if(!CUR_FMT)return;state.meta.lang=l;save();renderAll();if(document.getElementById('settings-modal').classList.contains('show'))renderSettings()}
+function setCurrency(c){state.meta.currency=CUR_FMT[c]?c:'BRL';save();renderAll()}
+function wireSeg(sel,attr,fn){document.querySelectorAll(sel).forEach(seg=>seg.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&b.dataset[attr])fn(b.dataset[attr])}))}
+wireSeg('#langSeg,#langSeg2,#startLang','lang',setLang);
+wireSeg('#curSeg,#curSeg2,#startCur','cur',setCurrency);
+function openStart(){applyI18n();applyCurrency();document.getElementById('start-modal').classList.add('show')}
+document.getElementById('start-go').onclick=()=>{document.getElementById('start-modal').classList.remove('show');save();openSettings(true)};
 /* ===== prompt modal ===== */
 let _pmCb=null;
 function askPromptModal(title,label,cb){
@@ -1813,9 +1992,9 @@ function reportData(){
   const m=curMonth,y=state.meta.year;
   const people=state.people||[];
   const renda=people.map(p=>({nome:p.name,valor:incomePerson(m,p.id)}));
-  const fontes=(state.incomes||[]).map(s=>({fonte:s.label,pessoa:s.person?personName(s.person):'',tipo:s.kind==='m'?'Mensal':'Avulsa',
+  const fontes=(state.incomes||[]).map(s=>({fonte:s.label,pessoa:s.person?personName(s.person):'',tipo:s.kind==='m'?tr('Mensal','Monthly'):tr('Avulsa','One-off'),
     valor:s.kind==='m'?(s.months[m]||0):(s.entries||[]).filter(e=>e.month===m).reduce((x,e)=>x+(e.valor||0),0)}));
-  const fixas=state.fixed.filter(f=>(f.months[m]||0)>0).map(f=>({grupo:f.group,conta:f.name,vencimento:f.due?('dia '+f.due):'',forma:effMethod(f,m)==='c'?'Crédito':'Débito',valor:f.months[m]}));
+  const fixas=state.fixed.filter(f=>(f.months[m]||0)>0).map(f=>({grupo:f.group,conta:f.name,vencimento:f.due?(tr('dia ','day ')+f.due):'',forma:effMethod(f,m)==='c'?tr('Crédito','Credit'):tr('Débito','Debit'),valor:f.months[m]}));
   const txs=txMonth(m).map(t=>({data:t.date?fmtDate(t.date):'',categoria:t.cat,descricao:t.desc||'',quem:personName(t.who),forma:t.type,parcelas:t.parc>1?t.parc+'x':'',valor:t.val}));
   const porCat={};txMonth(m).forEach(t=>{porCat[t.cat]=(porCat[t.cat]||0)+(t.val||0)});
   const cats=Object.entries(porCat).sort((a,b)=>b[1]-a[1]).map(([categoria,valor])=>({categoria,valor}));
@@ -1826,9 +2005,9 @@ function reportData(){
 function reportPrint(){
   const d=reportData();
   const esc=t=>String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  const tbl=(rows,cols)=>rows.length?`<table><thead><tr>${cols.map(c=>`<th>${c.h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td class="${c.num?'n':''}">${c.num?money(r[c.k]):esc(r[c.k])}</td>`).join('')}</tr>`).join('')}</tbody></table>`:'<p class="mut">Nada neste mês.</p>';
+  const tbl=(rows,cols)=>rows.length?`<table><thead><tr>${cols.map(c=>`<th>${c.h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td class="${c.num?'n':''}">${c.num?money(r[c.k]):esc(r[c.k])}</td>`).join('')}</tr>`).join('')}</tbody></table>`:`<p class="mut">${tr('Nada neste mês.','Nothing this month.')}</p>`;
   const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Quite · Relatório ${MONTHS[d.m]} ${d.y}</title>
+  w.document.write(`<!DOCTYPE html><html lang="${lang()==='en'?'en':'pt-BR'}"><head><meta charset="utf-8"><title>Quite · ${tr('Relatório','Report')} ${MO()[d.m]} ${d.y}</title>
   <style>
   body{font-family:Helvetica,Arial,sans-serif;color:#1A1A18;margin:34px;font-size:12.5px}
   h1{font-weight:300;font-size:26px;letter-spacing:.02em;margin:0}
@@ -1843,22 +2022,22 @@ function reportPrint(){
   .mut{color:#7A7A73} .tots td{font-weight:600}
   @media print{body{margin:12mm}}
   </style></head><body>
-  <div class="mono">Quite · Relatório</div>
-  <h1>${MONTHS[d.m]} ${d.y}</h1>
-  <div class="hero"><span>Saldo líquido do mês</span><b>${money(d.tot.saldo)}</b></div>
-  <h2>Resumo</h2>
+  <div class="mono">Quite · ${tr('Relatório','Report')}</div>
+  <h1>${MO()[d.m]} ${d.y}</h1>
+  <div class="hero"><span>${tr('Saldo líquido do mês','Net balance this month')}</span><b>${money(d.tot.saldo)}</b></div>
+  <h2>${tr('Resumo','Summary')}</h2>
   <table><tbody class="tots">
-    <tr><td>Renda total</td><td class="n">${money(d.tot.renda)}</td></tr>
-    <tr><td>Despesas fixas</td><td class="n">${money(d.tot.fixas)}</td></tr>
-    <tr><td>Gastos variáveis</td><td class="n">${money(d.tot.variaveis)}</td></tr>
-    <tr><td>Fatura no crédito</td><td class="n">${money(d.tot.fatura)}</td></tr>
+    <tr><td>${tr('Renda total','Total income')}</td><td class="n">${money(d.tot.renda)}</td></tr>
+    <tr><td>${tr('Despesas fixas','Fixed costs')}</td><td class="n">${money(d.tot.fixas)}</td></tr>
+    <tr><td>${tr('Gastos variáveis','Variable spending')}</td><td class="n">${money(d.tot.variaveis)}</td></tr>
+    <tr><td>${tr('Fatura no crédito','Credit-card bill')}</td><td class="n">${money(d.tot.fatura)}</td></tr>
   </tbody></table>
-  <h2>Renda por pessoa</h2>${tbl(d.renda,[{h:'Pessoa',k:'nome'},{h:'Renda no mês',k:'valor',num:1}])}
-  <h2>Fontes de renda</h2>${tbl(d.fontes,[{h:'Fonte',k:'fonte'},{h:'Pessoa',k:'pessoa'},{h:'Tipo',k:'tipo'},{h:'Valor no mês',k:'valor',num:1}])}
-  <h2>Despesas fixas do mês</h2>${tbl(d.fixas,[{h:'Grupo',k:'grupo'},{h:'Conta',k:'conta'},{h:'Vencimento',k:'vencimento'},{h:'Forma',k:'forma'},{h:'Valor',k:'valor',num:1}])}
-  <h2>Gastos por categoria</h2>${tbl(d.cats,[{h:'Categoria',k:'categoria'},{h:'Total',k:'valor',num:1}])}
-  <h2>Lançamentos</h2>${tbl(d.txs,[{h:'Data',k:'data'},{h:'Categoria',k:'categoria'},{h:'Descrição',k:'descricao'},{h:'Quem',k:'quem'},{h:'Forma',k:'forma'},{h:'Parc.',k:'parcelas'},{h:'Valor',k:'valor',num:1}])}
-  <p class="mut" style="margin-top:26px">Gerado pelo Quite. Seus dados, no seu aparelho.</p>
+  <h2>${tr('Renda por pessoa','Income by person')}</h2>${tbl(d.renda,[{h:tr('Pessoa','Person'),k:'nome'},{h:tr('Renda no mês','Income this month'),k:'valor',num:1}])}
+  <h2>${tr('Fontes de renda','Income sources')}</h2>${tbl(d.fontes,[{h:tr('Fonte','Source'),k:'fonte'},{h:tr('Pessoa','Person'),k:'pessoa'},{h:tr('Tipo','Type'),k:'tipo'},{h:tr('Valor no mês','Value this month'),k:'valor',num:1}])}
+  <h2>${tr('Despesas fixas do mês','Fixed costs this month')}</h2>${tbl(d.fixas,[{h:tr('Grupo','Group'),k:'grupo'},{h:tr('Conta','Bill'),k:'conta'},{h:tr('Vencimento','Due'),k:'vencimento'},{h:tr('Forma','Method'),k:'forma'},{h:tr('Valor','Value'),k:'valor',num:1}])}
+  <h2>${tr('Gastos por categoria','Spending by category')}</h2>${tbl(d.cats,[{h:tr('Categoria','Category'),k:'categoria'},{h:tr('Total','Total'),k:'valor',num:1}])}
+  <h2>${tr('Lançamentos','Entries')}</h2>${tbl(d.txs,[{h:tr('Data','Date'),k:'data'},{h:tr('Categoria','Category'),k:'categoria'},{h:tr('Descrição','Description'),k:'descricao'},{h:tr('Quem','Who'),k:'quem'},{h:tr('Forma','Method'),k:'forma'},{h:tr('Parc.','Inst.'),k:'parcelas'},{h:tr('Valor','Value'),k:'valor',num:1}])}
+  <p class="mut" style="margin-top:26px">${tr('Gerado pelo Quite. Seus dados, no seu aparelho.','Generated by Quite. Your data, on your device.')}</p>
   <script>window.onload=()=>setTimeout(()=>window.print(),300)<\/script></body></html>`);
   w.document.close();
 }
@@ -1866,26 +2045,26 @@ function reportXlsx(){
   const go=()=>{
     const d=reportData();const X=window.XLSX;
     const wb=X.utils.book_new();
-    const resumo=[['Quite · Relatório',MONTHS[d.m]+' '+d.y],[],
-      ['Renda total',d.tot.renda],['Despesas fixas',d.tot.fixas],['Gastos variáveis',d.tot.variaveis],
-      ['Fatura no crédito',d.tot.fatura],['Saldo líquido',d.tot.saldo],[],
-      ['Renda por pessoa','']].concat(d.renda.map(r=>[r.nome,r.valor]));
-    X.utils.book_append_sheet(wb,X.utils.aoa_to_sheet(resumo),'Resumo');
-    X.utils.book_append_sheet(wb,X.utils.json_to_sheet(d.txs.length?d.txs:[{}]),'Lançamentos');
-    X.utils.book_append_sheet(wb,X.utils.json_to_sheet(d.fixas.length?d.fixas:[{}]),'Fixas');
-    X.utils.book_append_sheet(wb,X.utils.json_to_sheet(d.fontes.length?d.fontes:[{}]),'Renda');
-    X.utils.book_append_sheet(wb,X.utils.json_to_sheet(d.cats.length?d.cats:[{}]),'Categorias');
-    X.writeFile(wb,`quite-relatorio-${d.y}-${String(d.m+1).padStart(2,'0')}.xlsx`);
-    toast('Planilha gerada ✓');
+    const resumo=[['Quite · '+tr('Relatório','Report'),MO()[d.m]+' '+d.y],[],
+      [tr('Renda total','Total income'),d.tot.renda],[tr('Despesas fixas','Fixed costs'),d.tot.fixas],[tr('Gastos variáveis','Variable spending'),d.tot.variaveis],
+      [tr('Fatura no crédito','Credit-card bill'),d.tot.fatura],[tr('Saldo líquido','Net balance'),d.tot.saldo],[],
+      [tr('Renda por pessoa','Income by person'),'']].concat(d.renda.map(r=>[r.nome,r.valor]));
+    X.utils.book_append_sheet(wb,X.utils.aoa_to_sheet(resumo),tr('Resumo','Summary'));
+    X.utils.book_append_sheet(wb,X.utils.json_to_sheet(d.txs.length?d.txs:[{}]),tr('Lançamentos','Entries'));
+    X.utils.book_append_sheet(wb,X.utils.json_to_sheet(d.fixas.length?d.fixas:[{}]),tr('Fixas','Fixed'));
+    X.utils.book_append_sheet(wb,X.utils.json_to_sheet(d.fontes.length?d.fontes:[{}]),tr('Renda','Income'));
+    X.utils.book_append_sheet(wb,X.utils.json_to_sheet(d.cats.length?d.cats:[{}]),tr('Categorias','Categories'));
+    X.writeFile(wb,`quite-${tr('relatorio','report')}-${d.y}-${String(d.m+1).padStart(2,'0')}.xlsx`);
+    toast(tr('Planilha gerada ✓','Spreadsheet generated ✓'));
   };
   if(window.XLSX)return go();
-  toast('Carregando gerador de planilha…');
+  toast(tr('Carregando gerador de planilha…','Loading spreadsheet generator…'));
   const sc=document.createElement('script');
   sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
-  sc.onload=go; sc.onerror=()=>toast('Sem conexão pra baixar o gerador. Tente de novo online.');
+  sc.onload=go; sc.onerror=()=>toast(tr('Sem conexão pra baixar o gerador. Tente de novo online.','No connection to download the generator. Try again online.'));
   document.head.appendChild(sc);
 }
-document.getElementById('reportBtn').onclick=()=>{document.getElementById('rp-sub').textContent=MONTHS[curMonth]+' '+state.meta.year;document.getElementById('report-modal').classList.add('show')};
+document.getElementById('reportBtn').onclick=()=>{document.getElementById('rp-sub').textContent=MO()[curMonth]+' '+state.meta.year;document.getElementById('report-modal').classList.add('show')};
 document.getElementById('mb-report').onclick=()=>document.getElementById('reportBtn').click();
 document.getElementById('mb-settings').onclick=()=>openSettings(false);
 const dataSheet=document.getElementById('data-sheet');
@@ -1920,15 +2099,15 @@ function renderSettings(){
       <div class="sw">${PREVIEW[t.id].map(c=>`<i style="background:${c}"></i>`).join('')}</div>
     </button>`).join('');
   document.querySelectorAll('#st-themes .theme-card').forEach(b=>b.onclick=()=>{
-    state.meta.theme=b.dataset.th;save();renderAll();renderSettings();toast('Tema: '+THEME_LIST.find(t=>t.id===b.dataset.th).nome+' ✓');
+    state.meta.theme=b.dataset.th;save();renderAll();renderSettings();toast(tr('Tema: ','Theme: ')+THEME_LIST.find(t=>t.id===b.dataset.th).nome+' ✓');
   });
   const wrap=document.getElementById('st-people');
   wrap.innerHTML=(state.people||[]).map((p,i)=>`
     <div class="tat" style="padding:8px 2px">
       <div class="av" style="background:${T().people[i%T().people.length]}">${(p.name[0]||'?').toUpperCase()}</div>
       <input class="st-prename" data-id="${p.id}" value="${p.name.replace(/"/g,'&quot;')}" style="flex:1;border:1px dashed var(--line);background:transparent">
-      <button class="del st-pdel" data-id="${p.id}" title="Remover">×</button>
-    </div>`).join('')||'<div class="ph-sub" style="padding:6px 0">Ninguém ainda.</div>';
+      <button class="del st-pdel" data-id="${p.id}" title="${tr('Remover','Remove')}">×</button>
+    </div>`).join('')||`<div class="ph-sub" style="padding:6px 0">${tr('Ninguém ainda.','No one yet.')}</div>`;
   wrap.querySelectorAll('.st-prename').forEach(inp=>inp.onchange=()=>{
     const p=state.people.find(x=>x.id===inp.dataset.id);
     const v=inp.value.trim();if(!v){inp.value=p.name;return}
@@ -1936,19 +2115,19 @@ function renderSettings(){
   });
   wrap.querySelectorAll('.st-pdel').forEach(b=>b.onclick=()=>{
     const p=state.people.find(x=>x.id===b.dataset.id);
-    askConfirm('Remover pessoa','Remover '+p.name+'? Os lançamentos já feitos continuam guardados, marcados como "(removida)".',()=>{
-      state.people=state.people.filter(x=>x.id!==b.dataset.id);save();renderAll();renderSettings();toast('Pessoa removida');
+    askConfirm(tr('Remover pessoa','Remove person'),tr('Remover ','Remove ')+p.name+tr('? Os lançamentos já feitos continuam guardados, marcados como "(removida)".','? Entries already made stay saved, marked as "(removed)".'),()=>{
+      state.people=state.people.filter(x=>x.id!==b.dataset.id);save();renderAll();renderSettings();toast(tr('Pessoa removida','Person removed'));
     });
   });
   const custom=[];
   (state.cats||[]).forEach((d,di)=>{const base=CAT_DEFS.find(x=>x.g===d.g);d.subs.forEach(sub=>{if(!base||!base.subs.includes(sub))custom.push({di,sub})})});
   const sc=document.getElementById('st-cats');
   sc.innerHTML=custom.length?custom.map(c=>`<span class="tag" style="background:var(--paper-2);color:var(--ink-soft);margin:2px 4px 2px 0;display:inline-flex;align-items:center;gap:6px">${c.sub}<button class="st-cdel" data-di="${c.di}" data-sub="${c.sub.replace(/"/g,'&quot;')}" style="border:none;background:none;cursor:pointer;color:var(--neg);font-size:13px;padding:0">×</button></span>`).join('')
-    :'Nenhuma ainda. Crie pelo botão + junto às categorias na aba Gastos.';
+    :tr('Nenhuma ainda. Crie pelo botão + junto às categorias na aba Gastos.','None yet. Create one with the + button next to the categories in the Expenses tab.');
   sc.querySelectorAll('.st-cdel').forEach(b=>b.onclick=()=>{
     const d=state.cats[+b.dataset.di];
     d.subs=d.subs.filter(x=>x!==b.dataset.sub);
-    save();renderCatButtons();renderSettings();toast('Categoria removida');
+    save();renderCatButtons();renderSettings();toast(tr('Categoria removida','Category removed'));
   });
 }
 function openSettings(welcome){
@@ -1968,23 +2147,23 @@ function paintTipoBtn(){const b=document.getElementById('iv-tipo-btn'),h=documen
   document.addEventListener('click',e=>{if(!wrap.contains(e.target))wrap.classList.remove('open')});
   paintTipoBtn();
 })();
-if(!(state.people||[]).length)setTimeout(()=>openSettings(true),350);
+if(firstRun){setTimeout(openStart,300)}else if(!(state.people||[]).length){setTimeout(()=>openSettings(true),350)}
 document.getElementById('st-close').onclick=closeSettings;
 document.getElementById('settings-modal').addEventListener('click',e=>{if(e.target.id==='settings-modal')closeSettings()});
 document.getElementById('st-padd').onclick=()=>{
   const v=document.getElementById('st-pname').value.trim();
-  if(!v){toast('Digite o nome');return}
-  if((state.people||[]).some(p=>p.name.toLowerCase()===v.toLowerCase())){toast('Já existe alguém com esse nome');return}
+  if(!v){toast(tr('Digite o nome','Enter the name'));return}
+  if((state.people||[]).some(p=>p.name.toLowerCase()===v.toLowerCase())){toast(tr('Já existe alguém com esse nome','Someone already has that name'));return}
   state.people.push({id:uid(),name:v});
   document.getElementById('st-pname').value='';
-  save();renderAll();renderSettings();toast(v+' entrou na casa ✓');
+  save();renderAll();renderSettings();toast(v+tr(' entrou na casa ✓',' joined the home ✓'));
 };
 document.getElementById('st-pname').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('st-padd').click()});
 
 document.getElementById('exportBtn').onclick=doExport;
 let cfYes=null;
 function askConfirm(title,msg,onYes){
-  document.getElementById('cf-title').innerHTML=title+'<small>confirmação</small>';
+  document.getElementById('cf-title').innerHTML=title+'<small>'+tr('confirmação','confirmation')+'</small>';
   document.getElementById('cf-msg').textContent=msg;
   cfYes=onYes;
   document.getElementById('confirm-modal').classList.add('show');
@@ -1993,9 +2172,9 @@ function closeConfirm(){document.getElementById('confirm-modal').classList.remov
 document.getElementById('cf-no').onclick=closeConfirm;
 document.getElementById('cf-yes').onclick=()=>{const fn=cfYes;closeConfirm();if(fn)fn();};
 document.getElementById('confirm-modal').addEventListener('click',e=>{if(e.target.id==='confirm-modal')closeConfirm()});
-document.getElementById('clearBtn').onclick=()=>askConfirm('Limpar tudo',
-  'Renda, despesas fixas, lançamentos e investimentos voltam a zero. A estrutura (categorias e linhas) é mantida. Exporte um backup antes, se quiser.',
-  ()=>{state=blankState();save();curMonth=new Date().getMonth();renderAll();toast('Tudo limpo, pode começar do zero');});
+document.getElementById('clearBtn').onclick=()=>askConfirm(tr('Limpar tudo','Clear everything'),
+  tr('Renda, despesas fixas, lançamentos e investimentos voltam a zero. A estrutura (categorias e linhas) é mantida. Exporte um backup antes, se quiser.','Income, fixed costs, entries and investments reset to zero. The structure (categories and rows) is kept. Export a backup first if you like.'),
+  ()=>{const L=state.meta.lang,C=state.meta.currency;state=blankState();state.meta.lang=L;state.meta.currency=C;save();curMonth=new Date().getMonth();calSelDay=null;renderAll();toast(tr('Tudo limpo, pode começar do zero','All clear, start fresh'));});
 document.getElementById('importBtn').onclick=()=>document.getElementById('fileIn').click();
 document.getElementById('fileIn').onchange=e=>{if(e.target.files[0])doImport(e.target.files[0])};
 /* modal de gasto */
@@ -2020,7 +2199,7 @@ document.addEventListener('focusin',e=>{
 document.addEventListener('focusout',e=>{
   const el=e.target;
   if(el.matches&&el.matches('input.val-in, input.inc-in')&&(el.value||'').trim()===''){el.value='0';}
-  if(el.id==='fx-budget'&&(el.textContent||'').trim()===''){el.textContent='R$ 0';}
+  if(el.id==='fx-budget'&&(el.textContent||'').trim()===''){el.textContent=money0(0);}
 });
 /* fontes de renda */
 document.getElementById('src-who').addEventListener('click',e=>{if(e.target.dataset.who){srcWho=e.target.dataset.who;renderWhoSeg('src-who',srcWho,false)}});
@@ -2034,7 +2213,7 @@ document.getElementById('iv-saldo').addEventListener('keydown',e=>{if(e.key==='E
 document.getElementById('email-bills').onclick=openBills;
 document.getElementById('bills-close').onclick=closeBills;
 document.getElementById('bills-modal').addEventListener('click',e=>{if(e.target.id==='bills-modal')closeBills()});
-document.getElementById('bills-copy').onclick=()=>{const t=document.getElementById('bills-text');t.select();t.setSelectionRange(0,99999);try{document.execCommand('copy')}catch(e){}window.getSelection&&window.getSelection().removeAllRanges&&window.getSelection().removeAllRanges();toast('Texto copiado ✓')};
+document.getElementById('bills-copy').onclick=()=>{const t=document.getElementById('bills-text');t.select();t.setSelectionRange(0,99999);try{document.execCommand('copy')}catch(e){}window.getSelection&&window.getSelection().removeAllRanges&&window.getSelection().removeAllRanges();toast(tr('Texto copiado ✓','Text copied ✓'))};
 document.getElementById('tx-filter').addEventListener('click',e=>{if(e.target.dataset.f){txFilter=e.target.dataset.f;document.querySelectorAll('#tx-filter .fpill').forEach(b=>b.classList.toggle('on',b===e.target));renderTx()}});
 const fb=document.getElementById('fx-budget');
 fb.addEventListener('blur',()=>{state.budget[curMonth]=parseNum(fb.textContent);save();renderFixas();renderResumo()});

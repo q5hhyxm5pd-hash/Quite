@@ -555,6 +555,10 @@ table.annual td.cur-col{box-shadow:inset 3px 0 0 var(--clay),inset -3px 0 0 var(
 .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(35,32,26,.42);backdrop-filter:blur(3px);
   display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
 .modal-overlay.show{opacity:1;pointer-events:auto}
+/* os modais ficam DENTRO de <main> (z-index:1, cria contexto de empilhamento),
+   então o header sticky (z-index:50) se sobrepunha a eles e roubava o toque do ×.
+   Com um modal aberto, rebaixa o header para que o modal (em main) fique por cima. */
+body:has(.modal-overlay.show) header{z-index:0;pointer-events:none}
 .modal{background:var(--paper);border:1px solid var(--line);border-radius:var(--r1);box-shadow:var(--shadow-lift);
   width:100%;max-width:480px;max-height:92vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transform:translateY(16px) scale(.98);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
 .modal-overlay.show .modal{transform:none}

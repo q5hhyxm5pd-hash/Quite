@@ -418,6 +418,7 @@ input,select,textarea{
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--clay);background:var(--focus-bg);box-shadow:0 0 0 2px var(--focus-ring)}
 input.amt{font-variant-numeric:tabular-nums;font-weight:400;font-size:16px}
 textarea{resize:vertical;min-height:44px}
+input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%}
 .seg{display:inline-flex;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r2);padding:3px}
 #src-who,#m-who{flex-wrap:wrap}
 .seg button{border:none;background:transparent;font-family:inherit;font-weight:700;font-size:13px;
@@ -488,7 +489,7 @@ textarea{resize:vertical;min-height:44px}
 .fx-line .nm{flex:1;font-size:14px;font-weight:600;color:var(--ink-soft);min-width:0}
 .fx-line .note-in{flex:1 1 90px;min-width:80px;font-size:12.5px;padding:7px 10px;background:transparent;border:1px dashed var(--line);color:var(--muted)}
 .fx-line .note-in:focus{border-style:solid}
-.fx-line .val-in{width:120px;text-align:right;font-weight:400;font-variant-numeric:tabular-nums}
+.fx-line .val-in{width:108px;text-align:left;font-weight:400;font-variant-numeric:tabular-nums}
 .fx-line .cur{color:var(--faint);font-size:12px;font-weight:700}
 .fx-line .due-in{width:58px;text-align:center;font-weight:400;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
 .fx-line .nm{flex:1 1 120px;min-width:0}
@@ -683,7 +684,8 @@ body{transition:background-color .4s ease,color .4s ease}
 .cal-cell.today{outline:2px solid var(--clay);outline-offset:-2px}
 .cal-cell.today .cal-dnum{color:var(--clay);font-weight:800}
 .cal-dnum{font-size:12.5px;font-weight:600;color:var(--ink-soft)}
-.cal-damt{font-size:9.5px;font-weight:700;color:var(--ink);line-height:1;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.cal-dot{width:5px;height:5px;border-radius:50%;background:var(--clay);align-self:flex-start;margin-top:auto;opacity:.85}
+.cal-cell.has{cursor:pointer}
 
 /* ===== anti-overflow horizontal no mobile ===== */
 body{overflow-x:clip}
@@ -700,8 +702,8 @@ img,canvas,table{max-width:100%}
   /* ----- calendário (mobile): mais alto, legível e alinhado ao restante ----- */
   .cal-grid,.cal-weekdays{gap:5px}
   .cal-cell{aspect-ratio:auto;min-height:54px;padding:5px 6px;border-radius:var(--r2);justify-content:space-between}
-  .cal-dnum{font-size:12.5px;font-weight:700}
-  .cal-damt{font-size:9px;line-height:1}
+  .cal-dnum{font-size:13px;font-weight:700}
+  .cal-dot{width:6px;height:6px}
   .cal-wd{font-size:10.5px}
   .cal-total{font-size:21px}
   /* ----- cartões de despesa fixa (mobile): nome+× em cima, nota embaixo ----- */
@@ -714,10 +716,32 @@ img,canvas,table{max-width:100%}
   .fx-line .methm-lab{order:4;flex:0 0 auto}
   .fx-line .methseg.fx-methm{order:5}
   .fx-line .methseg.fx-methm button{padding:7px 12px}
-  .fx-line .due-in{order:6;flex:0 0 64px;width:64px;height:44px;font-size:14px}
-  .fx-line .val-in{order:7;flex:1 1 auto;width:auto;height:44px;font-size:15px}
-  .fx-line .cur{order:8;flex:0 0 auto}
+  .fx-line .due-in{order:6;flex:0 0 64px;width:64px;height:44px}
+  .fx-line .cur{order:7;flex:0 0 auto}
+  .fx-line .val-in{order:8;flex:1 1 auto;width:auto;height:44px}
   .fx-line .note-in{order:9;flex:1 1 100%;width:100%;height:42px;border-radius:var(--r2)}
+  /* ≥16px keeps iOS Safari from auto-zooming the viewport when a field gains focus */
+  input,select,textarea,.fx-line .val-in,.fx-line .due-in,.fx-line .note-in{font-size:16px}
+  /* inline add-forms (income source, income entry, new holding): stack instead of cramped wrap */
+  .tattoo-form{gap:12px}
+  .tattoo-form>.field{flex:1 1 100%;min-width:0}
+  .tattoo-form>.btn.solid{width:100%;margin-top:2px}
+  /* entries list (Gastos): tighten so description + tags + amount never collide */
+  .tx{gap:10px;padding:13px 14px}
+  .tx .ic{width:34px;height:34px;font-size:15px}
+  .tx .info .t1{font-size:13.5px;gap:5px 6px}
+  .tx .info .t2{font-size:11.5px}
+  .tx .amt{font-size:15px}
+  .tx .del{width:28px;height:28px;font-size:17px}
+}
+/* very narrow phones: keep stat values inside their card (no spill over the card border) */
+@media(max-width:412px){
+  .stats{gap:11px}
+  .stat{padding:14px 13px}
+  .stat .lab{font-size:11px;align-items:flex-start;line-height:1.3}
+  .stat .lab .dot{margin-top:3px}
+  .stat .val{font-size:19px}
+  .stat .sub{font-size:11px}
 }
 </style>
 </head>
@@ -753,8 +777,8 @@ img,canvas,table{max-width:100%}
   <nav class="tabs" id="tabs">
     <button class="active" data-v="resumo" data-en="Summary">Resumo</button>
     <button data-v="gastos" data-en="Expenses">Gastos</button>
-    <button data-v="calendario" data-en="Calendar">Calendário</button>
     <button data-v="fixas" data-en="Fixed costs">Despesas Fixas</button>
+    <button data-v="calendario" data-en="Calendar">Calendário</button>
     <button data-v="renda" data-en="Income">Renda</button>
     <button data-v="invest" data-en="Investments">Investimentos</button>
     <button data-v="anual" data-en="Year view">Visão Anual</button>
@@ -1044,6 +1068,7 @@ img,canvas,table{max-width:100%}
         <div class="field" style="min-width:180px"><label data-en="Type">Tipo</label>
           <div class="seg" id="src-kind"><button data-kind="m" class="on" data-en="Monthly">Mensal</button><button data-kind="a" data-en="One-off">Avulsa</button></div>
         </div>
+        <div class="field" style="min-width:130px"><label><span data-en="Value this month">Valor neste mês</span> (<span class="cursym">R$</span>)</label><input id="src-amount" class="amt num" inputmode="decimal" placeholder="0,00" data-en-ph="0.00"></div>
         <button class="btn solid" id="src-add" style="height:46px;padding:13px 22px" data-en="Add source">Adicionar fonte</button>
       </div>
     </div>
@@ -1598,7 +1623,7 @@ function renderFixas(){
           </div>
           ${f.method==='v'?`<span class="methm-lab">${tr('no mês','this month')}</span><div class="methseg fx-methm" data-idx="${idx}"><button data-meth="d" class="${mm==='d'?'on':''}">${tr('Déb','Deb')}</button><button data-meth="c" class="${mm==='c'?'on':''}">${tr('Créd','Cred')}</button></div>`:''}
           <input class="due-in fx-due" data-idx="${idx}" inputmode="numeric" maxlength="2" placeholder="${tr('dia','day')}" value="${f.due||''}" title="${tr('Dia de vencimento','Due day')}">
-          <input class="val-in fx-val" data-idx="${idx}" value="${(f.months[m]||0).toString().replace('.',',')}"> <span class="cur">${curSym()}</span>
+          <span class="cur">${curSym()}</span> <input class="val-in fx-val" data-idx="${idx}" value="${(f.months[m]||0).toString().replace('.',',')}">
           <button class="del fx-del" data-idx="${idx}" title="${tr('Excluir conta','Delete bill')}">×</button>
         </div>`}).join('')}
         <div style="padding:8px 20px"><button class="btn fx-addline" data-g="${g.replace(/"/g,'&quot;')}">${tr('+ conta','+ bill')}</button></div>
@@ -1777,11 +1802,19 @@ function addIncomeSource(){
   const label=document.getElementById('src-label').value.trim();
   if(!label){toast(tr('Dê um nome pra fonte','Give the source a name'));return}
   if(!(state.people||[]).length){toast(tr('Adicione as pessoas da casa primeiro (Ajustes)','Add the people of the home first (Settings)'));return}
-  state.incomes.push(srcKind==='m'
-    ?{id:uid(),label,person:srcWho,kind:'m',months:Array(12).fill(0)}
-    :{id:uid(),label,person:srcWho,kind:'a',entries:[]});
+  const amtEl=document.getElementById('src-amount');
+  const amt=amtEl?parseNum(amtEl.value):0;
+  if(srcKind==='m'){
+    const months=Array(12).fill(0); if(amt>0)months[curMonth]=amt;
+    state.incomes.push({id:uid(),label,person:srcWho,kind:'m',months});
+  }else{
+    const entries=[]; if(amt>0)entries.push({id:uid(),who:srcWho,desc:'',date:defaultDate(),month:curMonth,valor:amt,note:''});
+    state.incomes.push({id:uid(),label,person:srcWho,kind:'a',entries});
+  }
   document.getElementById('src-label').value='';
-  save();renderRenda();toast(tr('Fonte criada ✓','Source created ✓'));
+  if(amtEl)amtEl.value='';
+  save();renderRenda();renderResumo();renderAnual();
+  toast(tr('Fonte criada ✓','Source created ✓'));
 }
 /* ===================== RENDER: INVESTIMENTOS ===================== */
 let ivDonut;
@@ -2001,8 +2034,8 @@ function renderCalendario(){
     const v=totals[d]||0;
     const bg=v>0?`background:rgba(${r},${g},${b},${(0.10+0.55*(maxv>0?v/maxv:0)).toFixed(3)})`:'';
     const iso=y+'-'+pad(m+1)+'-'+pad(d);
-    cells+=`<button class="cal-cell${calSelDay===d?' sel':''}${iso===todayIso?' today':''}" data-day="${d}" style="${bg}">
-      <span class="cal-dnum">${d}</span>${v>0?`<span class="cal-damt num">${moneyCell(v)}</span>`:''}</button>`;
+    cells+=`<button class="cal-cell${calSelDay===d?' sel':''}${iso===todayIso?' today':''}${v>0?' has':''}" data-day="${d}" style="${bg}" title="${v>0?money(v):''}">
+      <span class="cal-dnum">${d}</span>${v>0?`<span class="cal-dot" aria-hidden="true"></span>`:''}</button>`;
   }
   grid.innerHTML=cells;
   grid.querySelectorAll('.cal-cell[data-day]').forEach(c=>c.onclick=()=>{calSelDay=(calSelDay===+c.dataset.day?null:+c.dataset.day);renderCalendario()});
@@ -2273,6 +2306,7 @@ document.addEventListener('focusout',e=>{
 document.getElementById('src-who').addEventListener('click',e=>{if(e.target.dataset.who){srcWho=e.target.dataset.who;renderWhoSeg('src-who',srcWho,false)}});
 document.getElementById('src-kind').addEventListener('click',e=>{if(e.target.dataset.kind){srcKind=e.target.dataset.kind;document.querySelectorAll('#src-kind button').forEach(b=>b.classList.toggle('on',b===e.target))}});
 document.getElementById('src-add').onclick=addIncomeSource;
+['src-label','src-amount'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')addIncomeSource()})});
 /* investimentos */
 document.getElementById('iv-who').addEventListener('click',e=>{if(e.target.dataset.who){ivWho=e.target.dataset.who;renderWhoSeg('iv-who',ivWho,true)}});
 document.getElementById('iv-add').onclick=addInvest;

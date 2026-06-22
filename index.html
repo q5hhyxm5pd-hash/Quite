@@ -263,6 +263,50 @@ html[data-theme="bauhaus"] .btn.solid:hover{background:#123E96;color:#fff}
 html[data-theme="bauhaus"] nav.tabs button{font-weight:700}
 html[data-theme="bauhaus"] nav.tabs button.active{border-bottom:4px solid #1C5BD8;color:#111}
 html[data-theme="bauhaus"] .tag{border-radius:999px;border:1.5px solid #111}
+/* ---- tema Vidro (glass / iOS): cantos arredondados + superfícies translúcidas ---- */
+html[data-theme="glass"]{
+  --bone:#E9F0FA; --bone-2:#E2EBF6; --paper:rgba(255,255,255,.62); --paper-2:rgba(255,255,255,.46);
+  --ink:#1B1D2B; --ink-soft:#39414F; --muted:#697485; --faint:#A2ADBE;
+  --line:rgba(255,255,255,.6); --line-soft:rgba(255,255,255,.42); --line-strong:rgba(120,132,156,.3);
+  --clay:#0A84FF; --clay-deep:#0066D6; --clay-soft:rgba(10,132,255,.14);
+  --cactus:#34C759; --cactus-deep:#28A546; --gold:#FF9F0A;
+  --pos:#34C759; --neg:#FF3B30;
+  --r0:12px; --r1:16px; --r2:20px; --r3:24px; --r4:28px;
+  --f-body:'Inter',sans-serif; --f-disp:'Inter',sans-serif;
+  --w-disp:300; --w-num:400;
+  --glass:rgba(255,255,255,.6); --seg-on:rgba(255,255,255,.9);
+  --deb-on:#28A546; --cred-on:#C77A00;
+  --gold-bg:rgba(255,159,10,.16); --gold-tx:#C77A00;
+  --pos-bg:rgba(52,199,89,.14); --pos-tx:#28A546;
+  --focus-ring:rgba(10,132,255,.26); --neg-bg:rgba(255,59,48,.1);
+  --focus-bg:rgba(255,255,255,.82); --solid-ink:#FFFFFF;
+  --shadow:0 4px 24px rgba(31,45,80,.10); --shadow-lift:0 10px 34px rgba(31,45,80,.17);
+}
+html[data-theme="glass"] body{
+  background:
+    radial-gradient(circle at 12% 16%, rgba(10,132,255,.30), transparent 42%),
+    radial-gradient(circle at 88% 10%, rgba(191,90,242,.26), transparent 40%),
+    radial-gradient(circle at 80% 86%, rgba(52,199,89,.24), transparent 42%),
+    radial-gradient(circle at 18% 92%, rgba(255,159,10,.22), transparent 42%),
+    linear-gradient(160deg,#EAF1FB,#EAF6F0);
+  background-attachment:fixed;
+}
+html[data-theme="glass"] .card,html[data-theme="glass"] .panel,
+html[data-theme="glass"] header,html[data-theme="glass"] .mobile-bar{
+  -webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);
+}
+html[data-theme="glass"] header{background:rgba(255,255,255,.55)}
+html[data-theme="glass"] .mobile-bar{background:rgba(255,255,255,.6);border-top:1px solid var(--line)}
+html[data-theme="glass"] .hero{
+  background:linear-gradient(135deg,rgba(10,132,255,.94),rgba(94,92,230,.92));
+  border:1px solid rgba(255,255,255,.4);
+}
+html[data-theme="glass"] input,html[data-theme="glass"] select,html[data-theme="glass"] textarea{
+  background:rgba(255,255,255,.58);border-color:rgba(255,255,255,.66)}
+html[data-theme="glass"] .btn{background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+html[data-theme="glass"] .btn.solid{background:var(--clay);border-color:var(--clay)}
+html[data-theme="glass"] .seg{background:rgba(255,255,255,.42)}
+html[data-theme="glass"] .cat-btn,html[data-theme="glass"] .inc-item{background:rgba(255,255,255,.5)}
 /* display/num typografia controlada por tema */
 .view-title,.hero-big{font-family:var(--f-disp);font-weight:var(--w-disp)}
 .stat .val,.donut-center strong,.split .who .big,.tx-head h3{font-family:var(--f-disp);font-weight:var(--w-num)}
@@ -449,6 +493,14 @@ input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:1
 /* transaction list */
 .tx-head{display:flex;align-items:center;justify-content:space-between;margin:24px 0 4px}
 .tx-head h3{font-family:var(--f-body);font-weight:300;font-size:20px}
+.tx-toggle{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);box-shadow:var(--shadow);padding:13px 16px;margin:24px 0 0;cursor:pointer;font-family:inherit;text-align:left}
+.tx-toggle h3{margin:0;display:flex;align-items:center;gap:8px}
+.tx-count{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--muted);background:var(--paper-2);border:1px solid var(--line);border-radius:999px;padding:1px 9px}
+.tx-chev{color:var(--muted);font-size:14px;transition:transform .22s ease;display:inline-block}
+.tx-toggle[aria-expanded="true"] .tx-chev{transform:rotate(90deg)}
+.tx-toggle:hover{border-color:var(--clay)}
+.tx-collapse{margin-top:6px}
+.tx-collapse[hidden]{display:none}
 .filter-pills{display:flex;gap:6px}
 .fpill{font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--line);
   background:var(--paper);color:var(--muted);border-radius:var(--r1);padding:6px 13px;transition:.16s}
@@ -626,7 +678,8 @@ html[data-theme="brutal"] .modal-head .mx:hover{transform:translate(1px,1px);box
 @media(max-width:640px){
   .tools{display:none}
   header{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--paper)}
-  .mobile-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--paper);backdrop-filter:none;-webkit-backdrop-filter:none;border-top:1px solid var(--line-strong);padding:7px 10px calc(7px + env(safe-area-inset-bottom,0px));gap:6px}
+  .mobile-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--paper);backdrop-filter:none;-webkit-backdrop-filter:none;border-top:1px solid var(--line-strong);padding:7px 10px calc(7px + env(safe-area-inset-bottom,0px));gap:6px;transform:translateY(0);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+  .mobile-bar.mb-hidden{transform:translateY(130%)}
   .mb-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:48px;background:none;border:none;color:var(--ink);font-family:var(--f-body);font-size:11px;font-weight:600;cursor:pointer;padding:6px 4px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .mb-item:active{background:var(--paper-2);color:var(--clay)}
   .mb-item svg{width:22px;height:22px;stroke-width:1.8}
@@ -634,7 +687,7 @@ html[data-theme="brutal"] .modal-head .mx:hover{transform:translate(1px,1px);box
   main{padding-bottom:104px}
   /* esconde a barra inferior quando há um modal aberto (evita sobreposição de botões) */
   body:has(.modal-overlay.show) .mobile-bar{display:none}
-  /* no celular, empilha os campos do modal em largura total — evita aperto e o "Quem gastou" quebrando torto */
+  /* no celular, empilha os campos do modal em largura total - evita aperto e o "Quem gastou" quebrando torto */
   .modal-body{padding:14px 20px 22px;gap:16px}
   .modal .mrow{flex-direction:column;gap:16px}
   .modal .seg button{padding:10px 10px;font-size:13px}
@@ -805,7 +858,7 @@ img,canvas,table{max-width:100%}
   </nav>
 </header>
 
-<nav class="mobile-bar" id="mobile-bar">
+<nav class="mobile-bar mb-hidden" id="mobile-bar">
   <button class="mb-item" id="mb-report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg><span data-en="Report">Relatório</span></button>
   <button class="mb-item" id="mb-settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span data-en="Settings">Ajustes</span></button>
   <button class="mb-item" id="mb-data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><span data-en="Data">Dados</span></button>
@@ -864,18 +917,21 @@ img,canvas,table{max-width:100%}
       <div id="cat-buttons"></div>
     </div>
 
-    <div class="tx-head">
-      <h3 data-en="Entries this month">Lançamentos do mês</h3>
+    <button class="tx-head tx-toggle" id="tx-toggle" aria-expanded="false">
+      <h3 data-en="Entries this month">Lançamentos do mês <span class="tx-count" id="tx-count"></span></h3>
+      <span class="tx-chev" id="tx-chev">▸</span>
+    </button>
+    <div class="tx-collapse" id="tx-collapse" hidden>
       <div class="filter-pills" id="tx-filter"></div>
+      <div id="tx-list"></div>
     </div>
-    <div id="tx-list"></div>
   </section>
 
   <!-- ===== CALENDÁRIO ===== -->
   <section class="view" id="v-calendario">
     <div class="eyebrow" data-en="Day by day">Dia a dia</div>
     <h1 class="view-title" data-en="Spending calendar">Calendário de gastos</h1>
-    <p class="view-sub" data-en="Each day shows how much you spent — a stronger color means a bigger day. Tap a day to see its entries.">Cada dia mostra quanto você gastou — quanto mais forte a cor, maior o gasto do dia. Toque num dia para ver os lançamentos.</p>
+    <p class="view-sub" data-en="Each day shows how much you spent · a stronger color means a bigger day. Tap a day to see its entries.">Cada dia mostra quanto você gastou · quanto mais forte a cor, maior o gasto do dia. Toque num dia para ver os lançamentos.</p>
     <div class="card panel">
       <div class="cal-top">
         <div class="ph-sub" data-en="Total this month">Total no mês</div>
@@ -1028,7 +1084,7 @@ img,canvas,table{max-width:100%}
           <div class="eyebrow" style="margin-bottom:8px" data-en="Theme">Tema</div>
           <div id="st-themes" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:7px"></div>
         </div>
-        <div id="st-welcome" style="display:none;padding:10px 12px;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r2);font-size:13.5px;line-height:1.5" data-en="Welcome to Quite. Start by adding the people of the home: every entry, income and investment can be assigned to someone — and the names then show up in the Income tab.">Bem-vinda ao Quite. Comece adicionando as pessoas da casa: cada lançamento, renda e investimento pode ser atribuído a alguém — e os nomes passam a aparecer na aba Renda.</div>
+        <div id="st-welcome" style="display:none;padding:10px 12px;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r2);font-size:13.5px;line-height:1.5" data-en="Welcome to Quite. Start by adding the people of the home: every entry, income and investment can be assigned to someone · and the names then show up in the Income tab.">Bem-vinda ao Quite. Comece adicionando as pessoas da casa: cada lançamento, renda e investimento pode ser atribuído a alguém · e os nomes passam a aparecer na aba Renda.</div>
         <div>
           <div class="eyebrow" style="margin-bottom:8px" data-en="People of the home">Pessoas da casa</div>
           <div id="st-people"></div>
@@ -1068,21 +1124,19 @@ img,canvas,table{max-width:100%}
   <section class="view" id="v-renda">
     <div class="eyebrow" data-en="What comes in">O que entra</div>
     <h1 class="view-title" data-en="Income this month">Renda do mês</h1>
-    <p class="view-sub" data-en="Create the home's income sources your way: each person's salary, earnings from any activity. Monthly sources have a value per month; one-off sources get entries as the money comes in.">Crie as fontes de renda da casa do seu jeito: salário de cada pessoa, ganhos com qualquer atividade. Fontes mensais têm um valor por mês; fontes avulsas recebem lançamentos conforme o dinheiro entra.</p>
+    <p class="view-sub" data-en="Log each income as it comes in — salary, freelance, rent received. Every entry shows in the list below for the selected month.">Lance cada renda conforme ela entra - salário, freelas, aluguel recebido. Cada lançamento aparece na lista abaixo, no mês selecionado.</p>
 
     <div id="inc-peoplehint"></div>
 
     <div class="card inc-card fu" style="margin-bottom:14px">
-      <h3 class="serif" style="font-size:17px;margin-bottom:2px" data-en="New income source">Nova fonte de renda</h3>
-      <div class="ph-sub" style="color:var(--muted);font-size:12.5px" data-en="Name it, choose monthly or one-off, and log the value right here.">Dê um nome, escolha mensal ou avulsa e já lance o valor aqui.</div>
+      <h3 class="serif" style="font-size:17px;margin-bottom:2px" data-en="New income entry">Nova entrada de renda</h3>
+      <div class="ph-sub" style="color:var(--muted);font-size:12.5px" data-en="Fill it in and tap Log — it goes straight to the list.">Preencha e toque em Lançar - vai direto pra lista.</div>
       <div class="tattoo-form" style="margin-top:12px">
-        <div class="field" style="flex:1.4;min-width:160px"><label data-en="Source name">Nome da fonte</label><input id="src-label" placeholder="Ex.: Ganhos extras" data-en-ph="e.g. Side earnings"></div>
-        <div class="field" style="min-width:150px"><label data-en="Whose">De quem</label><div class="seg" id="src-who"></div></div>
-        <div class="field" style="min-width:180px"><label data-en="Type">Tipo</label>
-          <div class="seg" id="src-kind"><button data-kind="m" class="on" data-en="Monthly">Mensal</button><button data-kind="a" data-en="One-off">Avulsa</button></div>
-        </div>
-        <div class="field" style="min-width:130px"><label><span data-en="Value this month">Valor neste mês</span> (<span class="cursym">R$</span>)</label><input id="src-amount" class="amt num" inputmode="decimal" placeholder="0,00" data-en-ph="0.00"></div>
-        <button class="btn solid" id="src-add" style="height:46px;padding:13px 22px" data-en="Log income">Lançar renda</button>
+        <div class="field" style="min-width:150px"><label data-en="Whose">De quem</label><div class="seg" id="inc-who"></div></div>
+        <div class="field" style="flex:1.4;min-width:160px"><label data-en="Description">Descrição</label><input id="inc-desc" placeholder="Ex.: Salário, Freela" data-en-ph="e.g. Salary, Freelance"></div>
+        <div class="field" style="min-width:140px"><label data-en="Date">Data</label><input id="inc-date" type="date"></div>
+        <div class="field" style="min-width:130px"><label><span data-en="Amount">Valor</span> (<span class="cursym">R$</span>)</label><input id="inc-val" class="amt num" inputmode="decimal" placeholder="0,00" data-en-ph="0.00"></div>
+        <button class="btn solid" id="inc-add" style="height:46px;padding:13px 22px" data-en="Log">Lançar</button>
       </div>
     </div>
 
@@ -1091,7 +1145,7 @@ img,canvas,table{max-width:100%}
       <span class="serif num" id="inc-total" style="font-size:23px;font-weight:300;margin-left:auto">R$ 0</span>
     </div>
 
-    <div id="inc-sources"></div>
+    <div id="inc-list"></div>
   </section>
 
   <!-- ===== INVESTIMENTOS ===== -->
@@ -1198,7 +1252,7 @@ const WEEKD={pt:['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],en:['Sun','Mon','Tu
 function lang(){return (state&&state.meta&&state.meta.lang)||'pt'}
 function MO(){return lang()==='en'?MONTHS_EN:MONTHS}
 function MOA(){return lang()==='en'?MABBR_EN:MABBR}
-/* tradução de strings geradas em JS: tr(pt, en) — cai pro PT se faltar */
+/* tradução de strings geradas em JS: tr(pt, en) - cai pro PT se faltar */
 function tr(pt,en){return (lang()==='en'&&en!==undefined)?en:pt}
 const GROUPS=['Moradia','Contas','Seguros','Transporte','Assinaturas','Dívidas','Educação'];
 function fixedGroupList(){
@@ -1272,8 +1326,16 @@ const THEMES={
   groups:['#E2261C','#1C5BD8','#F5C518','#111111','#3E76E8','#8C1810','#1C8A4C'],
   tipos:['#1C5BD8','#111111','#1C8A4C','#136B3A','#F5C518','#D9A40E','#3E76E8','#E2261C','#C04030','#123E96','#6F6A60'],
   people:['#E2261C','#1C5BD8','#F5C518','#111111','#1C8A4C','#C04030','#3E76E8','#D9A40E']}
+,
+ glass:{font:'Inter',grid:'#DCE5F2',ticks:'#A9B4C4',ticksB:'#6B7686',legend:'#39414F',donutB:'rgba(255,255,255,.7)',
+  flow:['#34C759','#5E5CE6','#0A84FF','#FF9F0A'],flowNeg:'#FF3B30',
+  trR:'#34C759',trG:'#FF3B30',trS:'#FF9F0A',trSF:'rgba(255,159,10,.14)',heroPos:'#FFFFFF',heroNeg:'#FFD9D6',
+  cats:['#0A84FF','#5E5CE6','#34C759','#FF9F0A','#FF375F','#BF5AF2','#64D2FF','#30D158','#FF9500','#AC8E68','#5AC8FA','#FF2D55','#7D7AFF','#8E8E93'],
+  groups:['#0A84FF','#5E5CE6','#FF9F0A','#34C759','#BF5AF2','#FF375F','#64D2FF'],
+  tipos:['#0A84FF','#5E5CE6','#34C759','#30D158','#FF9F0A','#FF9500','#64D2FF','#FF375F','#BF5AF2','#7D7AFF','#8E8E93'],
+  people:['#0A84FF','#FF375F','#34C759','#FF9F0A','#5E5CE6','#BF5AF2','#64D2FF','#FF9500']}
 };
-const THEME_LIST=[{id:'quite',nome:'Original'},{id:'vivo',nome:'Vivo'},{id:'sereno',nome:'Sereno'},{id:'neon',nome:'Neon'},{id:'suico',nome:'Suíço'},{id:'brutal',nome:'Brutal'},{id:'editorial',nome:'Editorial'},{id:'terminal',nome:'Terminal'},{id:'bauhaus',nome:'Bauhaus'}];
+const THEME_LIST=[{id:'quite',nome:'Original'},{id:'vivo',nome:'Vivo'},{id:'sereno',nome:'Sereno'},{id:'neon',nome:'Neon'},{id:'suico',nome:'Suíço'},{id:'brutal',nome:'Brutal'},{id:'editorial',nome:'Editorial'},{id:'terminal',nome:'Terminal'},{id:'bauhaus',nome:'Bauhaus'},{id:'glass',nome:'Vidro'}];
 const T=()=>THEMES[(state&&state.meta&&state.meta.theme)||'quite']||THEMES.quite;
 function applyTheme(){document.documentElement.setAttribute('data-theme',(state.meta&&state.meta.theme)||'quite')}
 /* ---- idioma (PT/EN): traduz a interface, mantém os dados que você digitou ---- */
@@ -1362,9 +1424,10 @@ const SEED_FIXED=[
 
 function blankState(){
   return {
-    meta:{year:2026,v:9,lang:'pt',currency:'BRL'},
+    meta:{year:2026,v:10,lang:'pt',currency:'BRL'},
     people:[],
     incomes:[],
+    incomeLog:[],
     cats:CAT_DEFS.map(d=>({g:d.g,ic:d.ic,c:d.c,subs:d.subs.slice()})),
     fixedGroups:[],
     investments:[],
@@ -1421,9 +1484,21 @@ function migrate(){
     }
     if(!state.cats)state.cats=CAT_DEFS.map(d=>({g:d.g,ic:d.ic,c:d.c,subs:d.subs.slice()}));
   }
-  state.people=state.people||[];state.incomes=state.incomes||[];state.fixedGroups=state.fixedGroups||[];
+  if((state.meta.v||0)<10){
+    if(!state.incomeLog){
+      state.incomeLog=[];
+      (state.incomes||[]).forEach(src=>{
+        if(src.kind==='m'){
+          (src.months||[]).forEach((v,mm)=>{if(v>0)state.incomeLog.push({id:uid(),who:src.person||'',desc:src.label||'',date:(state.meta.year||2026)+'-'+pad(mm+1)+'-05',month:mm,valor:v})});
+        }else{
+          (src.entries||[]).forEach(e=>{state.incomeLog.push({id:e.id||uid(),who:e.who||src.person||'',desc:e.desc||src.label||'',date:e.date||((state.meta.year||2026)+'-'+pad((e.month||0)+1)+'-05'),month:(e.month!=null?e.month:0),valor:e.valor||0})});
+        }
+      });
+    }
+  }
+  state.people=state.people||[];state.incomes=state.incomes||[];state.incomeLog=state.incomeLog||[];state.fixedGroups=state.fixedGroups||[];
   if(!state.cats)state.cats=CAT_DEFS.map(d=>({g:d.g,ic:d.ic,c:d.c,subs:d.subs.slice()}));
-  state.meta.v=9;
+  state.meta.v=10;
   save();
 }
 function save(){try{localStorage.setItem('mandacaru_gobbo',JSON.stringify(state))}catch(e){}}
@@ -1455,8 +1530,8 @@ function fixedByGroup(m){const o={};fixedGroupList().forEach(g=>o[g]=0);state.fi
 function personColor(id){const i=(state.people||[]).findIndex(p=>p.id===id);return i<0?T().ticksB:T().people[i%T().people.length]}
 function personName(id){if(id==='c')return tr('Conjunto','Joint');const p=(state.people||[]).find(x=>x.id===id);return p?p.name:tr('(removida)','(removed)')}
 function personInitial(id){return (personName(id)[0]||'?').toUpperCase()}
-function incomeMonth(m){let t=0;(state.incomes||[]).forEach(s=>{if(s.kind==='m')t+=(s.months[m]||0);else (s.entries||[]).forEach(e=>{if(e.month===m)t+=(e.valor||0)})});return t}
-function incomePerson(m,who){let t=0;(state.incomes||[]).forEach(s=>{if(s.kind==='m'){if(s.person===who)t+=(s.months[m]||0)}else (s.entries||[]).forEach(e=>{if(e.month===m&&e.who===who)t+=(e.valor||0)})});return t}
+function incomeMonth(m){return (state.incomeLog||[]).reduce((t,e)=>e.month===m?t+(e.valor||0):t,0)}
+function incomePerson(m,who){return (state.incomeLog||[]).reduce((t,e)=>(e.month===m&&e.who===who)?t+(e.valor||0):t,0)}
 function txMonth(m){return state.tx.filter(t=>t.month===m)}
 function varTotal(m,who){return txMonth(m).filter(t=>!who||t.who===who).reduce((s,t)=>s+(t.val||0),0)}
 function creditMonth(m,who){return txMonth(m).filter(t=>t.type==='Crédito'&&(!who||t.who===who)).reduce((s,t)=>s+(t.val||0),0)}
@@ -1588,6 +1663,7 @@ function renderFilterPills(){
 }
 function renderTx(){
   renderFilterPills();
+  const cnt=document.getElementById('tx-count');if(cnt){const n=txMonth(curMonth).length;cnt.textContent=n||'';}
   const list=document.getElementById('tx-list');
   let items=txMonth(curMonth).filter(t=>txFilter==='all'||t.who===txFilter).slice().reverse();
   if(!items.length){list.innerHTML=`<div class="empty"><div style="margin-top:8px">${tr('Nenhum lançamento','No entries')} ${txFilter!=='all'?tr('para este filtro','for this filter'):tr('neste mês','this month')} ${tr('ainda.','yet.')}<br>${tr('Toque numa categoria acima para lançar.','Tap a category above to log one.')}</div></div>`;return}
@@ -1737,111 +1813,49 @@ function openBills(){
 function closeBills(){document.getElementById('bills-modal').classList.remove('show')}
 
 /* ===================== RENDER: RENDA ===================== */
-let srcWho='', srcKind='m';
+let incWho='';
 function renderRenda(){
   const m=curMonth;
   const ph=document.getElementById('inc-peoplehint');
   if(ph){
     ph.innerHTML=(state.people||[]).length?'':`<div class="card inc-card fu" style="border-left:3px solid var(--clay);margin-bottom:16px">
       <div style="font-weight:700;margin-bottom:4px">${tr('Primeiro, adicione as pessoas da casa','First, add the people of the home')}</div>
-      <div class="ph-sub" style="font-size:13px;line-height:1.5">${tr('Vá em <strong>Ajustes → Pessoas da casa</strong> e cadastre quem mora aí. Os nomes passam a aparecer aqui na Renda (e também em Gastos e Investimentos) para você atribuir cada valor a alguém.','Go to <strong>Settings → People of the home</strong> and add who lives there. The names then show up here in Income (and in Expenses and Investments) so you can assign each amount to someone.')}</div>
+      <div class="ph-sub" style="font-size:13px;line-height:1.5">${tr('Vá em <strong>Ajustes · Pessoas da casa</strong> e cadastre quem mora aí. Os nomes passam a aparecer aqui na Renda (e também em Gastos e Investimentos) para você atribuir cada valor a alguém.','Go to <strong>Settings · People of the home</strong> and add who lives there. The names then show up here in Income (and in Expenses and Investments) so you can assign each amount to someone.')}</div>
       <button class="btn solid" id="inc-openpeople" style="margin-top:12px">${tr('Abrir Ajustes','Open Settings')}</button></div>`;
     const ob=document.getElementById('inc-openpeople');if(ob)ob.onclick=()=>openSettings(true);
   }
-  if(!(state.people||[]).find(p=>p.id===srcWho))srcWho=(state.people[0]||{id:''}).id;
-  renderWhoSeg('src-who',srcWho,false);
-  const wrap=document.getElementById('inc-sources');
-  if(!(state.incomes||[]).length){
-    wrap.innerHTML=`<div class="card inc-card fu"><div class="ph-sub">${tr('Nenhuma fonte de renda ainda. Crie a primeira aqui embaixo.','No income source yet. Create your first one below.')}</div></div>`;
+  if(!(state.people||[]).find(p=>p.id===incWho))incWho=(state.people[0]||{id:''}).id;
+  renderWhoSeg('inc-who',incWho,false);
+  const dEl=document.getElementById('inc-date');if(dEl&&!dEl.value)dEl.value=defaultDate();
+  const list=document.getElementById('inc-list');
+  const items=(state.incomeLog||[]).filter(e=>e.month===m).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(!items.length){
+    list.innerHTML=`<div class="card inc-card fu"><div class="ph-sub">${tr('Nenhuma renda lançada neste mês ainda. Use o formulário acima.','No income logged this month yet. Use the form above.')}</div></div>`;
   }else{
-    wrap.innerHTML=state.incomes.map(src=>{
-      const pc=src.person?personColor(src.person):'#8A8A82';
-      const head=`<div class="src-head">
-        <h3 class="src-name serif">${src.label}</h3>
-        ${src.person?`<span class="tag" style="background:${pc}1A;color:${pc}">${personName(src.person)}</span>`:''}
-        <span class="tag" style="background:var(--paper-2);color:var(--muted)">${src.kind==='m'?tr('mensal','monthly'):tr('avulsa','one-off')}</span>
-        <button class="del src-del" data-id="${src.id}" title="${tr('Excluir fonte','Delete source')}" style="margin-left:auto">×</button>
-      </div>`;
-      if(src.kind==='m'){
-        return `<div class="card inc-card src-card fu">${head}
-          <div class="src-mrow">
-            <span class="il">${tr('Valor em','Value in')} ${MO()[m]}</span>
-            <span class="src-money"><span class="cur">${curSym()}</span><input class="num src-m" data-id="${src.id}" inputmode="decimal" value="${(src.months[m]||0).toString().replace('.',',')}"></span>
-          </div></div>`;
-      }
-      const items=(src.entries||[]).filter(e=>e.month===m).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-      const tot=items.reduce((s,e)=>s+(e.valor||0),0);
-      return `<div class="card inc-card src-card fu">${head}
-        <div class="src-totline"><span class="il">${tr('Neste mês','This month')}</span><span class="src-total num">${money(tot)}</span></div>
-        <div class="src-entries">${items.length?items.map(e=>`
-          <div class="tat tat-sm">
-            <div class="av" style="background:${personColor(e.who)}">${personInitial(e.who)}</div>
-            <div class="info"><div class="t1">${e.desc||src.label}
-              <span class="tag" style="background:${personColor(e.who)}1A;color:${personColor(e.who)}">${personName(e.who)}</span></div>
-              <div class="t2">${e.date?fmtDate(e.date):''}${e.note?' · '+e.note:''}</div></div>
-            <div class="amt">${money(e.valor)}</div>
-            <button class="del src-edel" data-src="${src.id}" data-id="${e.id}" title="${tr('Excluir','Delete')}">×</button>
-          </div>`).join(''):`<div class="ph-sub" style="padding:8px 2px">${tr('Nenhum lançamento neste mês.','No entries this month.')}</div>`}</div>
-        <button class="btn src-toggle" data-id="${src.id}">+ ${tr('Lançar','Log')}</button>
-        <div class="tattoo-form src-form" data-id="${src.id}" style="display:none;margin-top:10px">
-          <div class="field" style="min-width:140px"><label>${tr('Quem','Whose')}</label><div class="seg src-ewho" data-id="${src.id}"></div></div>
-          <div class="field" style="flex:1.3"><label>${tr('Descrição','Description')}</label><input class="src-desc" data-id="${src.id}" placeholder="${tr('Ex.: Projeto fechado','e.g. Project closed')}"></div>
-          <div class="field" style="min-width:135px"><label>${tr('Data','Date')}</label><input class="src-date" data-id="${src.id}" type="date" value="${defaultDate()}"></div>
-          <div class="field" style="min-width:130px"><label>${tr('Valor','Amount')} (${curSym()})</label><input class="amt num src-val" data-id="${src.id}" inputmode="decimal" placeholder="0,00"></div>
-          <button class="btn solid src-eadd" data-id="${src.id}" style="height:46px;padding:13px 18px">${tr('Lançar','Log')}</button>
-        </div>
-      </div>`;
-    }).join('');
+    list.innerHTML=`<div class="card panel fu inc-listcard">`+items.map(e=>`
+      <div class="tat tat-sm inc-row">
+        <div class="av" style="background:${personColor(e.who)}">${personInitial(e.who)}</div>
+        <div class="info"><div class="t1">${e.desc||tr('Renda','Income')}
+          <span class="tag" style="background:${personColor(e.who)}1A;color:${personColor(e.who)}">${personName(e.who)}</span></div>
+          <div class="t2">${e.date?fmtDate(e.date):''}</div></div>
+        <div class="amt">${money(e.valor)}</div>
+        <button class="del inc-del" data-id="${e.id}" title="${tr('Excluir','Delete')}">×</button>
+      </div>`).join('')+`</div>`;
   }
-  // handlers
-  wrap.querySelectorAll('.src-m').forEach(inp=>inp.onchange=()=>{const src=state.incomes.find(x=>x.id===inp.dataset.id);src.months[curMonth]=parseNum(inp.value);save();renderRenda();renderResumo();renderAnual()});
-  wrap.querySelectorAll('.src-ewho').forEach(seg=>{
-    const src=state.incomes.find(x=>x.id===seg.dataset.id);
-    src._ewho=(state.people||[]).find(p=>p.id===src._ewho)?src._ewho:(src.person||(state.people[0]||{id:''}).id);
-    seg.innerHTML=(state.people||[]).map(p=>`<button data-who="${p.id}" class="${p.id===src._ewho?'on':''}">${p.name}</button>`).join('');
-    seg.addEventListener('click',e=>{const b=e.target.closest('button[data-who]');if(!b)return;src._ewho=b.dataset.who;seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))});
-  });
-  wrap.querySelectorAll('.src-eadd').forEach(btn=>btn.onclick=()=>{
-    const src=state.incomes.find(x=>x.id===btn.dataset.id);
-    const val=parseNum(wrap.querySelector(`.src-val[data-id="${src.id}"]`).value);
-    if(!val){toast(tr('Digite o valor','Enter the amount'));return}
-    const date=wrap.querySelector(`.src-date[data-id="${src.id}"]`).value||defaultDate();
-    src.entries=src.entries||[];
-    src.entries.push({id:uid(),who:src._ewho||(state.people[0]||{id:''}).id,desc:wrap.querySelector(`.src-desc[data-id="${src.id}"]`).value.trim(),date,month:monthOfIso(date),valor:val,note:''});
-    save();renderRenda();renderResumo();renderAnual();toast(tr('Lançado ✓','Logged ✓'));
-  });
-  wrap.querySelectorAll('.src-toggle').forEach(btn=>btn.onclick=()=>{
-    const f=wrap.querySelector(`.src-form[data-id="${btn.dataset.id}"]`);if(!f)return;
-    const show=f.style.display==='none';f.style.display=show?'':'none';
-    btn.textContent=(show?'– ':'+ ')+tr('Lançar','Log');
-    if(show){const d=f.querySelector('.src-desc');if(d)setTimeout(()=>d.focus(),0);}
-  });
-  wrap.querySelectorAll('.src-edel').forEach(b=>b.onclick=()=>{const src=state.incomes.find(x=>x.id===b.dataset.src);src.entries=src.entries.filter(e=>e.id!==b.dataset.id);save();renderRenda();renderResumo();renderAnual();toast(tr('Removido','Removed'))});
-  wrap.querySelectorAll('.src-del').forEach(b=>b.onclick=()=>{
-    const src=state.incomes.find(x=>x.id===b.dataset.id);
-    askConfirm(tr('Excluir fonte de renda','Delete income source'),tr('Excluir "','Delete "')+src.label+tr('" e todos os seus valores? Essa ação não tem volta.','" and all its values? This cannot be undone.'),()=>{
-      state.incomes=state.incomes.filter(x=>x.id!==b.dataset.id);save();renderRenda();renderResumo();renderAnual();toast(tr('Fonte removida','Source removed'));
-    });
-  });
+  list.querySelectorAll('.inc-del').forEach(b=>b.onclick=()=>{state.incomeLog=(state.incomeLog||[]).filter(e=>e.id!==b.dataset.id);save();renderRenda();renderResumo();renderAnual();toast(tr('Removido','Removed'))});
   document.getElementById('inc-total').textContent=money(incomeMonth(m));
 }
-function addIncomeSource(){
-  const label=document.getElementById('src-label').value.trim();
-  if(!label){toast(tr('Dê um nome pra fonte','Give the source a name'));return}
+function addIncomeEntry(){
   if(!(state.people||[]).length){toast(tr('Adicione as pessoas da casa primeiro (Ajustes)','Add the people of the home first (Settings)'));return}
-  const amtEl=document.getElementById('src-amount');
-  const amt=amtEl?parseNum(amtEl.value):0;
-  if(srcKind==='m'){
-    const months=Array(12).fill(0); if(amt>0)months[curMonth]=amt;
-    state.incomes.push({id:uid(),label,person:srcWho,kind:'m',months});
-  }else{
-    const entries=[]; if(amt>0)entries.push({id:uid(),who:srcWho,desc:'',date:defaultDate(),month:curMonth,valor:amt,note:''});
-    state.incomes.push({id:uid(),label,person:srcWho,kind:'a',entries});
-  }
-  document.getElementById('src-label').value='';
-  if(amtEl)amtEl.value='';
-  save();renderRenda();renderResumo();renderAnual();
-  toast(tr('Fonte criada ✓','Source created ✓'));
+  const valEl=document.getElementById('inc-val');
+  const val=parseNum(valEl.value);
+  if(!val){toast(tr('Digite o valor','Enter the amount'));return}
+  const date=document.getElementById('inc-date').value||defaultDate();
+  const desc=document.getElementById('inc-desc').value.trim();
+  state.incomeLog=state.incomeLog||[];
+  state.incomeLog.push({id:uid(),who:incWho||(state.people[0]||{id:''}).id,desc,date,month:monthOfIso(date),valor:val});
+  document.getElementById('inc-desc').value='';valEl.value='';
+  save();renderRenda();renderResumo();renderAnual();toast(tr('Lançado ✓','Logged ✓'));
 }
 /* ===================== RENDER: INVESTIMENTOS ===================== */
 let ivDonut;
@@ -1981,8 +1995,8 @@ let _pendingImport=null;
 function doImport(file){
   const rd=new FileReader();
   rd.onload=e=>{try{const d=JSON.parse(e.target.result);
-    if(!d.fixed||(!d.income&&!d.incomes&&!d.people))throw 0;
-    const hasData=(state.tx||[]).length||(state.incomes||[]).length||(state.people||[]).length||(state.fixed||[]).some(f=>f.months.some(v=>v>0));
+    if(!d.fixed||(!d.income&&!d.incomes&&!d.incomeLog&&!d.people))throw 0;
+    const hasData=(state.tx||[]).length||(state.incomeLog||[]).length||(state.incomes||[]).length||(state.people||[]).length||(state.fixed||[]).some(f=>f.months.some(v=>v>0));
     if(hasData){_pendingImport=d;document.getElementById('import-modal').classList.add('show');}
     else{state=d;migrate();save();renderAll();toast(tr('Dados importados ✓','Data imported ✓'));}
   }catch(err){toast(tr('Arquivo inválido','Invalid file'))}};
@@ -2010,17 +2024,16 @@ function importMerge(){
   const mapWho=w=>w==='c'?'c':(idMap[w]||w);
   // lançamentos: anexa com ids novos
   (inc.tx||[]).forEach(t=>state.tx.push({...t,id:uid(),who:mapWho(t.who)}));
-  // rendas: mescla por (label+pessoa); avulsas anexam entradas
+  // rendas: novo modelo é uma lista de lançamentos (incomeLog)
+  state.incomeLog=state.incomeLog||[];
+  (inc.incomeLog||[]).forEach(e=>state.incomeLog.push({id:uid(),who:mapWho(e.who),desc:e.desc||'',date:e.date||'',month:(e.month!=null?e.month:(e.date?monthOfIso(e.date):0)),valor:e.valor||0}));
+  // compatibilidade: arquivos antigos guardavam fontes (incomes)
   (inc.incomes||[]).forEach(srcIn=>{
-    const person=srcIn.person?mapWho(srcIn.person):srcIn.person;
-    const match=(state.incomes||[]).find(x=>x.label.toLowerCase()===srcIn.label.toLowerCase()&&x.kind===srcIn.kind&&(x.person||'')===(person||''));
+    const person=srcIn.person?mapWho(srcIn.person):'';
     if(srcIn.kind==='m'){
-      if(match){srcIn.months.forEach((v,i)=>{if(v&&!match.months[i])match.months[i]=v});}
-      else state.incomes.push({id:uid(),label:srcIn.label,person,kind:'m',months:srcIn.months.slice()});
+      (srcIn.months||[]).forEach((v,mm)=>{if(v>0)state.incomeLog.push({id:uid(),who:person,desc:srcIn.label||'',date:(state.meta.year||2026)+'-'+pad(mm+1)+'-05',month:mm,valor:v})});
     }else{
-      const entries=(srcIn.entries||[]).map(e=>({...e,id:uid(),who:mapWho(e.who)}));
-      if(match){match.entries=(match.entries||[]).concat(entries);}
-      else state.incomes.push({id:uid(),label:srcIn.label,person,kind:'a',entries});
+      (srcIn.entries||[]).forEach(e=>state.incomeLog.push({id:uid(),who:mapWho(e.who),desc:e.desc||srcIn.label||'',date:e.date||'',month:(e.month!=null?e.month:(e.date?monthOfIso(e.date):0)),valor:e.valor||0}));
     }
   });
   // investimentos: anexa
@@ -2120,8 +2133,7 @@ function reportData(){
   const m=curMonth,y=state.meta.year;
   const people=state.people||[];
   const renda=people.map(p=>({nome:p.name,valor:incomePerson(m,p.id)}));
-  const fontes=(state.incomes||[]).map(s=>({fonte:s.label,pessoa:s.person?personName(s.person):'',tipo:s.kind==='m'?tr('Mensal','Monthly'):tr('Avulsa','One-off'),
-    valor:s.kind==='m'?(s.months[m]||0):(s.entries||[]).filter(e=>e.month===m).reduce((x,e)=>x+(e.valor||0),0)}));
+  const fontes=(state.incomeLog||[]).filter(e=>e.month===m).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')).map(e=>({data:e.date?fmtDate(e.date):'',descricao:e.desc||tr('Renda','Income'),pessoa:personName(e.who),valor:e.valor||0}));
   const fixas=state.fixed.filter(f=>(f.months[m]||0)>0).map(f=>({grupo:f.group,conta:f.name,vencimento:f.due?(tr('dia ','day ')+f.due):'',forma:effMethod(f,m)==='c'?tr('Crédito','Credit'):tr('Débito','Debit'),valor:f.months[m]}));
   const txs=txMonth(m).map(t=>({data:t.date?fmtDate(t.date):'',categoria:t.cat,descricao:t.desc||'',quem:personName(t.who),forma:t.type,parcelas:t.parc>1?t.parc+'x':'',valor:t.val}));
   const porCat={};txMonth(m).forEach(t=>{porCat[t.cat]=(porCat[t.cat]||0)+(t.val||0)});
@@ -2161,7 +2173,7 @@ function reportPrint(){
     <tr><td>${tr('Fatura no crédito','Credit-card bill')}</td><td class="n">${money(d.tot.fatura)}</td></tr>
   </tbody></table>
   <h2>${tr('Renda por pessoa','Income by person')}</h2>${tbl(d.renda,[{h:tr('Pessoa','Person'),k:'nome'},{h:tr('Renda no mês','Income this month'),k:'valor',num:1}])}
-  <h2>${tr('Fontes de renda','Income sources')}</h2>${tbl(d.fontes,[{h:tr('Fonte','Source'),k:'fonte'},{h:tr('Pessoa','Person'),k:'pessoa'},{h:tr('Tipo','Type'),k:'tipo'},{h:tr('Valor no mês','Value this month'),k:'valor',num:1}])}
+  <h2>${tr('Renda do mês','Income this month')}</h2>${tbl(d.fontes,[{h:tr('Data','Date'),k:'data'},{h:tr('Descrição','Description'),k:'descricao'},{h:tr('Pessoa','Person'),k:'pessoa'},{h:tr('Valor','Value'),k:'valor',num:1}])}
   <h2>${tr('Despesas fixas do mês','Fixed costs this month')}</h2>${tbl(d.fixas,[{h:tr('Grupo','Group'),k:'grupo'},{h:tr('Conta','Bill'),k:'conta'},{h:tr('Vencimento','Due'),k:'vencimento'},{h:tr('Forma','Method'),k:'forma'},{h:tr('Valor','Value'),k:'valor',num:1}])}
   <h2>${tr('Gastos por categoria','Spending by category')}</h2>${tbl(d.cats,[{h:tr('Categoria','Category'),k:'categoria'},{h:tr('Total','Total'),k:'valor',num:1}])}
   <h2>${tr('Lançamentos','Entries')}</h2>${tbl(d.txs,[{h:tr('Data','Date'),k:'data'},{h:tr('Categoria','Category'),k:'categoria'},{h:tr('Descrição','Description'),k:'descricao'},{h:tr('Quem','Who'),k:'quem'},{h:tr('Forma','Method'),k:'forma'},{h:tr('Parc.','Inst.'),k:'parcelas'},{h:tr('Valor','Value'),k:'valor',num:1}])}
@@ -2219,7 +2231,7 @@ document.getElementById('prompt-modal').addEventListener('click',e=>{if(e.target
 
 /* ===== ajustes ===== */
 function renderSettings(){
-  const PREVIEW={quite:['#FFFFFF','#B04A20','#1A1A18'],vivo:['#FFFFFF','#2563EB','#DC2626'],sereno:['#FAF8F7','#B58598','#88A892'],neon:['#0A0D14','#00D9C0','#FF4D6D'],suico:['#FFFFFF','#E30613','#111111'],brutal:['#FFFDF5','#FFE14D','#FF6B9D'],editorial:['#FBF7EF','#C9A96A','#2B2622'],terminal:['#050805','#33FF66','#FFB000'],bauhaus:['#F4F1EA','#E2261C','#1C5BD8']};
+  const PREVIEW={quite:['#FFFFFF','#B04A20','#1A1A18'],vivo:['#FFFFFF','#2563EB','#DC2626'],sereno:['#FAF8F7','#B58598','#88A892'],neon:['#0A0D14','#00D9C0','#FF4D6D'],suico:['#FFFFFF','#E30613','#111111'],brutal:['#FFFDF5','#FFE14D','#FF6B9D'],editorial:['#FBF7EF','#C9A96A','#2B2622'],terminal:['#050805','#33FF66','#FFB000'],bauhaus:['#F4F1EA','#E2261C','#1C5BD8'],glass:['#EAF1FB','#0A84FF','#BF5AF2']};
   const cur=(state.meta&&state.meta.theme)||'quite';
   document.getElementById('st-themes').innerHTML=THEME_LIST.map(t=>`
     <button class="theme-card ${t.id===cur?'on':''}" data-th="${t.id}">
@@ -2330,10 +2342,9 @@ document.addEventListener('focusout',e=>{
   if(el.id==='fx-budget'&&(el.textContent||'').trim()===''){el.textContent=money0(0);}
 });
 /* fontes de renda */
-document.getElementById('src-who').addEventListener('click',e=>{if(e.target.dataset.who){srcWho=e.target.dataset.who;renderWhoSeg('src-who',srcWho,false)}});
-document.getElementById('src-kind').addEventListener('click',e=>{if(e.target.dataset.kind){srcKind=e.target.dataset.kind;document.querySelectorAll('#src-kind button').forEach(b=>b.classList.toggle('on',b===e.target))}});
-document.getElementById('src-add').onclick=addIncomeSource;
-['src-label','src-amount'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')addIncomeSource()})});
+document.getElementById('inc-who').addEventListener('click',e=>{if(e.target.dataset.who){incWho=e.target.dataset.who;renderWhoSeg('inc-who',incWho,false)}});
+document.getElementById('inc-add').onclick=addIncomeEntry;
+['inc-desc','inc-val'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')addIncomeEntry()})});
 /* investimentos */
 document.getElementById('iv-who').addEventListener('click',e=>{if(e.target.dataset.who){ivWho=e.target.dataset.who;renderWhoSeg('iv-who',ivWho,true)}});
 document.getElementById('iv-add').onclick=addInvest;
@@ -2344,6 +2355,17 @@ document.getElementById('bills-close').onclick=closeBills;
 document.getElementById('bills-modal').addEventListener('click',e=>{if(e.target.id==='bills-modal')closeBills()});
 document.getElementById('bills-copy').onclick=()=>{const t=document.getElementById('bills-text');t.select();t.setSelectionRange(0,99999);try{document.execCommand('copy')}catch(e){}window.getSelection&&window.getSelection().removeAllRanges&&window.getSelection().removeAllRanges();toast(tr('Texto copiado ✓','Text copied ✓'))};
 document.getElementById('tx-filter').addEventListener('click',e=>{if(e.target.dataset.f){txFilter=e.target.dataset.f;document.querySelectorAll('#tx-filter .fpill').forEach(b=>b.classList.toggle('on',b===e.target));renderTx()}});
+(function(){const tg=document.getElementById('tx-toggle'),col=document.getElementById('tx-collapse');if(tg&&col)tg.onclick=()=>{const open=col.hasAttribute('hidden');if(open){col.removeAttribute('hidden');tg.setAttribute('aria-expanded','true')}else{col.setAttribute('hidden','');tg.setAttribute('aria-expanded','false')}};})();
+/* barra inferior (mobile): some no topo, aparece ao rolar a página para baixo */
+(function(){
+  const bar=document.getElementById('mobile-bar');if(!bar)return;
+  let last=0;
+  const upd=()=>{const y=window.scrollY||0;
+    if(y>80&&y>=last) bar.classList.remove('mb-hidden');
+    else if(y<60||y<last) bar.classList.add('mb-hidden');
+    last=y;};
+  window.addEventListener('scroll',upd,{passive:true});upd();
+})();
 const fb=document.getElementById('fx-budget');
 fb.addEventListener('blur',()=>{state.budget[curMonth]=parseNum(fb.textContent);save();renderFixas();renderResumo()});
 fb.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();fb.blur()}});

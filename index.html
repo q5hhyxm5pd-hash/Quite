@@ -521,6 +521,24 @@ input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:1
 .inc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:6px}
 .inc-item{padding:16px 18px;border-radius:var(--r3);border:1px solid var(--line);background:var(--paper-2);min-width:0}
 .inc-item .il{font-size:13px;font-weight:700;color:var(--ink-soft);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+/* compact income source cards */
+.src-card{padding:14px 16px;margin-top:12px;margin-bottom:0}
+.src-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.src-name{font-size:15.5px;margin:0;font-weight:700}
+.src-mrow,.src-totline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px}
+.src-mrow .il,.src-totline .il{font-size:12.5px;font-weight:600;color:var(--muted)}
+.src-money{display:inline-flex;align-items:center;gap:6px}
+.src-money .cur{color:var(--faint);font-size:12px;font-weight:700}
+.src-money input{width:118px;text-align:right;font-size:16px;font-weight:400;font-variant-numeric:tabular-nums}
+.src-total{font-size:17px;font-weight:400;color:var(--ink)}
+.src-entries{margin-top:6px}
+.src-toggle{margin-top:10px;font-size:13px;padding:8px 14px}
+.tat-sm{padding:9px 11px;gap:11px;margin-top:6px}
+.tat-sm .av{width:28px;height:28px;font-size:12px;border-radius:var(--r1)}
+.tat-sm .info .t1{font-size:13px}
+.tat-sm .info .t2{font-size:11px;margin-top:1px}
+.tat-sm .amt{font-size:14px}
+.tat-sm .del{width:26px;height:26px;font-size:16px}
 
 /* annual table */
 .tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r4);background:var(--paper)}
@@ -722,6 +740,8 @@ img,canvas,table{max-width:100%}
   .fx-line .note-in{order:9;flex:1 1 100%;width:100%;height:42px;border-radius:var(--r2)}
   /* ≥16px keeps iOS Safari from auto-zooming the viewport when a field gains focus */
   input,select,textarea,.fx-line .val-in,.fx-line .due-in,.fx-line .note-in{font-size:16px}
+  .inc-card{padding:16px 18px;margin-bottom:14px}
+  .src-card{padding:13px 15px}
   /* inline add-forms (income source, income entry, new holding): stack instead of cramped wrap */
   .tattoo-form{gap:12px}
   .tattoo-form>.field{flex:1 1 100%;min-width:0}
@@ -1052,26 +1072,26 @@ img,canvas,table{max-width:100%}
 
     <div id="inc-peoplehint"></div>
 
-    <div class="card inc-card fu" style="margin-bottom:16px;display:flex;align-items:baseline;gap:12px">
-      <span style="font-weight:600;color:var(--muted);font-size:13.5px" data-en="Combined income this month">Renda combinada do mês</span>
-      <span class="serif num" id="inc-total" style="font-size:30px;font-weight:300;margin-left:auto">R$ 0</span>
-    </div>
-
-    <div id="inc-sources"></div>
-
-    <div class="card inc-card fu" style="margin-top:16px">
-      <h3 class="serif" style="font-size:18px;margin-bottom:4px" data-en="New income source">Nova fonte de renda</h3>
-      <div class="ph-sub" style="color:var(--muted);font-size:12.5px" data-en="e.g. &quot;Salary&quot;, &quot;Side earnings&quot;, &quot;Freelance&quot;, &quot;Rent received&quot;">Ex.: "Salário", "Ganhos extras", "Freelas", "Aluguel recebido"</div>
-      <div class="tattoo-form" style="margin-top:14px">
+    <div class="card inc-card fu" style="margin-bottom:14px">
+      <h3 class="serif" style="font-size:17px;margin-bottom:2px" data-en="New income source">Nova fonte de renda</h3>
+      <div class="ph-sub" style="color:var(--muted);font-size:12.5px" data-en="Name it, choose monthly or one-off, and log the value right here.">Dê um nome, escolha mensal ou avulsa e já lance o valor aqui.</div>
+      <div class="tattoo-form" style="margin-top:12px">
         <div class="field" style="flex:1.4;min-width:160px"><label data-en="Source name">Nome da fonte</label><input id="src-label" placeholder="Ex.: Ganhos extras" data-en-ph="e.g. Side earnings"></div>
         <div class="field" style="min-width:150px"><label data-en="Whose">De quem</label><div class="seg" id="src-who"></div></div>
         <div class="field" style="min-width:180px"><label data-en="Type">Tipo</label>
           <div class="seg" id="src-kind"><button data-kind="m" class="on" data-en="Monthly">Mensal</button><button data-kind="a" data-en="One-off">Avulsa</button></div>
         </div>
         <div class="field" style="min-width:130px"><label><span data-en="Value this month">Valor neste mês</span> (<span class="cursym">R$</span>)</label><input id="src-amount" class="amt num" inputmode="decimal" placeholder="0,00" data-en-ph="0.00"></div>
-        <button class="btn solid" id="src-add" style="height:46px;padding:13px 22px" data-en="Add source">Adicionar fonte</button>
+        <button class="btn solid" id="src-add" style="height:46px;padding:13px 22px" data-en="Log income">Lançar renda</button>
       </div>
     </div>
+
+    <div class="card inc-card fu" style="margin-bottom:14px;display:flex;align-items:baseline;gap:12px;padding:14px 18px">
+      <span style="font-weight:600;color:var(--muted);font-size:13px" data-en="Combined income this month">Renda combinada do mês</span>
+      <span class="serif num" id="inc-total" style="font-size:23px;font-weight:300;margin-left:auto">R$ 0</span>
+    </div>
+
+    <div id="inc-sources"></div>
   </section>
 
   <!-- ===== INVESTIMENTOS ===== -->
@@ -1736,39 +1756,40 @@ function renderRenda(){
   }else{
     wrap.innerHTML=state.incomes.map(src=>{
       const pc=src.person?personColor(src.person):'#8A8A82';
-      const head=`<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
-        <h3 class="serif" style="font-size:18px;margin:0">${src.label}</h3>
+      const head=`<div class="src-head">
+        <h3 class="src-name serif">${src.label}</h3>
         ${src.person?`<span class="tag" style="background:${pc}1A;color:${pc}">${personName(src.person)}</span>`:''}
         <span class="tag" style="background:var(--paper-2);color:var(--muted)">${src.kind==='m'?tr('mensal','monthly'):tr('avulsa','one-off')}</span>
         <button class="del src-del" data-id="${src.id}" title="${tr('Excluir fonte','Delete source')}" style="margin-left:auto">×</button>
       </div>`;
       if(src.kind==='m'){
-        return `<div class="card inc-card fu" style="margin-top:16px">${head}
-          <div class="inc-item" style="margin-top:12px">
-            <div class="il">${tr('Valor em','Value in')} ${MO()[m]}</div>
-            <input class="amt num src-m" data-id="${src.id}" value="${(src.months[m]||0).toString().replace('.',',')}">
+        return `<div class="card inc-card src-card fu">${head}
+          <div class="src-mrow">
+            <span class="il">${tr('Valor em','Value in')} ${MO()[m]}</span>
+            <span class="src-money"><span class="cur">${curSym()}</span><input class="num src-m" data-id="${src.id}" inputmode="decimal" value="${(src.months[m]||0).toString().replace('.',',')}"></span>
           </div></div>`;
       }
       const items=(src.entries||[]).filter(e=>e.month===m).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-      const subs=(state.people||[]).map(p=>{const v=items.filter(e=>e.who===p.id).reduce((x,e)=>x+(e.valor||0),0);return v>0?`<span class="tag" style="background:${personColor(p.id)}1A;color:${personColor(p.id)}">${p.name} ${money(v)}</span>`:''}).join('');
-      return `<div class="card inc-card fu" style="margin-top:16px">${head}
-        <div class="tattoo-form" style="margin-top:12px">
-          <div class="field" style="min-width:140px"><label>${tr('Quem','Whose')}</label><div class="seg src-ewho" data-id="${src.id}"></div></div>
-          <div class="field" style="flex:1.3"><label>${tr('Descrição','Description')}</label><input class="src-desc" data-id="${src.id}" placeholder="${tr('Ex.: Projeto fechado','e.g. Project closed')}"></div>
-          <div class="field" style="min-width:135px"><label>${tr('Data','Date')}</label><input class="src-date" data-id="${src.id}" type="date" value="${defaultDate()}"></div>
-          <div class="field" style="min-width:130px"><label>${tr('Valor','Amount')} (${curSym()})</label><input class="amt num src-val" data-id="${src.id}" inputmode="decimal" placeholder="0,00"></div>
-          <button class="btn solid src-eadd" data-id="${src.id}" style="height:46px;padding:13px 18px">${tr('Lançar','Log')}</button>
-        </div>
-        ${subs?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${subs}</div>`:''}
-        <div style="margin-top:6px">${items.length?items.map(e=>`
-          <div class="tat">
+      const tot=items.reduce((s,e)=>s+(e.valor||0),0);
+      return `<div class="card inc-card src-card fu">${head}
+        <div class="src-totline"><span class="il">${tr('Neste mês','This month')}</span><span class="src-total num">${money(tot)}</span></div>
+        <div class="src-entries">${items.length?items.map(e=>`
+          <div class="tat tat-sm">
             <div class="av" style="background:${personColor(e.who)}">${personInitial(e.who)}</div>
             <div class="info"><div class="t1">${e.desc||src.label}
               <span class="tag" style="background:${personColor(e.who)}1A;color:${personColor(e.who)}">${personName(e.who)}</span></div>
               <div class="t2">${e.date?fmtDate(e.date):''}${e.note?' · '+e.note:''}</div></div>
             <div class="amt">${money(e.valor)}</div>
             <button class="del src-edel" data-src="${src.id}" data-id="${e.id}" title="${tr('Excluir','Delete')}">×</button>
-          </div>`).join(''):`<div class="ph-sub" style="padding:14px 2px">${tr('Nenhum lançamento neste mês.','No entries this month.')}</div>`}</div>
+          </div>`).join(''):`<div class="ph-sub" style="padding:8px 2px">${tr('Nenhum lançamento neste mês.','No entries this month.')}</div>`}</div>
+        <button class="btn src-toggle" data-id="${src.id}">+ ${tr('Lançar','Log')}</button>
+        <div class="tattoo-form src-form" data-id="${src.id}" style="display:none;margin-top:10px">
+          <div class="field" style="min-width:140px"><label>${tr('Quem','Whose')}</label><div class="seg src-ewho" data-id="${src.id}"></div></div>
+          <div class="field" style="flex:1.3"><label>${tr('Descrição','Description')}</label><input class="src-desc" data-id="${src.id}" placeholder="${tr('Ex.: Projeto fechado','e.g. Project closed')}"></div>
+          <div class="field" style="min-width:135px"><label>${tr('Data','Date')}</label><input class="src-date" data-id="${src.id}" type="date" value="${defaultDate()}"></div>
+          <div class="field" style="min-width:130px"><label>${tr('Valor','Amount')} (${curSym()})</label><input class="amt num src-val" data-id="${src.id}" inputmode="decimal" placeholder="0,00"></div>
+          <button class="btn solid src-eadd" data-id="${src.id}" style="height:46px;padding:13px 18px">${tr('Lançar','Log')}</button>
+        </div>
       </div>`;
     }).join('');
   }
@@ -1788,6 +1809,12 @@ function renderRenda(){
     src.entries=src.entries||[];
     src.entries.push({id:uid(),who:src._ewho||(state.people[0]||{id:''}).id,desc:wrap.querySelector(`.src-desc[data-id="${src.id}"]`).value.trim(),date,month:monthOfIso(date),valor:val,note:''});
     save();renderRenda();renderResumo();renderAnual();toast(tr('Lançado ✓','Logged ✓'));
+  });
+  wrap.querySelectorAll('.src-toggle').forEach(btn=>btn.onclick=()=>{
+    const f=wrap.querySelector(`.src-form[data-id="${btn.dataset.id}"]`);if(!f)return;
+    const show=f.style.display==='none';f.style.display=show?'':'none';
+    btn.textContent=(show?'– ':'+ ')+tr('Lançar','Log');
+    if(show){const d=f.querySelector('.src-desc');if(d)setTimeout(()=>d.focus(),0);}
   });
   wrap.querySelectorAll('.src-edel').forEach(b=>b.onclick=()=>{const src=state.incomes.find(x=>x.id===b.dataset.src);src.entries=src.entries.filter(e=>e.id!==b.dataset.id);save();renderRenda();renderResumo();renderAnual();toast(tr('Removido','Removed'))});
   wrap.querySelectorAll('.src-del').forEach(b=>b.onclick=()=>{

@@ -265,46 +265,49 @@ html[data-theme="bauhaus"] nav.tabs button.active{border-bottom:4px solid #1C5BD
 html[data-theme="bauhaus"] .tag{border-radius:999px;border:1.5px solid #111}
 /* ---- tema Vidro (glass / iOS): cantos arredondados + superfícies translúcidas ---- */
 html[data-theme="glass"]{
-  --bone:#EEF1F6; --bone-2:#E6EAF0; --paper:rgba(255,255,255,.64); --paper-2:rgba(255,255,255,.48);
-  --ink:#1C1C1E; --ink-soft:#3A3C40; --muted:#71757E; --faint:#A6AAB2;
-  --line:rgba(255,255,255,.6); --line-soft:rgba(255,255,255,.42); --line-strong:rgba(120,124,132,.3);
-  --clay:#0A84FF; --clay-deep:#0066D6; --clay-soft:rgba(10,132,255,.12);
-  --cactus:#8E8E93; --cactus-deep:#6E7177; --gold:#AEAEB2;
+  --bone:#EFF2F8; --bone-2:#E8ECF3; --paper:rgba(255,255,255,.42); --paper-2:rgba(255,255,255,.28);
+  --ink:#1C1C1E; --ink-soft:#3A3C40; --muted:#6E727B; --faint:#A2A6AF;
+  --line:rgba(255,255,255,.55); --line-soft:rgba(255,255,255,.34); --line-strong:rgba(120,124,132,.26);
+  --clay:#3C3C42; --clay-deep:#26262A; --clay-soft:rgba(60,60,66,.1);
+  --cactus:#8A8E96; --cactus-deep:#6E7177; --gold:#AAAEB6;
   --pos:#3E9B6B; --neg:#D9534F;
   --r0:12px; --r1:16px; --r2:20px; --r3:24px; --r4:28px;
   --f-body:'Inter',sans-serif; --f-disp:'Inter',sans-serif;
   --w-disp:300; --w-num:400;
-  --glass:rgba(255,255,255,.6); --seg-on:rgba(255,255,255,.92);
+  --glass:rgba(255,255,255,.5); --seg-on:rgba(255,255,255,.78);
   --deb-on:#5E6670; --cred-on:#6E7177;
-  --gold-bg:rgba(174,174,178,.18); --gold-tx:#6E7177;
+  --gold-bg:rgba(170,174,182,.18); --gold-tx:#6E7177;
   --pos-bg:rgba(62,155,107,.14); --pos-tx:#3E9B6B;
-  --focus-ring:rgba(10,132,255,.24); --neg-bg:rgba(217,83,79,.1);
-  --focus-bg:rgba(255,255,255,.85); --solid-ink:#FFFFFF;
-  --shadow:0 4px 22px rgba(40,44,54,.10); --shadow-lift:0 10px 32px rgba(40,44,54,.16);
+  --focus-ring:rgba(60,60,66,.2); --neg-bg:rgba(217,83,79,.1);
+  --focus-bg:rgba(255,255,255,.78); --solid-ink:#FFFFFF;
+  --shadow:0 6px 26px rgba(40,44,54,.12); --shadow-lift:0 12px 36px rgba(40,44,54,.18);
 }
 html[data-theme="glass"] body{
   background:
-    radial-gradient(circle at 26% 8%, rgba(255,255,255,.66), transparent 46%),
-    radial-gradient(circle at 84% 92%, rgba(208,214,224,.55), transparent 46%),
-    linear-gradient(165deg,#EFF2F7,#E5E9EF);
+    radial-gradient(circle at 24% 6%, rgba(255,255,255,.8), transparent 48%),
+    radial-gradient(circle at 86% 96%, rgba(214,221,232,.5), transparent 48%),
+    linear-gradient(165deg,#F3F6FB,#E9EDF4);
   background-attachment:fixed;
 }
 html[data-theme="glass"] .card,html[data-theme="glass"] .panel,
 html[data-theme="glass"] header,html[data-theme="glass"] .mobile-bar{
-  -webkit-backdrop-filter:blur(22px) saturate(120%);backdrop-filter:blur(22px) saturate(120%);
+  -webkit-backdrop-filter:blur(30px) saturate(135%) brightness(1.06);backdrop-filter:blur(30px) saturate(135%) brightness(1.06);
 }
-html[data-theme="glass"] header{background:rgba(255,255,255,.55)}
-html[data-theme="glass"] .mobile-bar{background:rgba(255,255,255,.62);border-top:1px solid var(--line)}
+html[data-theme="glass"] header{background:rgba(255,255,255,.42)}
+html[data-theme="glass"] .mobile-bar{background:rgba(255,255,255,.48);border-top:1px solid var(--line)}
 html[data-theme="glass"] .hero{
-  background:linear-gradient(135deg,rgba(58,58,62,.88),rgba(38,38,42,.84));
-  border:1px solid rgba(255,255,255,.18);
+  background:linear-gradient(135deg,rgba(46,46,52,.62),rgba(30,30,34,.55));
+  -webkit-backdrop-filter:blur(28px) saturate(130%);backdrop-filter:blur(28px) saturate(130%);
+  border:1px solid rgba(255,255,255,.16);
 }
 html[data-theme="glass"] input,html[data-theme="glass"] select,html[data-theme="glass"] textarea{
-  background:rgba(255,255,255,.6);border-color:rgba(255,255,255,.66)}
+  background:rgba(255,255,255,.5);border-color:rgba(255,255,255,.6)}
 html[data-theme="glass"] .btn{background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-html[data-theme="glass"] .btn.solid{background:var(--clay);border-color:var(--clay)}
-html[data-theme="glass"] .seg{background:rgba(255,255,255,.5)}
-html[data-theme="glass"] .cat-btn,html[data-theme="glass"] .inc-item{background:rgba(255,255,255,.55)}
+html[data-theme="glass"] .btn.solid{background:rgba(40,40,46,.82);border-color:transparent;color:#fff}
+html[data-theme="glass"] .btn.solid:hover{background:rgba(20,20,24,.9)}
+html[data-theme="glass"] .seg{background:rgba(255,255,255,.4)}
+html[data-theme="glass"] nav.tabs button.active{color:var(--ink);border-bottom-color:var(--ink)}
+html[data-theme="glass"] .cat-btn,html[data-theme="glass"] .inc-item{background:rgba(255,255,255,.42)}
 /* display/num typografia controlada por tema */
 .view-title,.hero-big{font-family:var(--f-disp);font-weight:var(--w-disp)}
 .stat .val,.donut-center strong,.split .who .big,.tx-head h3{font-family:var(--f-disp);font-weight:var(--w-num)}
@@ -460,7 +463,9 @@ input,select,textarea{
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--clay);background:var(--focus-bg);box-shadow:0 0 0 2px var(--focus-ring)}
 input.amt{font-variant-numeric:tabular-nums;font-weight:400;font-size:16px}
 textarea{resize:vertical;min-height:44px}
-input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%}
+input[type=date]{min-width:0;max-width:100%}
+input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.6}
+input[type=date]::-webkit-calendar-picker-indicator:hover{opacity:1}
 .seg{display:inline-flex;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r2);padding:3px}
 #src-who,#m-who{flex-wrap:wrap}
 .seg button{border:none;background:transparent;font-family:inherit;font-weight:700;font-size:13px;
@@ -589,6 +594,14 @@ input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:1
 .tat-sm .info .t2{font-size:11px;margin-top:1px}
 .tat-sm .amt{font-size:14px}
 .tat-sm .del{width:26px;height:26px;font-size:16px}
+/* renda: lista enxuta de lançamentos (sem cartões aninhados) */
+.inc-listcard{padding:2px 16px}
+.inc-row{background:transparent;border:none;border-radius:0;margin:0;padding:11px 0;gap:11px;border-bottom:1px solid var(--line-soft);animation:none}
+.inc-row:last-child{border-bottom:none}
+.inc-row:hover{box-shadow:none;background:transparent}
+.inc-row .av{width:25px;height:25px;font-size:11px}
+.inc-row .info .t1{font-size:13px}
+.inc-row .amt{font-size:14px}
 
 /* annual table */
 .tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r4);background:var(--paper)}
@@ -746,14 +759,14 @@ body{transition:background-color .4s ease,color .4s ease}
 .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
 .cal-wd{text-align:center;font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.02em}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.cal-cell{aspect-ratio:1;border:1px solid var(--line);border-radius:var(--r2);background:var(--paper);display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:4px 5px;cursor:pointer;font-family:inherit;text-align:left;transition:transform .15s,border-color .15s,box-shadow .15s;overflow:visible;min-height:0}
+.cal-cell{aspect-ratio:1;border:1px solid var(--line);border-radius:var(--r2);background:var(--paper);display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:4px 5px;cursor:pointer;font-family:inherit;text-align:left;transition:transform .15s,border-color .15s,box-shadow .15s;overflow:visible;min-height:0;position:relative}
 .cal-cell.empty{border:none;background:transparent;cursor:default}
 .cal-cell:not(.empty):hover{border-color:var(--clay);transform:translateY(-1px)}
 .cal-cell.sel{border-color:var(--clay);box-shadow:0 0 0 2px var(--clay-soft)}
 .cal-cell.today{outline:2px solid var(--clay);outline-offset:-2px}
 .cal-cell.today .cal-dnum{color:var(--clay);font-weight:800}
 .cal-dnum{font-size:12.5px;font-weight:600;color:var(--ink-soft)}
-.cal-dot{width:5px;height:5px;border-radius:50%;background:var(--clay);align-self:flex-start;margin-top:auto;opacity:.85}
+.cal-dot{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:var(--clay);opacity:.85;margin:0}
 .cal-cell.has{cursor:pointer}
 
 /* ===== anti-overflow horizontal no mobile ===== */
@@ -911,10 +924,6 @@ img,canvas,table{max-width:100%}
     <h1 class="view-title" data-en="Spending this month">Gastos do mês</h1>
     <p class="cat-hint" data-en="Tap a category to log an expense. Don't see yours? Tap <strong>+ new</strong> at the end of any group and create your own. Drag by the <strong>⠿</strong> handle to reorder groups however you like.">Toque numa categoria para lançar um gasto. Não achou a sua? Toque em <strong>+ nova</strong> no fim de qualquer grupo e crie a categoria do seu jeito. Arraste pelo <strong>⠿</strong> para reordenar os grupos como preferir.</p>
 
-    <div class="card entry fu">
-      <div id="cat-buttons"></div>
-    </div>
-
     <button class="tx-head tx-toggle" id="tx-toggle" aria-expanded="false">
       <h3 data-en="Entries this month">Lançamentos do mês <span class="tx-count" id="tx-count"></span></h3>
       <span class="tx-chev" id="tx-chev">▸</span>
@@ -922,6 +931,10 @@ img,canvas,table{max-width:100%}
     <div class="tx-collapse" id="tx-collapse" hidden>
       <div class="filter-pills" id="tx-filter"></div>
       <div id="tx-list"></div>
+    </div>
+
+    <div class="card entry fu" style="margin-top:16px">
+      <div id="cat-buttons"></div>
     </div>
   </section>
 

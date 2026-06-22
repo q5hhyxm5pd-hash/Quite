@@ -265,7 +265,7 @@ html[data-theme="bauhaus"] nav.tabs button.active{border-bottom:4px solid #1C5BD
 html[data-theme="bauhaus"] .tag{border-radius:999px;border:1.5px solid #111}
 /* ---- tema Vidro (glass / iOS): cantos arredondados + superfícies translúcidas ---- */
 html[data-theme="glass"]{
-  --bone:#F4F5F8; --bone-2:#ECEEF2; --paper:rgba(255,255,255,.4); --paper-2:rgba(255,255,255,.26);
+  --bone:#F4F5F8; --bone-2:#ECEEF2; --paper:rgba(255,255,255,.26); --paper-2:rgba(255,255,255,.16);
   --ink:#2A2C30; --ink-soft:#474A50; --muted:#7C828A; --faint:#AEB3BA;
   --line:rgba(255,255,255,.62); --line-soft:rgba(255,255,255,.36); --line-strong:rgba(140,146,156,.22);
   --clay:#7C828A; --clay-deep:#5E646B; --clay-soft:rgba(124,130,138,.16);
@@ -298,16 +298,16 @@ html[data-theme="glass"] header,html[data-theme="glass"] .mobile-bar{
   -webkit-backdrop-filter:blur(34px) saturate(140%) brightness(1.08);backdrop-filter:blur(34px) saturate(140%) brightness(1.08);
 }
 html[data-theme="glass"] .card,html[data-theme="glass"] .panel{
-  background-image:linear-gradient(150deg,rgba(255,255,255,.5),rgba(255,255,255,.08) 55%,rgba(255,255,255,.18));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 0 0 1px rgba(255,255,255,.18),var(--shadow);
+  background-image:linear-gradient(150deg,rgba(255,255,255,.28),rgba(255,255,255,.04) 55%,rgba(255,255,255,.1));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),inset 0 0 0 1px rgba(255,255,255,.14),var(--shadow);
 }
 html[data-theme="glass"] header{background:rgba(255,255,255,.38)}
 html[data-theme="glass"] .mobile-bar{background:rgba(255,255,255,.44);border-top:1px solid var(--line)}
 html[data-theme="glass"] .hero{
-  background:linear-gradient(135deg,rgba(255,255,255,.58),rgba(255,255,255,.32));
-  -webkit-backdrop-filter:blur(30px) saturate(140%) brightness(1.05);backdrop-filter:blur(30px) saturate(140%) brightness(1.05);
-  border:1px solid rgba(255,255,255,.55);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),var(--shadow-lift);
+  background:linear-gradient(135deg,rgba(255,255,255,.34),rgba(255,255,255,.16));
+  -webkit-backdrop-filter:blur(32px) saturate(140%) brightness(1.06);backdrop-filter:blur(32px) saturate(140%) brightness(1.06);
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),var(--shadow-lift);
 }
 html[data-theme="glass"] input,html[data-theme="glass"] select,html[data-theme="glass"] textarea{
   background:rgba(255,255,255,.5);border-color:rgba(255,255,255,.6)}
@@ -324,8 +324,9 @@ html[data-theme="glass"] .cal-cell.empty{background:transparent}
 html[data-theme="glass"] .cal-cell:not(.empty):hover{transform:none;background:rgba(255,255,255,.5)}
 html[data-theme="glass"] .cal-dnum{font-size:13px}
 html[data-theme="glass"] .cal-dot{display:none}
-html[data-theme="glass"] .cal-cell.today{outline:none;box-shadow:inset 0 0 0 2px var(--ink)}
-html[data-theme="glass"] .cal-cell.sel{outline:none;box-shadow:inset 0 0 0 2px var(--ink)}
+html[data-theme="glass"] .cal-cell.today{outline:none;box-shadow:inset 0 0 0 1.5px var(--faint)}
+html[data-theme="glass"] .cal-cell.today .cal-dnum{font-weight:800;color:var(--ink)}
+html[data-theme="glass"] .cal-cell.sel{outline:none;box-shadow:inset 0 0 0 1.5px var(--muted)}
 /* logo arredondado e transparente, só no tema Vidro */
 html[data-theme="glass"] .brand-txt h1{
   font-family:'Quicksand',sans-serif;font-weight:700;letter-spacing:.05em;
@@ -492,6 +493,22 @@ textarea{resize:vertical;min-height:44px}
 input[type=date]{min-width:0;max-width:100%}
 input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.6}
 input[type=date]::-webkit-calendar-picker-indicator:hover{opacity:1}
+/* seletor de data próprio (segue o tema, vidro frosted) */
+.dp-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round'%3E%3Crect x='2.5' y='3.5' width='11' height='10' rx='2'/%3E%3Cpath d='M2.5 6.5h11M5 1.5v3M11 1.5v3'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+.dp-pop{position:absolute;z-index:300;display:none;width:264px;padding:12px;border-radius:var(--r3);background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow-lift);-webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%)}
+.dp-pop.show{display:block;animation:fu .16s both}
+.dp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.dp-title{font-weight:600;font-size:14px;color:var(--ink)}
+.dp-nav{border:none;background:transparent;cursor:pointer;font-size:18px;color:var(--ink-soft);width:32px;height:32px;border-radius:var(--r1);display:grid;place-items:center;transition:.15s}
+.dp-nav:hover{background:var(--bone-2);color:var(--clay)}
+.dp-wd{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
+.dp-wd span{text-align:center;font-size:10.5px;color:var(--muted);font-weight:600;font-family:var(--f-mono)}
+.dp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.dp-d{border:none;background:transparent;cursor:pointer;aspect-ratio:1;border-radius:50%;font-family:inherit;font-size:13px;color:var(--ink);display:grid;place-items:center;transition:.12s}
+.dp-d.empty{visibility:hidden;cursor:default}
+.dp-d:hover{background:var(--clay-soft)}
+.dp-d.today{box-shadow:inset 0 0 0 1.5px var(--clay)}
+.dp-d.sel{background:var(--clay);color:var(--solid-ink);font-weight:700}
 .seg{display:inline-flex;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r2);padding:3px}
 #src-who,#m-who{flex-wrap:wrap}
 .seg button{border:none;background:transparent;font-family:inherit;font-weight:700;font-size:13px;
@@ -1171,7 +1188,7 @@ img,canvas,table{max-width:100%}
       <div class="tattoo-form" style="margin-top:12px">
         <div class="field" style="min-width:150px"><label data-en="Whose">De quem</label><div class="seg" id="inc-who"></div></div>
         <div class="field" style="flex:1.4;min-width:160px"><label data-en="Description">Descrição</label><input id="inc-desc" placeholder="Ex.: Salário, Freela" data-en-ph="e.g. Salary, Freelance"></div>
-        <div class="field" style="min-width:140px"><label data-en="Date">Data</label><input id="inc-date" type="date"></div>
+        <div class="field" style="min-width:140px"><label data-en="Date">Data</label><input id="inc-date" class="dp-input" type="text" readonly placeholder="—" aria-label="Data"></div>
         <div class="field" style="min-width:130px"><label><span data-en="Amount">Valor</span> (<span class="cursym">R$</span>)</label><input id="inc-val" class="amt num" inputmode="decimal" placeholder="0,00" data-en-ph="0.00"></div>
         <button class="btn solid" id="inc-add" style="height:46px;padding:13px 22px" data-en="Log">Lançar</button>
       </div>
@@ -1215,7 +1232,7 @@ img,canvas,table{max-width:100%}
         <div class="field" style="min-width:130px"><label><span data-en="Invested">Valor aplicado</span> (<span class="cursym">R$</span>)</label><input id="iv-aplic" class="amt num" inputmode="decimal" placeholder="0,00"></div>
         <div class="field" style="min-width:130px"><label><span data-en="Current balance">Saldo atual</span> (<span class="cursym">R$</span>)</label><input id="iv-saldo" class="amt num" inputmode="decimal" placeholder="= aplicado" data-en-ph="= invested"></div>
         <div class="field" style="min-width:130px"><label data-en="Yield">Rentabilidade</label><input id="iv-taxa" placeholder="Ex.: 110% CDI" data-en-ph="e.g. 110% CDI"></div>
-        <div class="field" style="min-width:140px"><label data-en="Maturity">Vencimento</label><input id="iv-venc" type="date"></div>
+        <div class="field" style="min-width:140px"><label data-en="Maturity">Vencimento</label><input id="iv-venc" class="dp-input" type="text" readonly placeholder="—" aria-label="Vencimento"></div>
         <div class="field" style="flex:1.2;min-width:130px"><label data-en="Notes (optional)">Notas (opcional)</label><input id="iv-note" placeholder="liquidez, observações…" data-en-ph="liquidity, notes…"></div>
         <button class="btn solid" id="iv-add" style="height:46px;padding:13px 22px" data-en="+ Add">+ Adicionar</button>
       </div>
@@ -2382,6 +2399,29 @@ document.addEventListener('focusout',e=>{
 document.getElementById('inc-who').addEventListener('click',e=>{if(e.target.dataset.who){incWho=e.target.dataset.who;renderWhoSeg('inc-who',incWho,false)}});
 document.getElementById('inc-add').onclick=addIncomeEntry;
 ['inc-desc','inc-val'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('keydown',e=>{if(e.key==='Enter')addIncomeEntry()})});
+/* ===== seletor de data próprio (combina com o tema, frosted no Vidro) ===== */
+function dpParse(iso){const p=(iso||'').split('-').map(Number);return (p.length===3&&p[0])?{y:p[0],m:p[1]-1}:null;}
+let _dpInput=null,_dpY=0,_dpM=0;
+function dpEl(){let p=document.getElementById('dp-pop');if(!p){p=document.createElement('div');p.id='dp-pop';p.className='dp-pop';document.body.appendChild(p);
+  p.addEventListener('click',e=>{
+    const nav=e.target.closest('[data-nav]');if(nav){_dpM+=(+nav.dataset.nav);if(_dpM<0){_dpM=11;_dpY--}if(_dpM>11){_dpM=0;_dpY++}dpRender();return;}
+    const d=e.target.closest('[data-iso]');if(d&&_dpInput){_dpInput.value=d.dataset.iso;_dpInput.dispatchEvent(new Event('change',{bubbles:true}));dpClose();}
+  });}
+  return p;}
+function dpClose(){const p=document.getElementById('dp-pop');if(p)p.classList.remove('show');_dpInput=null;}
+function dpRender(){const pop=dpEl();const wd=WEEKD[lang()]||WEEKD.pt;
+  const first=new Date(_dpY,_dpM,1).getDay(),dim=new Date(_dpY,_dpM+1,0).getDate(),sel=_dpInput?_dpInput.value:'',tod=isoToday();
+  let cells='';for(let i=0;i<first;i++)cells+='<span class="dp-d empty"></span>';
+  for(let d=1;d<=dim;d++){const iso=_dpY+'-'+pad(_dpM+1)+'-'+pad(d);cells+=`<button type="button" class="dp-d${iso===sel?' sel':''}${iso===tod?' today':''}" data-iso="${iso}">${d}</button>`;}
+  pop.innerHTML=`<div class="dp-head"><button type="button" class="dp-nav" data-nav="-1">‹</button><div class="dp-title">${MO()[_dpM]} ${_dpY}</div><button type="button" class="dp-nav" data-nav="1">›</button></div><div class="dp-wd">${wd.map(w=>`<span>${w}</span>`).join('')}</div><div class="dp-grid">${cells}</div>`;
+}
+function dpOpen(input){_dpInput=input;const cur=dpParse(input.value)||dpParse(isoToday());_dpY=cur.y;_dpM=cur.m;const pop=dpEl();dpRender();pop.classList.add('show');
+  const r=input.getBoundingClientRect();let left=window.scrollX+r.left;left=Math.max(8,Math.min(left,window.scrollX+document.documentElement.clientWidth-272));
+  let top=window.scrollY+r.bottom+6;if(r.bottom+300>window.innerHeight&&r.top>300)top=window.scrollY+r.top-6-300;
+  pop.style.left=left+'px';pop.style.top=top+'px';}
+document.querySelectorAll('.dp-input').forEach(inp=>{inp.addEventListener('click',e=>{e.stopPropagation();dpOpen(inp)});inp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();dpOpen(inp)}});});
+document.addEventListener('click',e=>{const p=document.getElementById('dp-pop');if(p&&p.classList.contains('show')&&!e.target.closest('#dp-pop')&&!(e.target.classList&&e.target.classList.contains('dp-input')))dpClose();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')dpClose();});
 /* investimentos */
 document.getElementById('iv-who').addEventListener('click',e=>{if(e.target.dataset.who){ivWho=e.target.dataset.who;renderWhoSeg('iv-who',ivWho,true)}});
 document.getElementById('iv-add').onclick=addInvest;

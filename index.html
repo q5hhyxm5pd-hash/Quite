@@ -265,36 +265,37 @@ html[data-theme="bauhaus"] nav.tabs button.active{border-bottom:4px solid #1C5BD
 html[data-theme="bauhaus"] .tag{border-radius:999px;border:1.5px solid #111}
 /* ---- tema Vidro (glass / iOS): cantos arredondados + superfícies translúcidas ---- */
 html[data-theme="glass"]{
-  --bone:#FBF4E4; --bone-2:#F6ECD6; --paper:rgba(255,255,255,.36); --paper-2:rgba(255,255,255,.22);
-  --ink:#2A2114; --ink-soft:#4A3D28; --muted:#8A7656; --faint:#C2B393;
-  --line:rgba(255,255,255,.62); --line-soft:rgba(255,255,255,.34); --line-strong:rgba(150,130,90,.24);
-  --clay:#C28A2E; --clay-deep:#A6731F; --clay-soft:rgba(194,138,46,.14);
-  --cactus:#D9A347; --cactus-deep:#B07F2E; --gold:#E8B860;
-  --pos:#9A7A22; --neg:#D2603E;
+  --bone:#F4F5F8; --bone-2:#ECEEF2; --paper:rgba(255,255,255,.4); --paper-2:rgba(255,255,255,.26);
+  --ink:#2A2C30; --ink-soft:#474A50; --muted:#7C828A; --faint:#AEB3BA;
+  --line:rgba(255,255,255,.62); --line-soft:rgba(255,255,255,.36); --line-strong:rgba(140,146,156,.22);
+  --clay:#7C828A; --clay-deep:#5E646B; --clay-soft:rgba(124,130,138,.16);
+  --cactus:#9298A0; --cactus-deep:#7C828A; --gold:#B0B5BB;
+  --pos:#5E646B; --neg:#C0584C;
   --r0:14px; --r1:18px; --r2:22px; --r3:26px; --r4:30px;
   --f-body:'Inter',sans-serif; --f-disp:'Inter',sans-serif;
   --w-disp:300; --w-num:400;
-  --glass:rgba(255,255,255,.44); --seg-on:rgba(255,255,255,.8);
-  --deb-on:#B07F2E; --cred-on:#A6731F;
-  --gold-bg:rgba(232,184,96,.2); --gold-tx:#A6731F;
-  --pos-bg:rgba(154,122,34,.14); --pos-tx:#8A6E1E;
-  --focus-ring:rgba(194,138,46,.24); --neg-bg:rgba(210,96,62,.1);
-  --focus-bg:rgba(255,255,255,.78); --solid-ink:#FFFFFF;
-  --shadow:0 8px 30px rgba(120,92,30,.14); --shadow-lift:0 14px 40px rgba(120,92,30,.2);
+  --glass:rgba(255,255,255,.46); --seg-on:rgba(255,255,255,.84);
+  --deb-on:#5E646B; --cred-on:#7C828A;
+  --gold-bg:rgba(176,181,187,.2); --gold-tx:#5E646B;
+  --pos-bg:rgba(94,100,107,.12); --pos-tx:#5E646B;
+  --focus-ring:rgba(124,130,138,.22); --neg-bg:rgba(192,88,76,.1);
+  --focus-bg:rgba(255,255,255,.8); --solid-ink:#FFFFFF;
+  --hero-ink:#2A2C30; --hero-sub:rgba(42,44,48,.7); --hero-sub2:rgba(42,44,48,.58); --hero-chip:rgba(42,44,48,.07); --hero-deco:rgba(42,44,48,.05);
+  --shadow:0 8px 30px rgba(60,66,76,.12); --shadow-lift:0 14px 40px rgba(60,66,76,.18);
 }
 html[data-theme="glass"] body{
   background:
-    radial-gradient(circle at 22% 4%, rgba(255,255,255,.92), transparent 46%),
-    radial-gradient(circle at 92% 8%, rgba(245,214,150,.46), transparent 40%),
-    radial-gradient(circle at 86% 98%, rgba(236,200,140,.34), transparent 46%),
-    radial-gradient(circle at 10% 92%, rgba(250,236,205,.5), transparent 46%),
-    linear-gradient(160deg,#FBF3E0,#F5EAD2);
+    radial-gradient(circle at 22% 4%, rgba(255,255,255,.95), transparent 46%),
+    radial-gradient(circle at 90% 8%, rgba(224,228,234,.5), transparent 42%),
+    radial-gradient(circle at 86% 98%, rgba(212,217,224,.4), transparent 46%),
+    radial-gradient(circle at 10% 92%, rgba(236,239,243,.5), transparent 46%),
+    linear-gradient(160deg,#F5F6FA,#EBEEF2);
   background-attachment:fixed;
 }
 /* liquid glass: deep blur + specular top highlight + faint sheen */
 html[data-theme="glass"] .card,html[data-theme="glass"] .panel,
 html[data-theme="glass"] header,html[data-theme="glass"] .mobile-bar{
-  -webkit-backdrop-filter:blur(34px) saturate(150%) brightness(1.08);backdrop-filter:blur(34px) saturate(150%) brightness(1.08);
+  -webkit-backdrop-filter:blur(34px) saturate(140%) brightness(1.08);backdrop-filter:blur(34px) saturate(140%) brightness(1.08);
 }
 html[data-theme="glass"] .card,html[data-theme="glass"] .panel{
   background-image:linear-gradient(150deg,rgba(255,255,255,.5),rgba(255,255,255,.08) 55%,rgba(255,255,255,.18));
@@ -303,26 +304,28 @@ html[data-theme="glass"] .card,html[data-theme="glass"] .panel{
 html[data-theme="glass"] header{background:rgba(255,255,255,.38)}
 html[data-theme="glass"] .mobile-bar{background:rgba(255,255,255,.44);border-top:1px solid var(--line)}
 html[data-theme="glass"] .hero{
-  background:linear-gradient(135deg,rgba(182,130,46,.74),rgba(150,104,38,.66));
-  -webkit-backdrop-filter:blur(30px) saturate(150%);backdrop-filter:blur(30px) saturate(150%);
-  border:1px solid rgba(255,255,255,.22);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),var(--shadow-lift);
+  background:linear-gradient(135deg,rgba(255,255,255,.58),rgba(255,255,255,.32));
+  -webkit-backdrop-filter:blur(30px) saturate(140%) brightness(1.05);backdrop-filter:blur(30px) saturate(140%) brightness(1.05);
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),var(--shadow-lift);
 }
 html[data-theme="glass"] input,html[data-theme="glass"] select,html[data-theme="glass"] textarea{
   background:rgba(255,255,255,.5);border-color:rgba(255,255,255,.6)}
 html[data-theme="glass"] .btn{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-html[data-theme="glass"] .btn.solid{background:rgba(28,24,16,.82);border-color:transparent;color:#fff}
-html[data-theme="glass"] .btn.solid:hover{background:rgba(16,13,8,.9)}
-html[data-theme="glass"] .seg{background:rgba(255,255,255,.38)}
+html[data-theme="glass"] .btn.solid{background:rgba(42,44,48,.85);border-color:transparent;color:#fff}
+html[data-theme="glass"] .btn.solid:hover{background:rgba(28,30,34,.92)}
+html[data-theme="glass"] .seg{background:rgba(255,255,255,.4)}
 html[data-theme="glass"] nav.tabs button.active{color:var(--ink);border-bottom-color:var(--ink)}
-html[data-theme="glass"] .cat-btn,html[data-theme="glass"] .inc-item{background:rgba(255,255,255,.38)}
-/* calendário líquido: células arredondadas, sem bordas rígidas, frosted */
-html[data-theme="glass"] .cal-grid{gap:8px}
-html[data-theme="glass"] .cal-cell{border:none;border-radius:18px;background:rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%)}
-html[data-theme="glass"] .cal-cell.empty{background:transparent;box-shadow:none}
-html[data-theme="glass"] .cal-cell:not(.empty):hover{transform:translateY(-2px);border:none}
-html[data-theme="glass"] .cal-cell.today{outline:none;box-shadow:inset 0 0 0 2px var(--clay),inset 0 1px 0 rgba(255,255,255,.5)}
-html[data-theme="glass"] .cal-cell.sel{box-shadow:0 0 0 2px var(--clay-soft),inset 0 1px 0 rgba(255,255,255,.5)}
+html[data-theme="glass"] .cat-btn,html[data-theme="glass"] .inc-item{background:rgba(255,255,255,.4)}
+/* calendário líquido (iOS): números flutuam, dias com gasto ganham um círculo suave */
+html[data-theme="glass"] .cal-grid{gap:5px}
+html[data-theme="glass"] .cal-cell{border:none;background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:50%;aspect-ratio:1;min-height:0;padding:0;align-items:center;justify-content:center}
+html[data-theme="glass"] .cal-cell.empty{background:transparent}
+html[data-theme="glass"] .cal-cell:not(.empty):hover{transform:none;background:rgba(255,255,255,.5)}
+html[data-theme="glass"] .cal-dnum{font-size:13px}
+html[data-theme="glass"] .cal-dot{display:none}
+html[data-theme="glass"] .cal-cell.today{outline:none;box-shadow:inset 0 0 0 2px var(--ink)}
+html[data-theme="glass"] .cal-cell.sel{outline:none;box-shadow:inset 0 0 0 2px var(--ink)}
 /* logo arredondado e transparente, só no tema Vidro */
 html[data-theme="glass"] .brand-txt h1{
   font-family:'Quicksand',sans-serif;font-weight:700;letter-spacing:.05em;
@@ -1361,13 +1364,13 @@ const THEMES={
   tipos:['#1C5BD8','#111111','#1C8A4C','#136B3A','#F5C518','#D9A40E','#3E76E8','#E2261C','#C04030','#123E96','#6F6A60'],
   people:['#E2261C','#1C5BD8','#F5C518','#111111','#1C8A4C','#C04030','#3E76E8','#D9A40E']}
 ,
- glass:{font:'Inter',grid:'#F0E6D0',ticks:'#D8C49A',ticksB:'#A98A52',legend:'#6E5A2E',donutB:'rgba(255,255,255,.72)',
-  flow:['#D9A347','#EDC57E','#C28A2E','#F2D7A0'],flowNeg:'#D2603E',
-  trR:'#C28A2E',trG:'#D2603E',trS:'#D9A347',trSF:'rgba(217,163,71,.16)',heroPos:'#FFFFFF',heroNeg:'#FBE2D6',
-  cats:['#C28A2E','#D9A347','#E8B860','#F0CE8C','#B07F2E','#CF9A3F','#E2B057','#EFC97F','#9A6E26','#EAC074','#C8923A','#DDB05A','#F2D9A6','#F7E6C2'],
-  groups:['#C28A2E','#D9A347','#E8B860','#F0CE8C','#B07F2E','#CF9A3F','#E2B057'],
-  tipos:['#C28A2E','#D9A347','#E8B860','#F0CE8C','#B07F2E','#CF9A3F','#E2B057','#EFC97F','#9A6E26','#EAC074','#C8923A'],
-  people:['#C28A2E','#E8B860','#D9A347','#F0CE8C','#B07F2E','#CF9A3F','#EFC97F','#9A6E26']}
+ glass:{font:'Inter',grid:'#E6E8EC',ticks:'#C2C6CC',ticksB:'#868C94',legend:'#474A50',donutB:'rgba(255,255,255,.72)',
+  flow:['#9298A0','#A8AEB5','#7B8086','#C0C5CB'],flowNeg:'#C0584C',
+  trR:'#7B8086',trG:'#C0584C',trS:'#9298A0',trSF:'rgba(146,152,160,.16)',heroPos:'#2A2C30',heroNeg:'#C0584C',
+  cats:['#7B8086','#9298A0','#A8AEB5','#C0C5CB','#6B7178','#868C94','#9FA5AD','#B5BBC2','#5E646B','#AEB4BB','#787E86','#8E949C','#A4AAB2','#C8CDD2'],
+  groups:['#7B8086','#9298A0','#A8AEB5','#C0C5CB','#6B7178','#868C94','#9FA5AD'],
+  tipos:['#7B8086','#9298A0','#A8AEB5','#C0C5CB','#6B7178','#868C94','#9FA5AD','#B5BBC2','#5E646B','#AEB4BB','#787E86'],
+  people:['#7B8086','#A8AEB5','#9298A0','#C0C5CB','#6B7178','#868C94','#B5BBC2','#5E646B']}
 };
 const THEME_LIST=[{id:'quite',nome:'Original'},{id:'vivo',nome:'Vivo'},{id:'sereno',nome:'Sereno'},{id:'neon',nome:'Neon'},{id:'suico',nome:'Suíço'},{id:'brutal',nome:'Brutal'},{id:'editorial',nome:'Editorial'},{id:'terminal',nome:'Terminal'},{id:'bauhaus',nome:'Bauhaus'},{id:'glass',nome:'Vidro'}];
 const T=()=>THEMES[(state&&state.meta&&state.meta.theme)||'quite']||THEMES.quite;
@@ -2265,7 +2268,7 @@ document.getElementById('prompt-modal').addEventListener('click',e=>{if(e.target
 
 /* ===== ajustes ===== */
 function renderSettings(){
-  const PREVIEW={quite:['#FFFFFF','#B04A20','#1A1A18'],vivo:['#FFFFFF','#2563EB','#DC2626'],sereno:['#FAF8F7','#B58598','#88A892'],neon:['#0A0D14','#00D9C0','#FF4D6D'],suico:['#FFFFFF','#E30613','#111111'],brutal:['#FFFDF5','#FFE14D','#FF6B9D'],editorial:['#FBF7EF','#C9A96A','#2B2622'],terminal:['#050805','#33FF66','#FFB000'],bauhaus:['#F4F1EA','#E2261C','#1C5BD8'],glass:['#FBF3E2','#E8B860','#1C1C1E']};
+  const PREVIEW={quite:['#FFFFFF','#B04A20','#1A1A18'],vivo:['#FFFFFF','#2563EB','#DC2626'],sereno:['#FAF8F7','#B58598','#88A892'],neon:['#0A0D14','#00D9C0','#FF4D6D'],suico:['#FFFFFF','#E30613','#111111'],brutal:['#FFFDF5','#FFE14D','#FF6B9D'],editorial:['#FBF7EF','#C9A96A','#2B2622'],terminal:['#050805','#33FF66','#FFB000'],bauhaus:['#F4F1EA','#E2261C','#1C5BD8'],glass:['#F4F5F8','#AEB3BA','#2A2C30']};
   const cur=(state.meta&&state.meta.theme)||'quite';
   document.getElementById('st-themes').innerHTML=THEME_LIST.map(t=>`
     <button class="theme-card ${t.id===cur?'on':''}" data-th="${t.id}">

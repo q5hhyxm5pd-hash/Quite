@@ -570,6 +570,8 @@ html[data-theme="glass"] .dp-pop{background:rgba(255,255,255,.6)}
 .iv-seg button{flex:1;padding:9px 6px;text-align:center}
 .tag.cr{background:var(--gold-bg);color:var(--gold-tx)}
 .tag.db{background:var(--pos-bg);color:var(--pos-tx)}
+.tag.mensal{background:var(--cactus-soft);color:var(--cactus-deep)}
+.tag.freela{background:var(--clay-soft);color:var(--clay-deep)}
 .tx .amt{font-weight:400;font-size:16px;font-variant-numeric:tabular-nums;white-space:nowrap;flex:none;margin-left:auto}
 .tx .del{border:none;background:transparent;cursor:pointer;color:var(--faint);font-size:18px;width:30px;height:30px;border-radius:var(--r1);transition:.16s;flex:none}
 .tx .del:hover{background:var(--neg-bg);color:var(--neg)}
@@ -1190,6 +1192,10 @@ img,canvas,table{max-width:100%}
       <div class="ph-sub" style="color:var(--muted);font-size:12.5px" data-en="Fill it in and tap Log — it goes straight to the list.">Preencha e toque em Lançar - vai direto pra lista.</div>
       <div class="tattoo-form" style="margin-top:12px">
         <div class="field" style="min-width:150px"><label data-en="Whose">De quem</label><div class="seg" id="inc-who"></div></div>
+        <div class="field" style="min-width:170px"><label data-en="Type">Tipo</label><div class="seg" id="inc-kind">
+          <button type="button" data-k="m" data-en="Monthly">Mensal</button>
+          <button type="button" data-k="a" data-en="Freelance">Freela</button>
+        </div></div>
         <div class="field" style="flex:1.4;min-width:160px"><label data-en="Description">Descrição</label><input id="inc-desc" placeholder="Ex.: Salário, Freela" data-en-ph="e.g. Salary, Freelance"></div>
         <div class="field" style="min-width:140px"><label data-en="Date">Data</label><input id="inc-date" class="dp-input" type="text" readonly placeholder="—" aria-label="Data"></div>
         <div class="field" style="min-width:130px"><label><span data-en="Amount">Valor</span> (<span class="cursym">R$</span>)</label><input id="inc-val" class="amt num" inputmode="decimal" placeholder="0,00" data-en-ph="0.00"></div>
@@ -1586,8 +1592,11 @@ function fixedByGroup(m){const o={};fixedGroupList().forEach(g=>o[g]=0);state.fi
 function personColor(id){const i=(state.people||[]).findIndex(p=>p.id===id);return i<0?T().ticksB:T().people[i%T().people.length]}
 function personName(id){if(id==='c')return tr('Conjunto','Joint');const p=(state.people||[]).find(x=>x.id===id);return p?p.name:tr('(removida)','(removed)')}
 function personInitial(id){return (personName(id)[0]||'?').toUpperCase()}
-function incomeMonth(m){return (state.incomeLog||[]).reduce((t,e)=>e.month===m?t+(e.valor||0):t,0)}
-function incomePerson(m,who){return (state.incomeLog||[]).reduce((t,e)=>(e.month===m&&e.who===who)?t+(e.valor||0):t,0)}
+/* monthly income (kind 'm') repeats from its start month onward; freela (default) is one-off */
+function incActive(e,m){return e.kind==='m'?(e.month<=m):(e.month===m)}
+function incomeForMonth(m){return (state.incomeLog||[]).filter(e=>incActive(e,m))}
+function incomeMonth(m){return incomeForMonth(m).reduce((t,e)=>t+(e.valor||0),0)}
+function incomePerson(m,who){return incomeForMonth(m).reduce((t,e)=>e.who===who?t+(e.valor||0):t,0)}
 function txMonth(m){return state.tx.filter(t=>t.month===m)}
 function varTotal(m,who){return txMonth(m).filter(t=>!who||t.who===who).reduce((s,t)=>s+(t.val||0),0)}
 function creditMonth(m,who){return txMonth(m).filter(t=>t.type==='Crédito'&&(!who||t.who===who)).reduce((s,t)=>s+(t.val||0),0)}
@@ -1869,7 +1878,7 @@ function openBills(){
 function closeBills(){document.getElementById('bills-modal').classList.remove('show')}
 
 /* ===================== RENDER: RENDA ===================== */
-let incWho='', incFilter='all';
+let incWho='', incFilter='all', incKind='m';
 function renderIncFilter(m){
   const box=document.getElementById('inc-bypers'),el=document.getElementById('inc-filter');
   if(!box||!el)return;
@@ -1892,22 +1901,29 @@ function renderRenda(){
   if(!(state.people||[]).find(p=>p.id===incWho))incWho=(state.people[0]||{id:''}).id;
   renderWhoSeg('inc-who',incWho,false);
   const dEl=document.getElementById('inc-date');if(dEl&&!dEl.value)dEl.value=defaultDate();
+  document.querySelectorAll('#inc-kind button').forEach(b=>b.classList.toggle('on',b.dataset.k===incKind));
   if(incFilter!=='all'&&!(state.people||[]).find(p=>p.id===incFilter))incFilter='all';
   renderIncFilter(m);
   const list=document.getElementById('inc-list');
-  const items=(state.incomeLog||[]).filter(e=>e.month===m&&(incFilter==='all'||e.who===incFilter)).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const items=incomeForMonth(m).filter(e=>incFilter==='all'||e.who===incFilter).slice()
+    .sort((a,b)=>((b.kind==='m')-(a.kind==='m'))||(b.date||'').localeCompare(a.date||''));
   if(!items.length){
     list.innerHTML=`<div class="card inc-card fu"><div class="ph-sub">${incFilter==='all'?tr('Nenhuma renda lançada neste mês ainda. Use o formulário acima.','No income logged this month yet. Use the form above.'):tr('Nenhuma renda de '+personName(incFilter)+' neste mês.','No income from '+personName(incFilter)+' this month.')}</div></div>`;
   }else{
-    list.innerHTML=`<div class="card panel fu inc-listcard">`+items.map(e=>`
+    list.innerHTML=`<div class="card panel fu inc-listcard">`+items.map(e=>{
+      const isM=e.kind==='m';
+      const kindTag=isM?`<span class="tag mensal">${tr('Mensal','Monthly')}</span>`:`<span class="tag freela">${tr('Freela','Freelance')}</span>`;
+      const t2=isM?(e.month<m?tr('Todo mês · desde ','Monthly · since ')+MO()[e.month]:tr('Todo mês','Every month')):(e.date?fmtDate(e.date):'');
+      return `
       <div class="tat tat-sm inc-row">
         <div class="av" style="background:${personColor(e.who)}">${personInitial(e.who)}</div>
         <div class="info"><div class="t1">${e.desc||tr('Renda','Income')}
-          <span class="tag" style="background:${personColor(e.who)}1A;color:${personColor(e.who)}">${personName(e.who)}</span></div>
-          <div class="t2">${e.date?fmtDate(e.date):''}</div></div>
+          <span class="tag" style="background:${personColor(e.who)}1A;color:${personColor(e.who)}">${personName(e.who)}</span>
+          ${kindTag}</div>
+          <div class="t2">${t2}</div></div>
         <div class="amt">${money(e.valor)}</div>
-        <button class="del inc-del" data-id="${e.id}" title="${tr('Excluir','Delete')}">×</button>
-      </div>`).join('')+`</div>`;
+        <button class="del inc-del" data-id="${e.id}" title="${isM?tr('Excluir (todos os meses)','Delete (all months)'):tr('Excluir','Delete')}">×</button>
+      </div>`}).join('')+`</div>`;
   }
   list.querySelectorAll('.inc-del').forEach(b=>b.onclick=()=>{state.incomeLog=(state.incomeLog||[]).filter(e=>e.id!==b.dataset.id);save();renderRenda();renderResumo();renderAnual();toast(tr('Removido','Removed'))});
   document.getElementById('inc-total').textContent=money(incomeMonth(m));
@@ -1920,9 +1936,9 @@ function addIncomeEntry(){
   const date=document.getElementById('inc-date').value||defaultDate();
   const desc=document.getElementById('inc-desc').value.trim();
   state.incomeLog=state.incomeLog||[];
-  state.incomeLog.push({id:uid(),who:incWho||(state.people[0]||{id:''}).id,desc,date,month:monthOfIso(date),valor:val});
+  state.incomeLog.push({id:uid(),who:incWho||(state.people[0]||{id:''}).id,desc,date,month:monthOfIso(date),valor:val,kind:incKind});
   document.getElementById('inc-desc').value='';valEl.value='';
-  save();renderRenda();renderResumo();renderAnual();toast(tr('Lançado ✓','Logged ✓'));
+  save();renderRenda();renderResumo();renderAnual();toast(incKind==='m'?tr('Renda mensal lançada ✓','Monthly income logged ✓'):tr('Freela lançado ✓','Freelance logged ✓'));
 }
 /* ===================== RENDER: INVESTIMENTOS ===================== */
 let ivDonut;
@@ -2443,6 +2459,7 @@ document.getElementById('bills-modal').addEventListener('click',e=>{if(e.target.
 document.getElementById('bills-copy').onclick=()=>{const t=document.getElementById('bills-text');t.select();t.setSelectionRange(0,99999);try{document.execCommand('copy')}catch(e){}window.getSelection&&window.getSelection().removeAllRanges&&window.getSelection().removeAllRanges();toast(tr('Texto copiado ✓','Text copied ✓'))};
 document.getElementById('tx-filter').addEventListener('click',e=>{if(e.target.dataset.f){txFilter=e.target.dataset.f;document.querySelectorAll('#tx-filter .fpill').forEach(b=>b.classList.toggle('on',b===e.target));renderTx()}});
 document.getElementById('inc-filter').addEventListener('click',e=>{const b=e.target.closest('.fpill');if(b&&b.dataset.f){incFilter=b.dataset.f;renderRenda()}});
+document.getElementById('inc-kind').addEventListener('click',e=>{const b=e.target.closest('button');if(b&&b.dataset.k){incKind=b.dataset.k;document.querySelectorAll('#inc-kind button').forEach(x=>x.classList.toggle('on',x===b))}});
 (function(){const tg=document.getElementById('tx-toggle'),col=document.getElementById('tx-collapse');if(tg&&col)tg.onclick=()=>{const open=col.hasAttribute('hidden');if(open){col.removeAttribute('hidden');tg.setAttribute('aria-expanded','true')}else{col.setAttribute('hidden','');tg.setAttribute('aria-expanded','false')}};})();
 /* barra inferior (mobile): some no topo, aparece ao rolar a página para baixo */
 (function(){

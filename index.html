@@ -1202,6 +1202,11 @@ img,canvas,table{max-width:100%}
       <span class="serif num" id="inc-total" style="font-size:23px;font-weight:300;margin-left:auto">R$ 0</span>
     </div>
 
+    <div id="inc-bypers" style="margin-bottom:14px;display:none">
+      <div class="ph-sub" style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px" data-en="Income by person — tap to filter">Renda por pessoa — toque para filtrar</div>
+      <div class="filter-pills" id="inc-filter" style="flex-wrap:wrap"></div>
+    </div>
+
     <div id="inc-list"></div>
   </section>
 
@@ -1864,7 +1869,16 @@ function openBills(){
 function closeBills(){document.getElementById('bills-modal').classList.remove('show')}
 
 /* ===================== RENDER: RENDA ===================== */
-let incWho='';
+let incWho='', incFilter='all';
+function renderIncFilter(m){
+  const box=document.getElementById('inc-bypers'),el=document.getElementById('inc-filter');
+  if(!box||!el)return;
+  const ps=state.people||[];
+  box.style.display=ps.length?'block':'none';
+  if(!ps.length){incFilter='all';el.innerHTML='';return}
+  el.innerHTML=`<button class="fpill ${incFilter==='all'?'on':''}" data-f="all">${tr('Todos','All')}</button>`+
+    ps.map(p=>`<button class="fpill ${incFilter===p.id?'on':''}" data-f="${p.id}"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${personColor(p.id)};margin-right:6px;vertical-align:middle"></span>${p.name} · <span class="num">${money0(incomePerson(m,p.id))}</span></button>`).join('');
+}
 function renderRenda(){
   const m=curMonth;
   const ph=document.getElementById('inc-peoplehint');
@@ -1878,10 +1892,12 @@ function renderRenda(){
   if(!(state.people||[]).find(p=>p.id===incWho))incWho=(state.people[0]||{id:''}).id;
   renderWhoSeg('inc-who',incWho,false);
   const dEl=document.getElementById('inc-date');if(dEl&&!dEl.value)dEl.value=defaultDate();
+  if(incFilter!=='all'&&!(state.people||[]).find(p=>p.id===incFilter))incFilter='all';
+  renderIncFilter(m);
   const list=document.getElementById('inc-list');
-  const items=(state.incomeLog||[]).filter(e=>e.month===m).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const items=(state.incomeLog||[]).filter(e=>e.month===m&&(incFilter==='all'||e.who===incFilter)).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   if(!items.length){
-    list.innerHTML=`<div class="card inc-card fu"><div class="ph-sub">${tr('Nenhuma renda lançada neste mês ainda. Use o formulário acima.','No income logged this month yet. Use the form above.')}</div></div>`;
+    list.innerHTML=`<div class="card inc-card fu"><div class="ph-sub">${incFilter==='all'?tr('Nenhuma renda lançada neste mês ainda. Use o formulário acima.','No income logged this month yet. Use the form above.'):tr('Nenhuma renda de '+personName(incFilter)+' neste mês.','No income from '+personName(incFilter)+' this month.')}</div></div>`;
   }else{
     list.innerHTML=`<div class="card panel fu inc-listcard">`+items.map(e=>`
       <div class="tat tat-sm inc-row">
@@ -2426,6 +2442,7 @@ document.getElementById('bills-close').onclick=closeBills;
 document.getElementById('bills-modal').addEventListener('click',e=>{if(e.target.id==='bills-modal')closeBills()});
 document.getElementById('bills-copy').onclick=()=>{const t=document.getElementById('bills-text');t.select();t.setSelectionRange(0,99999);try{document.execCommand('copy')}catch(e){}window.getSelection&&window.getSelection().removeAllRanges&&window.getSelection().removeAllRanges();toast(tr('Texto copiado ✓','Text copied ✓'))};
 document.getElementById('tx-filter').addEventListener('click',e=>{if(e.target.dataset.f){txFilter=e.target.dataset.f;document.querySelectorAll('#tx-filter .fpill').forEach(b=>b.classList.toggle('on',b===e.target));renderTx()}});
+document.getElementById('inc-filter').addEventListener('click',e=>{const b=e.target.closest('.fpill');if(b&&b.dataset.f){incFilter=b.dataset.f;renderRenda()}});
 (function(){const tg=document.getElementById('tx-toggle'),col=document.getElementById('tx-collapse');if(tg&&col)tg.onclick=()=>{const open=col.hasAttribute('hidden');if(open){col.removeAttribute('hidden');tg.setAttribute('aria-expanded','true')}else{col.setAttribute('hidden','');tg.setAttribute('aria-expanded','false')}};})();
 /* barra inferior (mobile): some no topo, aparece ao rolar a página para baixo */
 (function(){

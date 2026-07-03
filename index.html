@@ -1330,13 +1330,6 @@ function fixedGroupList(){
   return out;
 }
 const THEMES={
- vivo:{font:'Nunito',grid:'#EEF1F4',ticks:'#AAB2BD',ticksB:'#6B7480',legend:'#353B45',donutB:'#FFFFFF',
-  flow:['#059669','#334155','#2563EB','#D97706'],flowNeg:'#DC2626',
-  trR:'#059669',trG:'#DC2626',trS:'#D97706',trSF:'rgba(217,119,6,.12)',heroPos:'#FFFFFF',heroNeg:'#FFD6D6',
-  cats:['#2563EB','#DC2626','#059669','#D97706','#7C3AED','#DB2777','#0891B2','#65A30D','#EA580C','#4F46E5','#0D9488','#C026D3','#475569','#9333EA'],
-  groups:['#2563EB','#334155','#D97706','#0891B2','#7C3AED','#DC2626','#059669'],
-  tipos:['#2563EB','#334155','#059669','#65A30D','#D97706','#EA580C','#0891B2','#DC2626','#DB2777','#7C3AED','#6B7480'],
-  people:['#2563EB','#DC2626','#059669','#D97706','#7C3AED','#DB2777','#0891B2','#65A30D']},
  sereno:{font:'Quicksand',grid:'#F1EAEC',ticks:'#CCC2C9',ticksB:'#A89BA6',legend:'#6A5F6E',donutB:'#FFFFFF',
   flow:['#88A892','#8E8694','#B58598','#CDB48E'],flowNeg:'#C98E8E',
   trR:'#88A892',trG:'#C98E8E',trS:'#CDB48E',trSF:'rgba(205,180,142,.16)',heroPos:'#FFFFFF',heroNeg:'#F7E3E3',
@@ -1379,14 +1372,7 @@ const THEMES={
   cats:['#33FF66','#FFB000','#00E5FF','#7CFF9E','#FFD75E','#43FFD9','#1FCC52','#9CFFB8','#36CFC9','#62FF8C','#E8FFB0','#27AE60','#FFC83D','#15803D'],
   groups:['#33FF66','#FFB000','#00E5FF','#7CFF9E','#43FFD9','#FF5555','#1FCC52'],
   tipos:['#33FF66','#1FCC52','#7CFF9E','#9CFFB8','#FFB000','#FFD75E','#00E5FF','#FF5555','#43FFD9','#36CFC9','#1FA84A'],
-  people:['#33FF66','#FFB000','#00E5FF','#7CFF9E','#FF5555','#43FFD9','#FFD75E','#9CFFB8']},
- bauhaus:{font:'Archivo',grid:'#DDD8CB',ticks:'#A9A396',ticksB:'#6F6A60',legend:'#111111',donutB:'#FFFFFF',
-  flow:['#1C8A4C','#111111','#E2261C','#F5C518'],flowNeg:'#E2261C',
-  trR:'#1C8A4C',trG:'#E2261C',trS:'#F5C518',trSF:'rgba(245,197,24,.18)',heroPos:'#FFFFFF',heroNeg:'#FFD9D2',
-  cats:['#E2261C','#1C5BD8','#F5C518','#111111','#C04030','#3E76E8','#D9A40E','#444444','#8C1810','#123E96','#A87E0A','#1C8A4C','#E2552C','#2B2B2B'],
-  groups:['#E2261C','#1C5BD8','#F5C518','#111111','#3E76E8','#8C1810','#1C8A4C'],
-  tipos:['#1C5BD8','#111111','#1C8A4C','#136B3A','#F5C518','#D9A40E','#3E76E8','#E2261C','#C04030','#123E96','#6F6A60'],
-  people:['#E2261C','#1C5BD8','#F5C518','#111111','#1C8A4C','#C04030','#3E76E8','#D9A40E']}
+  people:['#33FF66','#FFB000','#00E5FF','#7CFF9E','#FF5555','#43FFD9','#FFD75E','#9CFFB8']}
 ,
  glass:{font:'Inter',grid:'#E6E8EC',ticks:'#C2C6CC',ticksB:'#868C94',legend:'#474A50',donutB:'rgba(255,255,255,.72)',
   flow:['#9298A0','#A8AEB5','#7B8086','#C0C5CB'],flowNeg:'#C0584C',
@@ -1396,7 +1382,7 @@ const THEMES={
   tipos:['#7B8086','#9298A0','#A8AEB5','#C0C5CB','#6B7178','#868C94','#9FA5AD','#B5BBC2','#5E646B','#AEB4BB','#787E86'],
   people:['#7B8086','#A8AEB5','#9298A0','#C0C5CB','#6B7178','#868C94','#B5BBC2','#5E646B']}
 };
-const THEME_LIST=[{id:'glass',nome:'Vidro'},{id:'vivo',nome:'Vivo'},{id:'sereno',nome:'Sereno'},{id:'neon',nome:'Neon'},{id:'suico',nome:'Suíço'},{id:'brutal',nome:'Brutal'},{id:'editorial',nome:'Editorial'},{id:'terminal',nome:'Terminal'},{id:'bauhaus',nome:'Bauhaus'}];
+const THEME_LIST=[{id:'glass',nome:'Vidro'},{id:'sereno',nome:'Sereno'},{id:'neon',nome:'Neon'},{id:'suico',nome:'Suíço'},{id:'brutal',nome:'Brutal'},{id:'editorial',nome:'Editorial'},{id:'terminal',nome:'Terminal'}];
 const T=()=>THEMES[(state&&state.meta&&state.meta.theme)||'glass']||THEMES.glass;
 function applyTheme(){document.documentElement.setAttribute('data-theme',(state.meta&&state.meta.theme)||'glass')}
 /* ---- idioma (PT/EN): traduz a interface, mantém os dados que você digitou ---- */
@@ -1514,7 +1500,7 @@ function migrate(){
   state.meta=state.meta||{};
   state.meta.lang=state.meta.lang||'pt';
   state.meta.currency=state.meta.currency||'BRL';
-  if(!state.meta.theme||state.meta.theme==='quite')state.meta.theme='glass';
+  if(!state.meta.theme||state.meta.theme==='quite'||state.meta.theme==='vivo'||state.meta.theme==='bauhaus')state.meta.theme='glass';
   state.investments=state.investments||[];
   (state.fixed||[]).forEach(f=>{if(f.due===undefined)f.due='';if(f.method===undefined)f.method='d'});
   if((state.meta.v||0)<9){state.tattoo=state.tattoo||[];state.income=state.income||{};}
